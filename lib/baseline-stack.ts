@@ -14,6 +14,7 @@ export class BaselineStack extends cdk.Stack {
     public readonly ChemblDb: rds.DatabaseInstance;
     public readonly chemblDBChemblDbAccessSg: ec2.SecurityGroup;
     public readonly chemblDBSecret: rds.DatabaseSecret; 
+    public readonly OpenTargetsSourceBucket: s3.Bucket; 
     
     constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
         
@@ -82,7 +83,8 @@ export class BaselineStack extends cdk.Stack {
             instanceClass: ec2.InstanceType.of(ec2.InstanceClass.BURSTABLE2, ec2.InstanceSize.SMALL),
             instanceIdentifier: 'chembl-25-00',
             masterUserPassword: chemblDBSecret.secretValueFromJson('password'),
-            securityGroups: [chemblDbSG]
+            securityGroups: [chemblDbSG],
+            deletionProtection: false
         });
         
         
@@ -108,7 +110,7 @@ export class BaselineStack extends cdk.Stack {
             instanceName: "ChemblDbImportInstance",
             role: importInstanceRole,
             blockDevices:[{
-                deviceName: '/dev/sda',
+                deviceName: '/dev/xvda',
                 volume: ec2.BlockDeviceVolume.ebs(50),
             }]
             
@@ -139,8 +141,10 @@ export class BaselineStack extends cdk.Stack {
         
         
         
-        const openTargetsBucket = new s3.Bucket(this, 'dataLakeBucket');
+        const openTargetsBucket = new s3.Bucket(this, 'openTargetsBucket');
+        this.OpenTargetsSourceBucket = openTargetsBucket;
         
+        this.OpenTargetsSourceBucket.grantReadWrite(importInstanceRole);
         
         const loadOpenTargetsDoc = new ssm.CfnDocument(this, 'loadOpenTargetsDoc', {
             content: JSON.parse(fs.readFileSync('scripts/ssmdoc.import.opentargets.1911.json', { encoding: 'utf-8' })),

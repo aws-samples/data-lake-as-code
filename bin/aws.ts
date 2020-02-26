@@ -9,7 +9,7 @@ import s3 = require('@aws-cdk/aws-s3');
 
 
 const app = new cdk.App();
-const baseline = new BaselineStack(app, 'ChemblBaselineStack');
+const baseline = new BaselineStack(app, 'BaselineStack');
 
 
 const coreDataLake = new DatalakeStack(app, 'CoreDataLake', {
