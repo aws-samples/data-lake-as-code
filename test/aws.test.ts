@@ -1,13 +1,15 @@
 import { expect as expectCDK, matchTemplate, MatchStyle } from '@aws-cdk/assert';
 import * as cdk from '@aws-cdk/core';
-import Aws = require('../lib/aws-stack');
+import { BaselineStack } from '../lib/baseline-stack';
 
 test('Empty Stack', () => {
     const app = new cdk.App();
     // WHEN
-    const stack = new Aws.AwsStack(app, 'MyTestStack');
+    const stack = new BaselineStack(app, 'MyTestStack');
     // THEN
     expectCDK(stack).to(matchTemplate({
       "Resources": {}
     }, MatchStyle.EXACT))
 });
+
+

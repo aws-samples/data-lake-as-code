@@ -1,0 +1,42 @@
+{
+   "schemaVersion":"2.2",
+   "description":"Downloads and installs chembl 25 onto RDS instance",
+   "parameters":{
+        "databaseSecretArn": {
+          "type": "String",
+          "description": "Secret Arn of Database Connection Creds"
+        },
+        "databaseHostName": {
+          "type": "String",
+          "description": "Hostname of the database server"
+        }
+    },
+    "mainSteps":[
+      {
+        "action":"aws:runShellScript",
+        "name":"DownloadAndImportChembl25intoDatabase",
+        "inputs":{
+            "runCommand": [
+                "sudo yum install jq -y",
+                "currentRegion=$(curl -s http://169.254.169.254/latest/dynamic/instance-identity/document|jq -r .region)",
+                "secretPayload=$(aws secretsmanager get-secret-value --secret-id {{databaseSecretArn}} --query SecretString --region $currentRegion)",
+                "echo $secretPayload | jq -rc '.' > dbsecrets.json",
+                "dbPw=$(jq -r '.password' dbsecrets.json)",
+                "dbUn=$(jq -r '.username' dbsecrets.json)",
+                "chembl25HostName='{{databaseHostName}}'",
+                "wget ftp://ftp.ebi.ac.uk/pub/databases/chembl/ChEMBLdb/releases/chembl_25/chembl_25_postgresql.tar.gz -P chembl/sourceExports/ChEMBLdb/releases/chembl_25/",
+                "tar -xvzf chembl/sourceExports/ChEMBLdb/releases/chembl_25/chembl_25_postgresql.tar.gz -C chembl/sourceExports/ChEMBLdb/releases/chembl_25/",
+                "sudo yum install postgresql -y",
+                "touch ~/.pgpass",
+                "chmod 0600 ~/.pgpass",
+                "escapedDbPw=$(echo $dbPw | sed 's|:|\\:|g')",
+                "echo $chembl25HostName:5432:*:$dbUn:$escapedDbPw >> ~/.pgpass",
+                "dropdb --if-exists -h $chembl25HostName --username=$dbUn chembl_25",
+                "createdb -h $chembl25HostName --username=$dbUn chembl_25",
+                "createuser -h $chembl25HostName --username=$dbUn user",
+                "pg_restore -v -h $chembl25HostName -p 5432 -U $dbUn -d chembl_25 chembl/sourceExports/ChEMBLdb/releases/chembl_25/chembl_25/chembl_25_postgresql/chembl_25_postgresql.dmp"
+            ]
+         }
+      }
+   ]
+}
