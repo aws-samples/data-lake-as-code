@@ -25,6 +25,7 @@
                 "dbPw=$(jq -r '.password' dbsecrets.json)",
                 "dbUn=$(jq -r '.username' dbsecrets.json)",
                 "chembl25HostName='{{databaseHostName}}'",
+                "mkdir -p /home/ssm-user/",
                 "touch /home/ssm-user/progressLog",
                 "echo 'Starting chembl download...' >> /home/ssm-user/progressLog",
                 "wget ftp://ftp.ebi.ac.uk/pub/databases/chembl/ChEMBLdb/releases/chembl_25/chembl_25_postgresql.tar.gz -P chembl/sourceExports/ChEMBLdb/releases/chembl_25/ >> /home/ssm-user/progressLog 2>/home/ssm-user/progressLog",
