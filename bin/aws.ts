@@ -27,7 +27,7 @@ const chemblStack = new Chembl25Stack(app, 'ChemblStack', {
 
 
 const openTargetsStack = new OpenTargetsStack(app, 'OpenTargetsStack', {
-    sourceBucket: s3.Bucket.fromBucketName(coreDataLake, 'openTargetsSourceBucket', 'chembl-opentarget-blog'),
+    sourceBucket: baseline.OpenTargetsSourceBucket,
     sourceBucketDataPrefix: '/opentargets/sourceExports/19.11/output/',
     dataLakeBucket: coreDataLake.DataLakeBucket
 });
