@@ -16,6 +16,7 @@
         "action":"aws:runShellScript",
         "name":"DownloadAndImportChembl25intoDatabase",
         "inputs":{
+            "timeoutSeconds":"7200",
             "runCommand": [
                 "sudo yum install jq -y",
                 "currentRegion=$(curl -s http://169.254.169.254/latest/dynamic/instance-identity/document|jq -r .region)",
@@ -24,17 +25,19 @@
                 "dbPw=$(jq -r '.password' dbsecrets.json)",
                 "dbUn=$(jq -r '.username' dbsecrets.json)",
                 "chembl25HostName='{{databaseHostName}}'",
-                "wget ftp://ftp.ebi.ac.uk/pub/databases/chembl/ChEMBLdb/releases/chembl_25/chembl_25_postgresql.tar.gz -P chembl/sourceExports/ChEMBLdb/releases/chembl_25/",
-                "tar -xvzf chembl/sourceExports/ChEMBLdb/releases/chembl_25/chembl_25_postgresql.tar.gz -C chembl/sourceExports/ChEMBLdb/releases/chembl_25/",
-                "sudo yum install postgresql -y",
+                "touch /home/ssm-user/progressLog",
+                "echo 'Starting chembl download...' >> /home/ssm-user/progressLog",
+                "wget ftp://ftp.ebi.ac.uk/pub/databases/chembl/ChEMBLdb/releases/chembl_25/chembl_25_postgresql.tar.gz -P chembl/sourceExports/ChEMBLdb/releases/chembl_25/ >> /home/ssm-user/progressLog 2>/home/ssm-user/progressLog",
+                "tar -xvzf chembl/sourceExports/ChEMBLdb/releases/chembl_25/chembl_25_postgresql.tar.gz -C chembl/sourceExports/ChEMBLdb/releases/chembl_25/ >> /home/ssm-user/progressLog",
+                "sudo yum install postgresql -y >> /home/ssm-user/progressLog",
                 "touch ~/.pgpass",
                 "chmod 0600 ~/.pgpass",
-                "escapedDbPw=$(echo $dbPw | sed 's|:|\\:|g')",
+                "escapedDbPw=$(echo $dbPw | sed 's|:|\\\\:|g')",
                 "echo $chembl25HostName:5432:*:$dbUn:$escapedDbPw >> ~/.pgpass",
-                "dropdb --if-exists -h $chembl25HostName --username=$dbUn chembl_25",
+                "dropdb --if-exists -h $chembl25HostName --username=$dbUn chembl_25 >> /home/ssm-user/progressLog 2>/home/ssm-user/progressLog",
                 "createdb -h $chembl25HostName --username=$dbUn chembl_25",
                 "createuser -h $chembl25HostName --username=$dbUn user",
-                "pg_restore -v -h $chembl25HostName -p 5432 -U $dbUn -d chembl_25 chembl/sourceExports/ChEMBLdb/releases/chembl_25/chembl_25/chembl_25_postgresql/chembl_25_postgresql.dmp"
+                "pg_restore -v -h $chembl25HostName -p 5432 -U $dbUn -d chembl_25 chembl/sourceExports/ChEMBLdb/releases/chembl_25/chembl_25/chembl_25_postgresql/chembl_25_postgresql.dmp >> /home/ssm-user/progressLog 2>/home/ssm-user/progressLog"
             ]
          }
       }
