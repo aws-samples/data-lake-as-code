@@ -21,11 +21,11 @@ export class Chembl25Stack extends cdk.Stack {
 		
 		
 		const chembl_25_src = new glue.Database(this, 'chembl-25-src', {
-			databaseName: 'chembl-25-src',
+			databaseName: 'chembl_25_src',
 			locationUri: `s3://${props.dataLakeBucket.bucketName}/chembl/src/chembl25`
 		});
 		const chembl_25_dl = new glue.Database(this, 'chembl-25-dl', {
-			databaseName: 'chembl-25-dl',
+			databaseName: 'chembl_25_dl',
 			locationUri: `s3://${props.dataLakeBucket.bucketName}/chembl/dl/chembl25`
 		});
 		

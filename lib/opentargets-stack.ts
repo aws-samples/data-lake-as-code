@@ -18,12 +18,12 @@ export class OpenTargetsStack extends cdk.Stack {
         super(scope, id, props);
         
         const open_targets_1911_src = new glue.Database(this, 'open-targets-1911-src', {
-            databaseName: 'open-targets-1911-src',
+            databaseName: 'open_targets_1911_src',
             locationUri: `s3://${props.sourceBucket.bucketName}/${props.sourceBucketDataPrefix}`
         });
         
         const open_targets_1911_dl = new glue.Database(this, 'open-targets-1911-dl', {
-            databaseName: 'open-targets-1911-dl',
+            databaseName: 'open_targets_1911_dl',
             locationUri: `s3://${props.dataLakeBucket.bucketName}/opentargets/dl/19_11`
         });
         
