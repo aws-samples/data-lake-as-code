@@ -38,7 +38,9 @@
                 "dropdb --if-exists -h $chembl25HostName --username=$dbUn chembl_25 >> /home/ssm-user/progressLog 2>/home/ssm-user/progressLog",
                 "createdb -h $chembl25HostName --username=$dbUn chembl_25",
                 "createuser -h $chembl25HostName --username=$dbUn user",
-                "pg_restore -v -h $chembl25HostName -p 5432 -U $dbUn -d chembl_25 chembl/sourceExports/ChEMBLdb/releases/chembl_25/chembl_25/chembl_25_postgresql/chembl_25_postgresql.dmp >> /home/ssm-user/progressLog 2>/home/ssm-user/progressLog"
+                "pg_restore -v -h $chembl25HostName -p 5432 -U $dbUn -d chembl_25 chembl/sourceExports/ChEMBLdb/releases/chembl_25/chembl_25/chembl_25_postgresql/chembl_25_postgresql.dmp >> /home/ssm-user/progressLog 2>/home/ssm-user/progressLog",
+                "psql -h $chembl25HostName -p 5432 -U $dbUn -d chembl_25 -c 'alter table activities ALTER COLUMN value TYPE varchar(100), ALTER COLUMN standard_value TYPE varchar(100), ALTER COLUMN upper_value TYPE varchar(100), ALTER COLUMN standard_upper_value TYPE varchar(100);'"
+                
             ]
          }
       }
