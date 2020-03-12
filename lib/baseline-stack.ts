@@ -135,7 +135,8 @@ export class BaselineStack extends cdk.Stack {
         
         loadChemblAssociation.addPropertyOverride('Parameters',{
             databaseSecretArn: [chemblDBSecret.secretArn],
-            databaseHostName: [chemblDb.dbInstanceEndpointAddress]
+            databaseHostName: [chemblDb.dbInstanceEndpointAddress],
+            executionTimeout: ['7200']
         });
         
         
