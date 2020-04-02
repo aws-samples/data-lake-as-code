@@ -4,7 +4,7 @@ import * as cdk from '@aws-cdk/core';
 import { BaselineStack } from '../lib/baseline-stack';
 import { DatalakeStack } from '../lib/datalake-stack';
 import { OpenTargetsStack } from '../lib/opentargets-stack';
-import { Chembl25Stack } from '../lib/chembl-25-stack';
+import { ChemblStack } from '../lib/chembl-25-stack';
 import s3 = require('@aws-cdk/aws-s3');
 
 
@@ -18,7 +18,7 @@ const coreDataLake = new DatalakeStack(app, 'CoreDataLake', {
 
 
 
-const chemblStack = new Chembl25Stack(app, 'ChemblStack', {
+const chemblStack = new ChemblStack(app, 'ChemblStack', {
     database: baseline.ChemblDb,
     accessSecurityGroup: baseline.chemblDBChemblDbAccessSg,
     databaseSecret: baseline.chemblDBSecret,

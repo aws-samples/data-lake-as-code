@@ -5,10 +5,151 @@ import lambda = require('@aws-cdk/aws-lambda');
 import iam = require('@aws-cdk/aws-iam');
 import cfn = require("@aws-cdk/aws-cloudformation");
 import fs = require('fs');
+import s3assets = require('@aws-cdk/aws-s3-assets');
+import { URL } from "url";
+
 
 export interface DataSetEnrollmentProps extends cdk.StackProps {
 		dataLakeBucket: s3.Bucket;
+		dataSetName: string;
+		SourceConnectionInput?: glue.CfnConnection.ConnectionInputProperty;
+		SourceTargets: glue.CfnCrawler.TargetsProperty;
+		GlueScriptPath: string;
+		GlueScriptArguments: any;
+		SourceAccessPolicy?: iam.Policy;
 }
+
+
+
+
+
+export class DataSetEnrollment extends cdk.Construct {
+		
+	public readonly Workflow: DataLakeEnrollmentWorkflow;
+    public readonly SrcCrawlerCompleteTrigger: glue.CfnTrigger;
+    public readonly ETLCompleteTrigger: glue.CfnTrigger; 
+    public readonly SourceConnection?: glue.CfnConnection;
+    public readonly DataLakeConnection: glue.CfnConnection;
+    public readonly DataSetName: string;
+    public readonly DataSetGlueRole: iam.Role;
+    public readonly Dataset_Source: glue.Database;
+    public readonly Dataset_Datalake: glue.Database;
+
+	private setupCrawler(targetGlueDatabase: glue.Database, targets: glue.CfnCrawler.TargetsProperty, isSourceCrawler: boolean){
+		
+		var sourceCrawler = isSourceCrawler ? "src" : "dl";
+		
+		return new glue.CfnCrawler(this,  `${this.DataSetName}-${sourceCrawler}-crawler`,{
+			name: `${this.DataSetName}_${sourceCrawler}_crawler`, 
+			targets: targets, 
+			role: this.DataSetGlueRole.roleName,
+			databaseName: targetGlueDatabase.databaseName, 
+			schemaChangePolicy: {
+				deleteBehavior: "DEPRECATE_IN_DATABASE", 
+				updateBehavior: "UPDATE_IN_DATABASE",
+			}, 
+			tablePrefix: "", 
+			classifiers: []
+		});
+		
+	}
+
+	constructor(scope: cdk.Construct, id: string, props: DataSetEnrollmentProps) {
+		super(scope, id);	
+		
+		this.DataSetName = props.dataSetName;
+		
+		this.Dataset_Source = new glue.Database(this, `${props.dataSetName}_src`, {
+			databaseName: `${props.dataSetName}_src`,
+			locationUri: `s3://${props.dataLakeBucket.bucketName}/${props.dataSetName}/src/`
+		});
+		this.Dataset_Datalake = new glue.Database(this, `${props.dataSetName}_dl`, {
+			databaseName:  `${props.dataSetName}_dl`,
+			locationUri: `s3://${props.dataLakeBucket.bucketName}/${props.dataSetName}/dl/`
+		});
+		
+
+		let connectionArray = [];
+		if(props.SourceConnectionInput){
+			this.SourceConnection = new glue.CfnConnection(this, `${props.dataSetName}-src-connection`, {
+				catalogId: this.Dataset_Source.catalogId, 
+				connectionInput: props.SourceConnectionInput
+			});
+			if(props.SourceConnectionInput.name){
+				connectionArray.push(props.SourceConnectionInput.name);	
+			}
+		}
+
+		
+		this.DataSetGlueRole = new iam.Role(this, `${props.dataSetName}-GlueRole`, {
+			assumedBy: new iam.ServicePrincipal('glue.amazonaws.com')
+		});
+		
+		this.DataSetGlueRole.addManagedPolicy(iam.ManagedPolicy.fromAwsManagedPolicyName('service-role/AWSGlueServiceRole'));
+		this.DataSetGlueRole.addManagedPolicy(iam.ManagedPolicy.fromAwsManagedPolicyName('CloudWatchAgentServerPolicy'));
+		props.dataLakeBucket.grantReadWrite(this.DataSetGlueRole);
+		
+		if(props.SourceAccessPolicy){
+			props.SourceAccessPolicy.attachToRole(this.DataSetGlueRole);	
+		}
+		 
+		 
+		 
+		const sourceCrawler = this.setupCrawler(this.Dataset_Source, props.SourceTargets, true);
+		
+		
+		
+		const glueScript = new s3assets.Asset(this, `${props.dataSetName}-GlueScript`, {
+			path: props.GlueScriptPath
+		});
+		glueScript.grantRead(this.DataSetGlueRole);
+		
+		
+		const etl_job = new glue.CfnJob(this, `${props.dataSetName}-EtlJob`, {
+			executionProperty: {
+				maxConcurrentRuns: 1
+			}, 
+			name: `${props.dataSetName}_src_to_dl_etl`, 
+			timeout: 2880, 
+			connections: {
+				connections: connectionArray
+			},
+			glueVersion: "1.0", 
+			maxCapacity: 10.0,
+			command: {
+				scriptLocation: `s3://${glueScript.s3BucketName}/${glueScript.s3ObjectKey}`, 
+				name: "glueetl", 
+				pythonVersion: "3"
+			}, 
+			role: this.DataSetGlueRole.roleArn,
+			maxRetries: 0, 
+			defaultArguments: props.GlueScriptArguments
+		});
+		
+		
+		
+		const datalake_crawler = this.setupCrawler(this.Dataset_Datalake, {
+				s3Targets: [
+					{
+						path: `s3://${props.dataLakeBucket.bucketName}/${props.dataSetName}/`
+					}
+				]
+		}, false);
+
+		
+		const datalakeEnrollmentWorkflow = new DataLakeEnrollmentWorkflow(this,`${props.dataSetName}DataLakeWorkflow`,{
+			workfowName: `${props.dataSetName}_DataLakeEnrollmentWorkflow`,
+			srcCrawler: sourceCrawler,
+			etlJob: etl_job,
+			datalakeCrawler: datalake_crawler
+			
+		})
+		
+	}
+	
+	
+}
+
 
 export interface DataLakeEnrollmentWorkflowProps {
 	workfowName: string;
@@ -16,7 +157,6 @@ export interface DataLakeEnrollmentWorkflowProps {
 	etlJob: glue.CfnJob,
 	datalakeCrawler: glue.CfnCrawler
 }
-
 
 export class DataLakeEnrollmentWorkflow extends cdk.Construct {
 
