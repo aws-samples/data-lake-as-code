@@ -5,6 +5,7 @@ import { BaselineStack } from '../lib/baseline-stack';
 import { DatalakeStack } from '../lib/datalake-stack';
 import { OpenTargetsStack } from '../lib/opentargets-stack';
 import { ChemblStack } from '../lib/chembl-25-stack';
+import { AnalyticsStack } from '../lib/analytics-stack.js';
 import s3 = require('@aws-cdk/aws-s3');
 
 
@@ -32,9 +33,7 @@ const openTargetsStack = new OpenTargetsStack(app, 'OpenTargetsStack', {
     dataLakeBucket: coreDataLake.DataLakeBucket
 });
 
+const analyticsStack = new AnalyticsStack(app, 'AnalyticsStack', {
+    targetVpc: baseline.Vpc
+});
 
-// new OpenTargetsStack(app, 'OpenTargetsStack', {
-//     dataLakeBucket: coreDataLake.DataLakeBucket,
-//     sourceBucket:  s3.Bucket.fromBucketName(app, 'openTargetsImportBucket', 'chembl-opentarget-blog'),
-//     sourceBucketDataPrefix: '/opentargets/sourceExports/19.11/output',
-// });

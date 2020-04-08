@@ -15,6 +15,7 @@ export class BaselineStack extends cdk.Stack {
     public readonly chemblDBChemblDbAccessSg: ec2.SecurityGroup;
     public readonly chemblDBSecret: rds.DatabaseSecret; 
     public readonly OpenTargetsSourceBucket: s3.Bucket; 
+    public readonly Vpc: ec2.Vpc;
     
     constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
         
@@ -40,6 +41,8 @@ export class BaselineStack extends cdk.Stack {
                }, 
             ]
         });    
+        
+        this.Vpc = baselineVpc;
         
         const chemblAccessSG = new ec2.SecurityGroup(this, 'chemblAccessSg', {
             vpc: baselineVpc,

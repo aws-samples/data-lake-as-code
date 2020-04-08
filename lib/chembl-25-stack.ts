@@ -22,7 +22,7 @@ export class ChemblStack extends cdk.Stack{
 	
 		const dataSetName = "chembl_25";
 		
-	    new RDSPostgresDataSetEnrollment(this, 'chembl-25-enrollment', {
+	    const chembl25 = new RDSPostgresDataSetEnrollment(this, 'chembl-25-enrollment', {
 	    	databaseSecret: props.databaseSecret,
 	    	database: props.database,
 	    	accessSecurityGroup: props.accessSecurityGroup,
@@ -39,7 +39,6 @@ export class ChemblStack extends cdk.Stack{
 				"--DL_REGION": cdk.Stack.of(this).region,
 				"--GLUE_SRC_DATABASE": "chembl_25_src"
 			}	    	
-	    
 	    });
 	}
 }
