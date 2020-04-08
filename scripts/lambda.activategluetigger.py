@@ -8,13 +8,23 @@ glue = boto3.client('glue')
 
 def main(event, context):
 
-    print(event)
-
+    physical_id = 'startTrigger'
     log.getLogger().setLevel(log.INFO)
-    
-    triggerId = event['ResourceProperties']['TriggerId']
-    
-    response = glue.start_trigger(Name=triggerId);
+    responseData = {}
+     
+    try:
+        log.info('Input event: %s', event)
 
-    cfnresponse.send(event, context, cfnresponse.SUCCESS, response, triggerId);
-
+        if event['RequestType'] == 'Delete':
+            responseData['Complete'] = 'True';
+            resourceID = event['PhysicalResourceId']
+            cfnresponse.send(event, context, cfnresponse.SUCCESS, responseData, resourceID)
+        
+        if event['RequestType'] == 'Create':
+            
+            triggerId = event['ResourceProperties']['TriggerId']
+            response = glue.start_trigger(Name=triggerId);
+            cfnresponse.send(event, context, cfnresponse.SUCCESS, response, triggerId);
+    except Exception as e:
+        log.exception(e)
+        cfnresponse.send(event, context, cfnresponse.FAILED, {}, physical_id)

@@ -35,7 +35,7 @@ export class ChemblStack extends cdk.Stack{
 				"--job-bookmark-option": "job-bookmark-disable",
 				"--enable-metrics": "",
 				"--DL_BUCKET": props.dataLakeBucket.bucketName,
-				"--DL_PREFIX": "/chembl/25/",
+				"--DL_PREFIX": "/"+dataSetName+"/",
 				"--DL_REGION": cdk.Stack.of(this).region,
 				"--GLUE_SRC_DATABASE": "chembl_25_src"
 			}	    	

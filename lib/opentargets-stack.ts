@@ -37,7 +37,7 @@ export class OpenTargetsStack extends cdk.Stack{
                 "--job-bookmark-option": "job-bookmark-disable",
                 "--enable-metrics": "",
                 "--DL_BUCKET": props.dataLakeBucket.bucketName,
-                "--DL_PREFIX": "/opentargets/19_11/",
+                "--DL_PREFIX": "/opentargets_1911/",
                 "--GLUE_SRC_DATABASE": "opentargets_1911_src"
             }
 	    });
