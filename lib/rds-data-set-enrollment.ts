@@ -6,24 +6,20 @@ import s3 = require('@aws-cdk/aws-s3');
 import s3assets = require('@aws-cdk/aws-s3-assets')
 import rds = require('@aws-cdk/aws-rds');
 import { DataSetEnrollmentProps, DataSetEnrollment } from './data-set-enrollment';
+import { DataLakeEnrollment, DataLakeEnrollmentProps } from './datalake-stack'
 
 
-
-export interface RDSdataSetSetEnrollmentProps extends cdk.StackProps {
+export interface RDSdataSetSetEnrollmentProps extends DataLakeEnrollmentProps {
 	databaseSecret: rds.DatabaseSecret;
 	database: rds.DatabaseInstance;
 	accessSecurityGroup: ec2.SecurityGroup;
-	dataLakeBucket: s3.Bucket;
-	DataSetName: string;
 	JdbcTargetIncludePaths: string[];
-	GlueScriptPath: string;
-	GlueScriptArguments: any;	
 }
 
 
-export class RDSPostgresDataSetEnrollment extends cdk.Construct{
+export class RDSPostgresDataSetEnrollment extends DataLakeEnrollment {
 	constructor(scope: cdk.Construct, id: string, props: RDSdataSetSetEnrollmentProps) {
-		super(scope, id);
+		super(scope, id, props);
 	
 		const dataSetName = props.DataSetName;
         const dataSetSourceConnectionName = `${dataSetName}-src`
@@ -39,7 +35,7 @@ export class RDSPostgresDataSetEnrollment extends cdk.Construct{
             
         }
         
-        const enrollment = new DataSetEnrollment(this, 'rdsDatasetEnrollment', {
+        this.DataEnrollment = new DataSetEnrollment(this, 'rdsDatasetEnrollment', {
 			dataLakeBucket: props.dataLakeBucket,
 			dataSetName: dataSetName,
 			SourceConnectionInput: {

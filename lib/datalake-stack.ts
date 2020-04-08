@@ -5,7 +5,7 @@ import rds = require('@aws-cdk/aws-rds');
 import glue = require('@aws-cdk/aws-glue');
 import s3 = require('@aws-cdk/aws-s3');
 import s3assets = require('@aws-cdk/aws-s3-assets');
-import { DataSetEnrollmentProps } from './data-set-enrollment';
+import { DataSetEnrollmentProps, DataSetEnrollment } from './data-set-enrollment';
 
 export interface DatalakeStackProps extends cdk.StackProps {
     // chemblDB: rds.DatabaseInstance;
@@ -25,6 +25,27 @@ export class DatalakeStack extends cdk.Stack {
     this.DataLakeBucket = dataLakeBucket;
   }
 }
+
+
+
+
+export interface DataLakeEnrollmentProps extends cdk.StackProps {
+	dataLakeBucket: s3.Bucket;
+	GlueScriptPath: string;
+	GlueScriptArguments: any;
+	DataSetName: string;
+}
+
+export class DataLakeEnrollment extends cdk.Construct {
+  
+  public DataEnrollment: DataSetEnrollment; 
+  
+  constructor(scope: cdk.Construct, id: string, props: DataLakeEnrollmentProps) {
+    super(scope, id);
+  }
+}
+
+
 
 
 

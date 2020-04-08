@@ -70,6 +70,8 @@ export class DataSetEnrollment extends cdk.Construct {
 		
 
 		let connectionArray = [];
+		
+		
 		if(props.SourceConnectionInput){
 			this.SourceConnection = new glue.CfnConnection(this, `${props.dataSetName}-src-connection`, {
 				catalogId: this.Dataset_Source.catalogId, 
@@ -105,15 +107,14 @@ export class DataSetEnrollment extends cdk.Construct {
 		glueScript.grantRead(this.DataSetGlueRole);
 		
 		
-		const etl_job = new glue.CfnJob(this, `${props.dataSetName}-EtlJob`, {
+		
+		/// The spread operator below (...) makes the connections property conditional. Its only used for JDBC sources at the moment.
+		const jobParams = {
 			executionProperty: {
 				maxConcurrentRuns: 1
 			}, 
 			name: `${props.dataSetName}_src_to_dl_etl`, 
 			timeout: 2880, 
-			connections: {
-				connections: connectionArray
-			},
 			glueVersion: "1.0", 
 			maxCapacity: 10.0,
 			command: {
@@ -123,8 +124,14 @@ export class DataSetEnrollment extends cdk.Construct {
 			}, 
 			role: this.DataSetGlueRole.roleArn,
 			maxRetries: 0, 
-			defaultArguments: props.GlueScriptArguments
-		});
+			defaultArguments: props.GlueScriptArguments,
+			...(typeof props.SourceConnectionInput !== "undefined" && {
+					connections: {
+						connections: connectionArray
+					}
+			})
+		}
+		const etl_job = new glue.CfnJob(this, `${props.dataSetName}-EtlJob`, jobParams );
 		
 		
 		

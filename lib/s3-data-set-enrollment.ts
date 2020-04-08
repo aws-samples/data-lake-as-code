@@ -5,22 +5,19 @@ import glue = require('@aws-cdk/aws-glue');
 import s3 = require('@aws-cdk/aws-s3');
 import s3assets = require('@aws-cdk/aws-s3-assets');
 import { DataSetEnrollmentProps, DataSetEnrollment } from './data-set-enrollment';
+import { DataLakeEnrollment, DataLakeEnrollmentProps } from './datalake-stack'
 
 
-export interface S3dataSetEnrollmentProps extends cdk.StackProps {
+export interface S3dataSetEnrollmentProps extends DataLakeEnrollmentProps {
     sourceBucket: s3.IBucket;
     sourceBucketDataPrefixes: string[];
-	dataLakeBucket: s3.Bucket;
-	GlueScriptPath: string;
-	GlueScriptArguments: any;
-	DataSetName: string;
 }
 
 
 
-export class S3dataSetEnrollment extends cdk.Construct{
+export class S3dataSetEnrollment extends DataLakeEnrollment{
 	constructor(scope: cdk.Construct, id: string, props: S3dataSetEnrollmentProps) {
-		super(scope, id);
+		super(scope, id, props);
 	
 		const dataSetName = props.DataSetName;
 		
@@ -50,7 +47,7 @@ export class S3dataSetEnrollment extends cdk.Construct{
             
         }
 		
-		const enrollment = new DataSetEnrollment(this, 'openTargetsEnrollment', {
+		this.DataEnrollment = new DataSetEnrollment(this, 'openTargetsEnrollment', {
 		    dataLakeBucket: props.dataLakeBucket,
 			dataSetName: dataSetName,
 			SourceAccessPolicy: s3AccessPolicy,
