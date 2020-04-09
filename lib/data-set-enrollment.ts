@@ -34,6 +34,11 @@ export class DataSetEnrollment extends cdk.Construct {
     public readonly DataSetGlueRole: iam.Role;
     public readonly Dataset_Source: glue.Database;
     public readonly Dataset_Datalake: glue.Database;
+    
+    public readonly DataLakeBucketName: string;
+    public readonly DataLakePrefix: string;
+
+
 
 	private setupCrawler(targetGlueDatabase: glue.Database, targets: glue.CfnCrawler.TargetsProperty, isSourceCrawler: boolean){
 		
@@ -56,6 +61,10 @@ export class DataSetEnrollment extends cdk.Construct {
 
 	constructor(scope: cdk.Construct, id: string, props: DataSetEnrollmentProps) {
 		super(scope, id);	
+		
+		
+		this.DataLakeBucketName	= props.GlueScriptArguments['--DL_BUCKET'];
+		this.DataLakePrefix = props.GlueScriptArguments['--DL_PREFIX'];
 		
 		this.DataSetName = props.dataSetName;
 		

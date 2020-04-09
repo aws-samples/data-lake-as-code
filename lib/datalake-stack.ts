@@ -43,6 +43,33 @@ export class DataLakeEnrollment extends cdk.Construct {
   constructor(scope: cdk.Construct, id: string, props: DataLakeEnrollmentProps) {
     super(scope, id);
   }
+  
+	public grantRead(principal: iam.Role){
+		
+		
+		const dataLakeBucket = s3.Bucket.fromBucketName(this, 'dataLakeBucket', this.DataEnrollment.DataLakeBucketName);
+		dataLakeBucket.grantRead(principal, this.DataEnrollment.DataLakePrefix + "*")
+		
+		const gluePolicy = new iam.PolicyStatement({
+	        actions: ["glue:GetDatabase"],
+	        effect: iam.Effect.ALLOW,
+	        resources: [`arn:aws:glue:${cdk.Stack.of(this).region}:${cdk.Stack.of(this).account}:catalog`, 
+	        			`arn:aws:glue:${cdk.Stack.of(this).region}:${cdk.Stack.of(this).account}:database/default`, 
+	        			this.DataEnrollment.Dataset_Datalake.databaseArn
+	        		   ]
+	    });    
+		
+		const athenaPolicy = new iam.PolicyStatement({
+	        actions: ["athena:*"],
+	        effect: iam.Effect.ALLOW,
+	        resources: ["*"],
+	    });    
+	    
+	    principal.addToPolicy(gluePolicy);
+	    principal.addToPolicy(athenaPolicy);
+		
+	
+	}
 }
 
 

@@ -34,6 +34,13 @@ const openTargetsStack = new OpenTargetsStack(app, 'OpenTargetsStack', {
 });
 
 const analyticsStack = new AnalyticsStack(app, 'AnalyticsStack', {
-    targetVpc: baseline.Vpc
+    targetVpc: baseline.Vpc,
 });
 
+
+chemblStack.grantRead(analyticsStack.NotebookRole);
+openTargetsStack.grantRead(analyticsStack.NotebookRole);
+
+
+// chemblStack.grantRead(analyticsStack.NotebookRole);
+// openTargetsStack.grantRead(analyticsStack.NotebookRole);
