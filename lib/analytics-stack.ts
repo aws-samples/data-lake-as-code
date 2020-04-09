@@ -24,7 +24,10 @@ export class AnalyticsStack extends cdk.Stack {
     
     
     const lifecycleCode = [
-            {"content": "echo hello" }
+            {"content": cdk.Fn.base64(`
+            wget -O /home/ec2-user/SageMaker/opentargets.chembl.example.ipynb https://raw.githubusercontent.com/paulu-aws/chembl-opentargets-data-lake-example/master/scripts/sagemaker.opentargets.chembl.example.ipynb
+            chown ec2-user /home/ec2-user/SageMaker/opentargets.chembl.example.ipynb
+            `) }
         ];
     const sageMakerIntanceLifecyclePolicy = new sagemaker.CfnNotebookInstanceLifecycleConfig(this, 'notebookLifecyclePolicy', {
         notebookInstanceLifecycleConfigName: "Boostrap-Chembl-OpenTargets-Demo-Notebook",
