@@ -47,26 +47,62 @@ export class DataLakeEnrollment extends cdk.Construct {
 	public grantRead(principal: iam.Role){
 		
 		
-		const dataLakeBucket = s3.Bucket.fromBucketName(this, 'dataLakeBucket', this.DataEnrollment.DataLakeBucketName);
-		dataLakeBucket.grantRead(principal, this.DataEnrollment.DataLakePrefix + "*")
+		const s3Policy = {
+				"Action": [
+            "s3:GetObject*",
+            "s3:GetBucket*",
+            "s3:List*"
+        ],
+        "Resource": [
+            `arn:aws:s3:::${this.DataEnrollment.DataLakeBucketName}`,
+            `arn:aws:s3:::${this.DataEnrollment.DataLakeBucketName}${this.DataEnrollment.DataLakePrefix}*`
+        ],
+        "Effect": "Allow"
+			};
+			
+			
+    const s3PolicyStatement = iam.PolicyStatement.fromJson(s3Policy);
+    
+		const gluePolicy = {
+					"Action": [
+              "glue:GetDatabase",
+              "glue:GetTable",
+          ],
+          "Resource": [
+              `arn:aws:glue:${cdk.Stack.of(this).region}:${cdk.Stack.of(this).account}:catalog`,
+              `arn:aws:glue:${cdk.Stack.of(this).region}:${cdk.Stack.of(this).account}:database/default`,
+              this.DataEnrollment.Dataset_Datalake.databaseArn,
+              `arn:aws:glue:${cdk.Stack.of(this).region}:${cdk.Stack.of(this).account}:table/${this.DataEnrollment.Dataset_Datalake.databaseName}/*`
+          ],
+          "Effect": "Allow"
+			};
+    const gluePolicyStatement = iam.PolicyStatement.fromJson(gluePolicy);
+
+
+		const athenaPolicy = {
+					"Action": [
+						"athena:BatchGetNamedQuery",
+						"athena:BatchGetQueryExecution",
+						"athena:GetQueryExecution",
+						"athena:GetQueryResults",
+						"athena:GetQueryResultsStream",
+						"athena:GetWorkGroup",
+						"athena:ListTagsForResource"
+          ],
+          "Resource": [
+              `arn:aws:athena:${cdk.Stack.of(this).region}:${cdk.Stack.of(this).account}:*`
+              
+          ],
+          "Effect": "Allow"
+			};
+		const athenaPolicyStatement = iam.PolicyStatement.fromJson(athenaPolicy);
 		
-		const gluePolicy = new iam.PolicyStatement({
-	        actions: ["glue:GetDatabase"],
-	        effect: iam.Effect.ALLOW,
-	        resources: [`arn:aws:glue:${cdk.Stack.of(this).region}:${cdk.Stack.of(this).account}:catalog`, 
-	        			`arn:aws:glue:${cdk.Stack.of(this).region}:${cdk.Stack.of(this).account}:database/default`, 
-	        			this.DataEnrollment.Dataset_Datalake.databaseArn
-	        		   ]
-	    });    
 		
-		const athenaPolicy = new iam.PolicyStatement({
-	        actions: ["athena:*"],
-	        effect: iam.Effect.ALLOW,
-	        resources: ["*"],
-	    });    
+    
+		principal.addToPolicy(gluePolicyStatement);
+		principal.addToPolicy(s3PolicyStatement);
+    principal.addToPolicy(athenaPolicyStatement);
 	    
-	    principal.addToPolicy(gluePolicy);
-	    principal.addToPolicy(athenaPolicy);
 		
 	
 	}

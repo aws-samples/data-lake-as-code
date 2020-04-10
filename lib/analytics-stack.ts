@@ -25,16 +25,14 @@ export class AnalyticsStack extends cdk.Stack {
        vpc: props.targetVpc
     });
     
-    const athenaSagingDirectory = new s3.Bucket(this, 'athenaStagingDir', {});
-    
-    
+    const athenaStagingDirectory = new s3.Bucket(this, 'athenaStagingDir', {});
     
     const lifecycleCode = [
             {"content": cdk.Fn.base64(`
             wget -O /home/ec2-user/SageMaker/opentargets.chembl.example.ipynb https://raw.githubusercontent.com/paulu-aws/chembl-opentargets-data-lake-example/master/scripts/sagemaker.opentargets.chembl.example.ipynb
             sudo chown ec2-user /home/ec2-user/SageMaker/opentargets.chembl.example.ipynb
-            sed -i 's/XXXXAthenaStagingDirectoryXXXX/${athenaSagingDirectory.bucketName}/g' opentargets.chembl.example.ipynb
-            sed -i 's/XXXXAthenaRegionXXXX/${cdk.Stack.of(this).region}/g' opentargets.chembl.example.ipynb
+            sed -i 's/XXXXAthenaStagingDirectoryXXXX/${athenaStagingDirectory.bucketName}/g' /home/ec2-user/SageMaker/opentargets.chembl.example.ipynb
+            sed -i 's/XXXXAthenaRegionXXXX/${cdk.Stack.of(this).region}/g' /home/ec2-user/SageMaker/opentargets.chembl.example.ipynb
             `) }
         ];
     const sageMakerIntanceLifecyclePolicy = new sagemaker.CfnNotebookInstanceLifecycleConfig(this, 'notebookLifecyclePolicy', {
@@ -43,12 +41,36 @@ export class AnalyticsStack extends cdk.Stack {
         
     });
     
+    const notebookPolicy = {
+        "Version": "2012-10-17",
+        "Statement": [
+            {
+                "Effect": "Allow",
+                "Action": [
+                    "cloudwatch:PutMetricData",
+                    "logs:CreateLogStream",
+                    "logs:PutLogEvents",
+                    "logs:CreateLogGroup",
+                    "logs:DescribeLogStreams",
+                ],
+                "Resource": "*"
+            }
+        ]
+    };
+    
+    const notebookPolicyDoc = iam.PolicyDocument.fromJson(notebookPolicy);
+    
     this.NotebookRole = new iam.Role(this, 'notebookInstanceRole', {
         roleName: "chemblOpenTargetsNotebookRole",
-        assumedBy: new iam.ServicePrincipal('sagemaker')
+        assumedBy: new iam.ServicePrincipal('sagemaker'),
+        inlinePolicies: {
+            "notebookPermissions": notebookPolicyDoc
+        }
     });
     
-    athenaSagingDirectory.grantReadWrite(this.NotebookRole)
+    athenaStagingDirectory.grantReadWrite(this.NotebookRole);
+    
+
     
     new sagemaker.CfnNotebookInstance(this, 'analyticsNotebook', {
         instanceType : 'ml.t2.medium',

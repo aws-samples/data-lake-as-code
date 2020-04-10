@@ -26,7 +26,6 @@ const chemblStack = new ChemblStack(app, 'ChemblStack', {
     dataLakeBucket: coreDataLake.DataLakeBucket
 });
 
-
 const openTargetsStack = new OpenTargetsStack(app, 'OpenTargetsStack', {
     sourceBucket: baseline.OpenTargetsSourceBucket,
     sourceBucketDataPrefix: '/opentargets/sourceExports/19.11/output/',
@@ -40,7 +39,3 @@ const analyticsStack = new AnalyticsStack(app, 'AnalyticsStack', {
 
 chemblStack.grantRead(analyticsStack.NotebookRole);
 openTargetsStack.grantRead(analyticsStack.NotebookRole);
-
-
-// chemblStack.grantRead(analyticsStack.NotebookRole);
-// openTargetsStack.grantRead(analyticsStack.NotebookRole);
