@@ -2,7 +2,7 @@
 import 'source-map-support/register';
 import * as cdk from '@aws-cdk/core';
 import { BaselineStack } from '../lib/baseline-stack';
-import { DatalakeStack } from '../lib/datalake-stack';
+import { DatalakeStack } from '../lib/stacks/datalake-stack';
 import { OpenTargetsStack } from '../lib/opentargets-stack';
 import { ChemblStack } from '../lib/chembl-25-stack';
 import { AnalyticsStack } from '../lib/analytics-stack.js';

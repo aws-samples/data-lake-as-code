@@ -6,7 +6,7 @@ import glue = require('@aws-cdk/aws-glue');
 import s3 = require('@aws-cdk/aws-s3');
 import s3assets = require('@aws-cdk/aws-s3-assets');
 import { RDSdataSetSetEnrollmentProps, RDSPostgresDataSetEnrollment } from './constructs/rds-data-set-enrollment';
-import { DataSetStack, DataSetStackProps} from './dataset-stack';
+import { DataSetStack, DataSetStackProps} from './stacks/dataset-stack';
 
 
 

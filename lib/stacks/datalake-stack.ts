@@ -5,7 +5,7 @@ import rds = require('@aws-cdk/aws-rds');
 import glue = require('@aws-cdk/aws-glue');
 import s3 = require('@aws-cdk/aws-s3');
 import s3assets = require('@aws-cdk/aws-s3-assets');
-import { DataSetEnrollmentProps, DataSetEnrollment } from './constructs/data-set-enrollment';
+import { DataSetEnrollmentProps, DataSetEnrollment } from '../constructs/data-set-enrollment';
 
 export interface DatalakeStackProps extends cdk.StackProps {
 
