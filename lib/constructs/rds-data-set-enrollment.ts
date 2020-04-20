@@ -6,7 +6,7 @@ import s3 = require('@aws-cdk/aws-s3');
 import s3assets = require('@aws-cdk/aws-s3-assets')
 import rds = require('@aws-cdk/aws-rds');
 import { DataSetEnrollmentProps, DataSetEnrollment } from './data-set-enrollment';
-import { DataLakeEnrollment, DataLakeEnrollmentProps } from './datalake-stack'
+import { DataLakeEnrollment, DataLakeEnrollmentProps } from './data-lake-enrollment'
 
 
 export interface RDSdataSetSetEnrollmentProps extends DataLakeEnrollmentProps {

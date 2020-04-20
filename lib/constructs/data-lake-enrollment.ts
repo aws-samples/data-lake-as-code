@@ -7,26 +7,6 @@ import s3 = require('@aws-cdk/aws-s3');
 import s3assets = require('@aws-cdk/aws-s3-assets');
 import { DataSetEnrollmentProps, DataSetEnrollment } from './data-set-enrollment';
 
-export interface DatalakeStackProps extends cdk.StackProps {
-    // chemblDB: rds.DatabaseInstance;
-    // chemblDBAccessSg: ec2.SecurityGroup;
-    // chemblDBSecret: rds.DatabaseSecret;
-}
-
-export class DatalakeStack extends cdk.Stack {
-  
-  public readonly DataLakeBucket: s3.Bucket; 
-  
-  constructor(scope: cdk.Construct, id: string, props: DatalakeStackProps) {
-    super(scope, id, props);
-
-    const dataLakeBucket = new s3.Bucket(this, 'dataLakeBucket');
-
-    this.DataLakeBucket = dataLakeBucket;
-  }
-}
-
-
 
 
 export interface DataLakeEnrollmentProps extends cdk.StackProps {

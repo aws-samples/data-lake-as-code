@@ -4,8 +4,8 @@ import iam = require('@aws-cdk/aws-iam');
 import glue = require('@aws-cdk/aws-glue');
 import s3 = require('@aws-cdk/aws-s3');
 import s3assets = require('@aws-cdk/aws-s3-assets');
-import { S3dataSetEnrollmentProps, S3dataSetEnrollment } from './s3-data-set-enrollment';
-import { DataSetStack, DataSetStackProps} from './dataset-stack';
+import { S3dataSetEnrollmentProps, S3dataSetEnrollment } from './constructs/s3-data-set-enrollment';
+import { DataSetStack, DataSetStackProps} from './stacks/dataset-stack';
 
 
 export interface OpenTargetsEnrollmentProps extends DataSetStackProps {
