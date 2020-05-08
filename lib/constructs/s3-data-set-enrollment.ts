@@ -5,10 +5,10 @@ import glue = require('@aws-cdk/aws-glue');
 import s3 = require('@aws-cdk/aws-s3');
 import s3assets = require('@aws-cdk/aws-s3-assets');
 import { DataSetEnrollmentProps, DataSetEnrollment } from './data-set-enrollment';
-import { DataLakeEnrollment, DataLakeEnrollmentProps } from './data-lake-enrollment';
+import { DataLakeEnrollment } from './data-lake-enrollment';
 
 
-export interface S3dataSetEnrollmentProps extends DataLakeEnrollmentProps {
+export interface S3dataSetEnrollmentProps extends DataLakeEnrollment.DataLakeEnrollmentProps {
     sourceBucket: s3.IBucket;
     sourceBucketDataPrefixes: string[];
 }
@@ -58,5 +58,6 @@ export class S3dataSetEnrollment extends DataLakeEnrollment{
 			GlueScriptArguments: props.GlueScriptArguments
 		});
 	
+	    this.createCoarseIamPolicy();
 	}
 }

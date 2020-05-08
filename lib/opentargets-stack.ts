@@ -11,7 +11,6 @@ import { DataSetStack, DataSetStackProps} from './stacks/dataset-stack';
 export interface OpenTargetsEnrollmentProps extends DataSetStackProps {
     sourceBucket: s3.IBucket;
     sourceBucketDataPrefix: string;
-	dataLakeBucket: s3.Bucket;
 }
 
 
@@ -30,13 +29,13 @@ export class OpenTargetsStack extends DataSetStack{
                 `${props.sourceBucketDataPrefix}19.11_evidence_data/`, 
                 `${props.sourceBucketDataPrefix}19.11_target_list/`
             ],
-	        dataLakeBucket: props.dataLakeBucket,
+	        dataLakeBucket: props.DataLake.DataLakeBucket,
 	        GlueScriptPath: "scripts/glue.s3import.opentargets.py",
 	        GlueScriptArguments: {
                 "--job-language": "python", 
                 "--job-bookmark-option": "job-bookmark-disable",
                 "--enable-metrics": "",
-                "--DL_BUCKET": props.dataLakeBucket.bucketName,
+                "--DL_BUCKET": props.DataLake.DataLakeBucket.bucketName,
                 "--DL_PREFIX": "/opentargets_1911/",
                 "--GLUE_SRC_DATABASE": "opentargets_1911_src"
             }
