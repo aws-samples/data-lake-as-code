@@ -226,9 +226,7 @@ export class DataLakeEnrollment extends cdk.Construct {
 
     private createLakeFormationPermission(resourceId: string, dataLakePrincipal: lakeformation.CfnPermissions.DataLakePrincipalProperty,
                                           resource: lakeformation.CfnPermissions.ResourceProperty, permissions: string[], grantablePremissions: string[] ){
-
-        console.log("CREATING lakeformation permission");
-
+       
         new lakeformation.CfnPermissions(this, resourceId, {
             dataLakePrincipal: dataLakePrincipal,
             resource: resource,
@@ -238,8 +236,7 @@ export class DataLakeEnrollment extends cdk.Construct {
     }
 
     public grantLakeFormationPermissions(principal: iam.IPrincipal, permissionGrant: DataLakeEnrollment.LakeFormationPermissionGrant){
-
-        console.log("Granting lakeformation permission");
+       
 
         this.grantCoarseIamRead(principal);
 
@@ -252,34 +249,18 @@ export class DataLakeEnrollment extends cdk.Construct {
             databaseResource: {name: this.DataEnrollment.Dataset_Datalake.databaseName}
         };
 
-        if(principal instanceof iam.Role){
-            grantIdPrefix = `${principal.roleName}-${this.DataSetName}`
-            dataLakePrincipal = { dataLakePrincipalIdentifier: principal.roleArn };
+        const resolvedPrincipalType = this.determinePrincipalType(principal);
+
+        if(resolvedPrincipalType === iam.Role) {
+            const resolvedPrincipal = principal as  iam.Role;
+            grantIdPrefix = `${resolvedPrincipal.roleArn}-${this.DataSetName}`
+            dataLakePrincipal = { dataLakePrincipalIdentifier: resolvedPrincipal.roleArn };
 		}
 
-	    if(principal instanceof iam.User){
-            grantIdPrefix = `${principal.userName}-${this.DataSetName}`
-            dataLakePrincipal = { dataLakePrincipalIdentifier: principal.userName };
-		}
-
-		if(principal instanceof cdk.Resource){
-
-	        try{
-                const user = principal as iam.User;
-                grantIdPrefix = `${user.userName}-${this.DataSetName}`
-                dataLakePrincipal = { dataLakePrincipalIdentifier: user.userName };
-                return;
-	        } catch(exception) {
-	            console.log(exception);
-	        }
-	        try{
-                const role = principal as iam.Role;
-                grantIdPrefix = `${role.roleName}-${this.DataSetName}`
-                dataLakePrincipal = { dataLakePrincipalIdentifier: role.roleArn };
-                return;
-	        } catch(exception) {
-	            console.log(exception);
-	        }
+	    if(resolvedPrincipalType === iam.User){
+            const resolvedPrincipal = principal as  iam.User;
+            grantIdPrefix = `${resolvedPrincipal.userName}-${this.DataSetName}`
+            dataLakePrincipal = { dataLakePrincipalIdentifier: resolvedPrincipal.userName };
 		}
 
 		this.createLakeFormationPermission(`${grantIdPrefix}-databaseGrant`,dataLakePrincipal , databaseResourceProperty, permissionGrant.DatabasePermissions, permissionGrant.GrantableDatabasePermissions)
@@ -291,47 +272,60 @@ export class DataLakeEnrollment extends cdk.Construct {
                     databaseName: this.DataEnrollment.Dataset_Datalake.databaseName
                 }
             };
-            this.createLakeFormationPermission(`${grantIdPrefix}-databaseTableGrant`,dataLakePrincipal , tableResourceProperty, permissionGrant.TablePermissions, permissionGrant.TablePermissions)
+            this.createLakeFormationPermission(`${grantIdPrefix}-${table}-databaseTableGrant`,dataLakePrincipal , tableResourceProperty, permissionGrant.TablePermissions, permissionGrant.TablePermissions)
         });
 
     }
 
-	public grantCoarseIamRead(principal: iam.IPrincipal){
+    private determinePrincipalType(principal: iam.IPrincipal){        
 
-		if(principal instanceof iam.Role){
-		    this.CoarseAthenaAccessPolicy.attachToRole(principal);
-		    this.CoarseResourceAccessPolicy.attachToRole(principal);
-		    return;
+        if(principal instanceof iam.Role){
+            //return principal as iam.Role;
+            return iam.Role;            
 		}
 
 	    if(principal instanceof iam.User){
-		    this.CoarseAthenaAccessPolicy.attachToUser(principal);
-		    this.CoarseResourceAccessPolicy.attachToUser(principal);
-		    return;
+            //return principal as iam.User;
+            return iam.User;
 		}
 
 		if(principal instanceof cdk.Resource){
-
+            
 	        try{
-                const user = principal as iam.User;
-                this.CoarseAthenaAccessPolicy.attachToUser(user);
-                this.CoarseResourceAccessPolicy.attachToUser(user);
-                return;
+                const user = principal as iam.User;                          
+                return iam.User;
 	        } catch(exception) {
 	            console.log(exception);
 	        }
 	        try{
                 const role = principal as iam.Role;
-                this.CoarseAthenaAccessPolicy.attachToRole(role);
-                this.CoarseResourceAccessPolicy.attachToRole(role);
-                return;
+                return iam.Role; 
 	        } catch(exception) {
 	            console.log(exception);
 	        }
+        }
+        
+        throw("Unable to deterimine principal type...");
 
+    }
+    
 
+	public grantCoarseIamRead(principal: iam.IPrincipal){
+
+        const resolvedPrincipalType = this.determinePrincipalType(principal);
+
+		if(resolvedPrincipalType === iam.Role){            
+		    this.CoarseAthenaAccessPolicy.attachToRole(principal as iam.Role);
+		    this.CoarseResourceAccessPolicy.attachToRole(principal as iam.Role);
+		    return;
 		}
 
+	    if(resolvedPrincipalType === iam.User){
+		    this.CoarseAthenaAccessPolicy.attachToUser(principal as iam.User);
+		    this.CoarseResourceAccessPolicy.attachToUser(principal as iam.User);
+		    return;
+		}
+		
 		throw("Unable to attach policy. Principal is not a user or role.");
 
 	}

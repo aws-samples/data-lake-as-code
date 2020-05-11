@@ -41,7 +41,13 @@ openTargetsStack.grantIamRead(analyticsStack.NotebookRole);
 
 
 
+
+
+
+
+
 const exampleUser = iam.User.fromUserName(coreDataLake, 'exampleGrantee', 'paul0' );
+
 var exampleGrant: DataLakeEnrollment.LakeFormationPermissionGrant = {
     tables: ["association_data", "evidence_data","target_list","disease_list"],
     DatabasePermissions: [DataLakeEnrollment.DatabasePermission.Alter, DataLakeEnrollment.DatabasePermission.CreateTable, DataLakeEnrollment.DatabasePermission.Drop],
