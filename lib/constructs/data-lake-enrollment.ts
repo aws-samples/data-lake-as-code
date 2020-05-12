@@ -17,12 +17,14 @@ export class DataLakeEnrollment extends cdk.Construct {
   public DataSetName: string;
   private CoarseAthenaAccessPolicy: iam.ManagedPolicy;
   private CoarseResourceAccessPolicy: iam.ManagedPolicy;
+  private CoarseIamPolciesApplied: boolean;
 
   constructor(scope: cdk.Construct, id: string, props: DataLakeEnrollment.DataLakeEnrollmentProps) {
         super(scope, id);
 
 
         this.DataSetName = props.DataSetName;
+        this.CoarseIamPolciesApplied = false;
 
     }
 
@@ -224,9 +226,134 @@ export class DataLakeEnrollment extends cdk.Construct {
     }
 
 
-    private createLakeFormationPermission(resourceId: string, dataLakePrincipal: lakeformation.CfnPermissions.DataLakePrincipalProperty,
-                                          resource: lakeformation.CfnPermissions.ResourceProperty, permissions: string[], grantablePremissions: string[] ){
-       
+    public grantTableWithColumnPermissions(principal: iam.IPrincipal, permissionGrant: DataLakeEnrollment.TableWithColumnPermissionGrant){
+
+        const coreGrant = this.setupIamAndLakeFormationDatabasePermissionForPrincipal(principal, permissionGrant.DatabasePermissions, permissionGrant.GrantableDatabasePermissions);
+
+        const wildcardProperty: lakeformation.CfnPermissions.ColumnWildcardProperty = {
+            excludedColumnNames: permissionGrant.columns
+        };
+
+        var  tableWithColumnsProperty : lakeformation.CfnPermissions.TableWithColumnsResourceProperty = {
+            columnNames: permissionGrant.columns,
+            databaseName: this.DataEnrollment.Dataset_Datalake.databaseName,
+            name: permissionGrant.table
+        };
+
+        if(permissionGrant.wildCardFilter === null){
+            tableWithColumnsProperty = {
+                columnNames: permissionGrant.columns,
+                databaseName: this.DataEnrollment.Dataset_Datalake.databaseName,
+                name: permissionGrant.table
+            };
+        }else{
+
+            if(permissionGrant.wildCardFilter == DataLakeEnrollment.TableWithColumnFilter.Include){
+                tableWithColumnsProperty = {
+                    columnNames: permissionGrant.columns,
+                    databaseName: this.DataEnrollment.Dataset_Datalake.databaseName,
+                    name: permissionGrant.table
+                };
+            }
+
+            if(permissionGrant.wildCardFilter == DataLakeEnrollment.TableWithColumnFilter.Exclude){
+                tableWithColumnsProperty = {
+                    databaseName: this.DataEnrollment.Dataset_Datalake.databaseName,
+                    name: permissionGrant.table,
+                    columnWildcard: {
+                        excludedColumnNames: permissionGrant.columns
+                    }
+                };
+            }
+
+        }
+
+        const tableWithColumnResourceProperty : lakeformation.CfnPermissions.ResourceProperty = {
+            tableWithColumnsResource: tableWithColumnsProperty
+        };
+
+        this.createLakeFormationPermission(`${coreGrant.grantIdPrefix}-${permissionGrant.table}-databaseTableWithColumnGrant`,coreGrant.dataLakePrincipal , tableWithColumnResourceProperty, permissionGrant.TableColumnPermissions, permissionGrant.GrantableTableColumnPermissions)
+
+
+    }
+
+    public grantDatabasePermission(principal: iam.IPrincipal, permissionGrant: DataLakeEnrollment.DatabasePermissionGrant){
+
+
+        var grantIdPrefix = ""
+        var dataLakePrincipal : lakeformation.CfnPermissions.DataLakePrincipalProperty = {
+            dataLakePrincipalIdentifier: ""
+        };
+        var databaseResourceProperty : lakeformation.CfnPermissions.ResourceProperty = {
+            //dataLocationResource: {resourceArn: this.DataEnrollment.DataLakeBucketName},
+            databaseResource: {name: this.DataEnrollment.Dataset_Datalake.databaseName}
+        };
+
+        const resolvedPrincipalType = this.determinePrincipalType(principal);
+
+        if(resolvedPrincipalType === iam.Role) {
+            const resolvedPrincipal = principal as  iam.Role;
+            grantIdPrefix = `${resolvedPrincipal.roleArn}-${this.DataSetName}`
+            dataLakePrincipal = { dataLakePrincipalIdentifier: resolvedPrincipal.roleArn };
+		}
+
+	    if(resolvedPrincipalType === iam.User){
+            const resolvedPrincipal = principal as  iam.User;
+            grantIdPrefix = `${resolvedPrincipal.userName}-${this.DataSetName}`
+            dataLakePrincipal = { dataLakePrincipalIdentifier: resolvedPrincipal.userArn };
+		}
+
+        this.createLakeFormationPermission(`${grantIdPrefix}-databaseGrant`,dataLakePrincipal , databaseResourceProperty, permissionGrant.DatabasePermissions, permissionGrant.GrantableDatabasePermissions)
+
+    }
+
+
+    public grantTablePermissions(principal: iam.IPrincipal, permissionGrant: DataLakeEnrollment.TablePermissionGrant){
+
+        const coreGrant = this.setupIamAndLakeFormationDatabasePermissionForPrincipal(principal, permissionGrant.DatabasePermissions, permissionGrant.GrantableDatabasePermissions);
+
+        permissionGrant.tables.forEach(table => {
+            var tableResourceProperty : lakeformation.CfnPermissions.ResourceProperty = {
+                tableResource:{
+                    name: table,
+                    databaseName: this.DataEnrollment.Dataset_Datalake.databaseName
+                }
+            };
+            this.createLakeFormationPermission(`${coreGrant.grantIdPrefix}-${table}-databaseTableGrant`,coreGrant.dataLakePrincipal , tableResourceProperty, permissionGrant.TablePermissions, permissionGrant.GrantableTablePermissions)
+        });
+
+    }
+
+
+	public grantCoarseIamRead(principal: iam.IPrincipal){
+
+
+        const resolvedPrincipalType = this.determinePrincipalType(principal);
+
+		if(resolvedPrincipalType === iam.Role){
+		    this.CoarseAthenaAccessPolicy.attachToRole(principal as iam.Role);
+		    this.CoarseResourceAccessPolicy.attachToRole(principal as iam.Role);
+		    this.CoarseIamPolciesApplied = true;
+		    return;
+		}
+
+	    if(resolvedPrincipalType === iam.User){
+		    this.CoarseAthenaAccessPolicy.attachToUser(principal as iam.User);
+		    this.CoarseResourceAccessPolicy.attachToUser(principal as iam.User);
+		    this.CoarseIamPolciesApplied = true;
+		    return;
+		}
+
+
+
+
+
+	}
+
+
+
+	private createLakeFormationPermission(resourceId: string, dataLakePrincipal: lakeformation.CfnPermissions.DataLakePrincipalProperty, resource: lakeformation.CfnPermissions.ResourceProperty, permissions: string[], grantablePremissions: string[] ){
+
         new lakeformation.CfnPermissions(this, resourceId, {
             dataLakePrincipal: dataLakePrincipal,
             resource: resource,
@@ -234,9 +361,38 @@ export class DataLakeEnrollment extends cdk.Construct {
             permissionsWithGrantOption: grantablePremissions
         });
     }
+	private determinePrincipalType(principal: iam.IPrincipal){
 
-    public grantLakeFormationPermissions(principal: iam.IPrincipal, permissionGrant: DataLakeEnrollment.LakeFormationPermissionGrant){
-       
+        if(principal instanceof iam.Role){
+            //return principal as iam.Role;
+            return iam.Role;
+		}
+
+	    if(principal instanceof iam.User){
+            //return principal as iam.User;
+            return iam.User;
+		}
+
+		if(principal instanceof cdk.Resource){
+
+	        try{
+                const user = principal as iam.User;
+                return iam.User;
+	        } catch(exception) {
+	            console.log(exception);
+	        }
+	        try{
+                const role = principal as iam.Role;
+                return iam.Role;
+	        } catch(exception) {
+	            console.log(exception);
+	        }
+        }
+
+        throw("Unable to deterimine principal type...");
+
+    }
+	private setupIamAndLakeFormationDatabasePermissionForPrincipal(principal: iam.IPrincipal, databasePermissions: Array<DataLakeEnrollment.DatabasePermission>, grantableDatabasePermissions: Array<DataLakeEnrollment.DatabasePermission> ){
 
         this.grantCoarseIamRead(principal);
 
@@ -260,75 +416,14 @@ export class DataLakeEnrollment extends cdk.Construct {
 	    if(resolvedPrincipalType === iam.User){
             const resolvedPrincipal = principal as  iam.User;
             grantIdPrefix = `${resolvedPrincipal.userName}-${this.DataSetName}`
-            dataLakePrincipal = { dataLakePrincipalIdentifier: resolvedPrincipal.userName };
+            dataLakePrincipal = { dataLakePrincipalIdentifier: resolvedPrincipal.userArn };
 		}
 
-		this.createLakeFormationPermission(`${grantIdPrefix}-databaseGrant`,dataLakePrincipal , databaseResourceProperty, permissionGrant.DatabasePermissions, permissionGrant.GrantableDatabasePermissions)
+	    this.grantDatabasePermission(principal, { DatabasePermissions: databasePermissions, GrantableDatabasePermissions: grantableDatabasePermissions  });
 
-        permissionGrant.tables.forEach(table => {
-            var tableResourceProperty : lakeformation.CfnPermissions.ResourceProperty = {
-                tableResource:{
-                    name: table,
-                    databaseName: this.DataEnrollment.Dataset_Datalake.databaseName
-                }
-            };
-            this.createLakeFormationPermission(`${grantIdPrefix}-${table}-databaseTableGrant`,dataLakePrincipal , tableResourceProperty, permissionGrant.TablePermissions, permissionGrant.TablePermissions)
-        });
-
+        return { grantIdPrefix: grantIdPrefix, dataLakePrincipal: dataLakePrincipal };
     }
 
-    private determinePrincipalType(principal: iam.IPrincipal){        
-
-        if(principal instanceof iam.Role){
-            //return principal as iam.Role;
-            return iam.Role;            
-		}
-
-	    if(principal instanceof iam.User){
-            //return principal as iam.User;
-            return iam.User;
-		}
-
-		if(principal instanceof cdk.Resource){
-            
-	        try{
-                const user = principal as iam.User;                          
-                return iam.User;
-	        } catch(exception) {
-	            console.log(exception);
-	        }
-	        try{
-                const role = principal as iam.Role;
-                return iam.Role; 
-	        } catch(exception) {
-	            console.log(exception);
-	        }
-        }
-        
-        throw("Unable to deterimine principal type...");
-
-    }
-    
-
-	public grantCoarseIamRead(principal: iam.IPrincipal){
-
-        const resolvedPrincipalType = this.determinePrincipalType(principal);
-
-		if(resolvedPrincipalType === iam.Role){            
-		    this.CoarseAthenaAccessPolicy.attachToRole(principal as iam.Role);
-		    this.CoarseResourceAccessPolicy.attachToRole(principal as iam.Role);
-		    return;
-		}
-
-	    if(resolvedPrincipalType === iam.User){
-		    this.CoarseAthenaAccessPolicy.attachToUser(principal as iam.User);
-		    this.CoarseResourceAccessPolicy.attachToUser(principal as iam.User);
-		    return;
-		}
-		
-		throw("Unable to attach policy. Principal is not a user or role.");
-
-	}
 }
 
 
@@ -352,6 +447,11 @@ export namespace DataLakeEnrollment
         Insert = 'INSERT',
     }
 
+    export enum TableWithColumnFilter {
+        Include = "Include",
+        Exclude = "Exclude"
+    }
+
     export interface DataLakeEnrollmentProps extends cdk.StackProps {
     	dataLakeBucket: s3.Bucket;
     	GlueScriptPath: string;
@@ -359,12 +459,28 @@ export namespace DataLakeEnrollment
     	DataSetName: string;
     }
 
-    export interface LakeFormationPermissionGrant {
+    export interface DatabasePermissionGrant {
+        DatabasePermissions: Array<DatabasePermission>;
+        GrantableDatabasePermissions: Array<DatabasePermission>;
+    }
+
+
+    export interface TablePermissionGrant {
         tables: Array<string>;
         DatabasePermissions: Array<DatabasePermission>;
         GrantableDatabasePermissions: Array<DatabasePermission>;
         TablePermissions: Array<TablePermission>;
         GrantableTablePermissions: Array<TablePermission>;
+    }
+
+    export interface TableWithColumnPermissionGrant {
+        table: string;
+        columns: Array<string>;
+        wildCardFilter?: TableWithColumnFilter;
+        DatabasePermissions: Array<DatabasePermission>;
+        GrantableDatabasePermissions: Array<DatabasePermission>;
+        TableColumnPermissions: Array<TablePermission>;
+        GrantableTableColumnPermissions: Array<TablePermission>;
     }
 }
 

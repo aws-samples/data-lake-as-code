@@ -8,28 +8,40 @@ import s3assets = require('@aws-cdk/aws-s3-assets');
 import { DataSetEnrollmentProps, DataSetEnrollment } from '../constructs/data-set-enrollment';
 import { DataLakeEnrollment } from '../constructs/data-lake-enrollment';
 import { DataLakeStack } from './datalake-stack';
-	
+
 export interface DataSetStackProps extends cdk.StackProps {
 	DataLake: DataLakeStack;
-}	
+}
 
 
 export class DataSetStack extends cdk.Stack {
-  
+
   public Enrollment: DataLakeEnrollment;
   public DataLake: DataLakeStack;
-  
+
   constructor(scope: cdk.Construct, id: string, props: DataSetStackProps) {
     super(scope, id, props);
     this.DataLake = props.DataLake;
   }
-  
-  public grantLakeFormationPermissions(principal: iam.IPrincipal, permissionGrant: DataLakeEnrollment.LakeFormationPermissionGrant){
-    
-    this.DataLake.grantAthenaResultsBucketPermission(principal);
-    this.Enrollment.grantLakeFormationPermissions(principal, permissionGrant);
+
+
+  public grantDatabasePermissions( principal: iam.IPrincipal, permissionGrant: DataLakeEnrollment.DatabasePermissionGrant){
+    this.Enrollment.grantDatabasePermission(principal, permissionGrant);
   }
-  
+
+  public grantTablePermissions(principal: iam.IPrincipal, permissionGrant: DataLakeEnrollment.TablePermissionGrant){
+
+    this.DataLake.grantAthenaResultsBucketPermission(principal);
+    this.Enrollment.grantTablePermissions(principal, permissionGrant);
+  }
+
+  public grantTableWithColumnPermissions(principal: iam.IPrincipal, permissionGrant: DataLakeEnrollment.TableWithColumnPermissionGrant){
+
+    this.DataLake.grantAthenaResultsBucketPermission(principal);
+    this.Enrollment.grantTableWithColumnPermissions(principal, permissionGrant);
+  }
+
+
   public grantIamRead(principal: iam.IPrincipal){
     this.DataLake.grantAthenaResultsBucketPermission(principal);
     this.Enrollment.grantCoarseIamRead(principal);
