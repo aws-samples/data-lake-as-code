@@ -27,6 +27,7 @@ export class DataLakeEnrollment extends cdk.Construct {
         this.CoarseIamPolciesApplied = false;
 
     }
+ 
 
     public createCoarseIamPolicy(){
 
@@ -277,7 +278,7 @@ export class DataLakeEnrollment extends cdk.Construct {
 
     }
 
-    public grantDatabasePermission(principal: iam.IPrincipal, permissionGrant: DataLakeEnrollment.DatabasePermissionGrant){
+    public grantDatabasePermission(principal: iam.IPrincipal, permissionGrant: DataLakeEnrollment.DatabasePermissionGrant, includeSourceDb: boolean = false){
 
 
         var grantIdPrefix = ""
@@ -293,7 +294,12 @@ export class DataLakeEnrollment extends cdk.Construct {
 
         if(resolvedPrincipalType === iam.Role) {
             const resolvedPrincipal = principal as  iam.Role;
-            grantIdPrefix = `${resolvedPrincipal.roleArn}-${this.DataSetName}`
+
+            if(permissionGrant.GrantResourcePrefix){
+                grantIdPrefix = `${permissionGrant.GrantResourcePrefix}-${this.DataSetName}`
+            }else{
+                grantIdPrefix = `${resolvedPrincipal.roleName}-${this.DataSetName}`
+            }            
             dataLakePrincipal = { dataLakePrincipalIdentifier: resolvedPrincipal.roleArn };
 		}
 
@@ -304,6 +310,18 @@ export class DataLakeEnrollment extends cdk.Construct {
 		}
 
         this.createLakeFormationPermission(`${grantIdPrefix}-databaseGrant`,dataLakePrincipal , databaseResourceProperty, permissionGrant.DatabasePermissions, permissionGrant.GrantableDatabasePermissions)
+
+        if(includeSourceDb){
+
+            databaseResourceProperty = {
+                //dataLocationResource: {resourceArn: this.DataEnrollment.DataLakeBucketName},
+                databaseResource: {name: this.DataEnrollment.Dataset_Source.databaseName}
+            };
+
+            this.createLakeFormationPermission(`${grantIdPrefix}-databaseSrcGrant`,dataLakePrincipal , databaseResourceProperty, permissionGrant.DatabasePermissions, permissionGrant.GrantableDatabasePermissions)
+
+        }
+
 
     }
 
@@ -462,6 +480,7 @@ export namespace DataLakeEnrollment
     export interface DatabasePermissionGrant {
         DatabasePermissions: Array<DatabasePermission>;
         GrantableDatabasePermissions: Array<DatabasePermission>;
+        GrantResourcePrefix?: string;
     }
 
 

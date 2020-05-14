@@ -34,7 +34,7 @@ export class RDSPostgresDataSetEnrollment extends DataLakeEnrollment {
 			});
             
         }
-        
+		
         this.DataEnrollment = new DataSetEnrollment(this, 'rdsDatasetEnrollment', {
 			dataLakeBucket: props.dataLakeBucket,
 			dataSetName: dataSetName,
@@ -61,7 +61,15 @@ export class RDSPostgresDataSetEnrollment extends DataLakeEnrollment {
 			GlueScriptArguments: props.GlueScriptArguments
 			
 		});        
-        
+						
+
 		this.createCoarseIamPolicy();
+
+        this.grantDatabasePermission(this.DataEnrollment.DataSetGlueRole,  {		     
+			DatabasePermissions: [DataLakeEnrollment.DatabasePermission.All],
+			GrantableDatabasePermissions: [DataLakeEnrollment.DatabasePermission.All],
+			GrantResourcePrefix: `${props.DataSetName}RoleGrant`
+	   }, true);
+
 	}
 }

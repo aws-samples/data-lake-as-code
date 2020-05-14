@@ -47,7 +47,7 @@ export class S3dataSetEnrollment extends DataLakeEnrollment{
             
         }
 		
-		this.DataEnrollment = new DataSetEnrollment(this, 'openTargetsEnrollment', {
+		this.DataEnrollment = new DataSetEnrollment(this, `${props.DataSetName}-s3Enrollment`, {
 		    dataLakeBucket: props.dataLakeBucket,
 			dataSetName: dataSetName,
 			SourceAccessPolicy: s3AccessPolicy,
@@ -58,6 +58,15 @@ export class S3dataSetEnrollment extends DataLakeEnrollment{
 			GlueScriptArguments: props.GlueScriptArguments
 		});
 	
-	    this.createCoarseIamPolicy();
+        this.createCoarseIamPolicy();
+        
+
+        this.grantDatabasePermission(this.DataEnrollment.DataSetGlueRole,  {		     
+		     DatabasePermissions: [DataLakeEnrollment.DatabasePermission.All],
+             GrantableDatabasePermissions: [DataLakeEnrollment.DatabasePermission.All],
+             GrantResourcePrefix: `${props.DataSetName}RoleGrant`
+		}, true);
+
+
 	}
 }

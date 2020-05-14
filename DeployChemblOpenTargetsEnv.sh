@@ -1,6 +1,9 @@
+#!/bin/sh
 npm run build
 cdk bootstrap
 cdk deploy BaselineStack --require-approval never
+currentPrincipalArn=$(aws sts get-caller-identity --query Arn --output text)
+jq '.context.starterLakeFormationAdmin = $currentPrincipalArn' --arg currentPrincipalArn $currentPrincipalArn cdk.json > tmp.$$.json && mv tmp.$$.json cdk.json
 cdk deploy CoreDataLake --require-approval never
 cdk deploy ChemblStack --require-approval never
 cdk deploy OpenTargetsStack --require-approval never
