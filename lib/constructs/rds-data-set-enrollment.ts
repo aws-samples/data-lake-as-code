@@ -64,12 +64,7 @@ export class RDSPostgresDataSetEnrollment extends DataLakeEnrollment {
 						
 
 		this.createCoarseIamPolicy();
-
-        this.grantDatabasePermission(this.DataEnrollment.DataSetGlueRole,  {		     
-			DatabasePermissions: [DataLakeEnrollment.DatabasePermission.All],
-			GrantableDatabasePermissions: [DataLakeEnrollment.DatabasePermission.All],
-			GrantResourcePrefix: `${props.DataSetName}RoleGrant`
-	   }, true);
+		this.grantGlueRoleLakeFormationPermissions(this.DataEnrollment.DataSetGlueRole, props.DataSetName); 
 
 	}
 }
