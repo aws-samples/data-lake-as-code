@@ -8,13 +8,15 @@ import cfn = require("@aws-cdk/aws-cloudformation");
 import s3 = require('@aws-cdk/aws-s3');
 import s3assets = require('@aws-cdk/aws-s3-assets');
 import lakeformation = require('@aws-cdk/aws-lakeformation');
-import lambda = require('@aws-cdk/aws-lambda')
+import { CustomResource } from '@aws-cdk/core';
+import * as cr from '@aws-cdk/custom-resources';
+import lambda = require('@aws-cdk/aws-lambda');
 import fs = require('fs');
 
 import { DataSetEnrollmentProps, DataSetEnrollment } from '../constructs/data-set-enrollment';
 
 export interface DataLakeStackProps extends cdk.StackProps {
-
+  starterLakeFormationAdminPrincipalArn: string;
 }
 
 export class DataLakeStack extends cdk.Stack {
@@ -25,6 +27,7 @@ export class DataLakeStack extends cdk.Stack {
   public readonly LakeFormationResource: lakeformation.CfnResource;
   public readonly PrimaryAthenaWorkgroup: athena.CfnWorkGroup;
   private readonly bucketRole: iam.Role; 
+  private readonly starterAdminArn: string;
   
   public grantAthenaResultsBucketPermission(principal: iam.IPrincipal){
     
@@ -63,9 +66,14 @@ export class DataLakeStack extends cdk.Stack {
     super(scope, id, props);
 
     this.DataLakeBucket = new s3.Bucket(this, 'dataLakeBucket');
-    this.AthenaResultsBucket = new s3.Bucket(this, 'athenaResultsBucket');
-    
-    
+    this.AthenaResultsBucket = new s3.Bucket(this, 'athenaResultsBucket');        
+   
+    new lakeformation.CfnDataLakeSettings(this, 'starterAdminPermission', {
+      admins: [{
+        dataLakePrincipalIdentifier: props.starterLakeFormationAdminPrincipalArn        
+      }]
+    });
+
     const coarseAthenaResultBucketAccess = {
             "Version": "2012-10-17",
             "Statement": [

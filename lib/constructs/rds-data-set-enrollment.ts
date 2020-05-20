@@ -34,7 +34,7 @@ export class RDSPostgresDataSetEnrollment extends DataLakeEnrollment {
 			});
             
         }
-        
+		
         this.DataEnrollment = new DataSetEnrollment(this, 'rdsDatasetEnrollment', {
 			dataLakeBucket: props.dataLakeBucket,
 			dataSetName: dataSetName,
@@ -61,7 +61,10 @@ export class RDSPostgresDataSetEnrollment extends DataLakeEnrollment {
 			GlueScriptArguments: props.GlueScriptArguments
 			
 		});        
-        
+						
+
 		this.createCoarseIamPolicy();
+		this.grantGlueRoleLakeFormationPermissions(this.DataEnrollment.DataSetGlueRole, props.DataSetName); 
+
 	}
 }

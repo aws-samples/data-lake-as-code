@@ -16,6 +16,22 @@ export interface S3dataSetEnrollmentProps extends DataLakeEnrollment.DataLakeEnr
 
 
 export class S3dataSetEnrollment extends DataLakeEnrollment{
+
+
+
+    grantGlueRoleLakeFormationPermissions(DataSetGlueRole: iam.Role, DataSetName: string) {
+
+        this.grantDataLocationPermissions(this.DataEnrollment.DataSetGlueRole, {
+            Grantable: true,
+            GrantResourcePrefix: `${DataSetName}locationGrant`
+        });
+        this.grantDatabasePermission(this.DataEnrollment.DataSetGlueRole,  {		     
+		     DatabasePermissions: [DataLakeEnrollment.DatabasePermission.All],
+             GrantableDatabasePermissions: [DataLakeEnrollment.DatabasePermission.All],
+             GrantResourcePrefix: `${DataSetName}RoleGrant`
+		}, true);
+    }
+
 	constructor(scope: cdk.Construct, id: string, props: S3dataSetEnrollmentProps) {
 		super(scope, id, props);
 	
@@ -47,7 +63,7 @@ export class S3dataSetEnrollment extends DataLakeEnrollment{
             
         }
 		
-		this.DataEnrollment = new DataSetEnrollment(this, 'openTargetsEnrollment', {
+		this.DataEnrollment = new DataSetEnrollment(this, `${props.DataSetName}-s3Enrollment`, {
 		    dataLakeBucket: props.dataLakeBucket,
 			dataSetName: dataSetName,
 			SourceAccessPolicy: s3AccessPolicy,
@@ -58,6 +74,12 @@ export class S3dataSetEnrollment extends DataLakeEnrollment{
 			GlueScriptArguments: props.GlueScriptArguments
 		});
 	
-	    this.createCoarseIamPolicy();
+        this.createCoarseIamPolicy();
+
+        this.grantGlueRoleLakeFormationPermissions(this.DataEnrollment.DataSetGlueRole, props.DataSetName); 
+        
+        
+
+
 	}
 }
