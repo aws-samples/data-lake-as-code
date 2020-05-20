@@ -1,0 +1,1 @@
+python scripts/local.datalake.RemoveIamAllowedPrincipals.py
