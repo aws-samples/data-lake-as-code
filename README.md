@@ -1,4 +1,4 @@
-<h1 id='HPG9CA7YL2o'>ChEMBL and Open Targets in an AWS Data Lake</h1>
+<h1 id='HPG9CA7YL2o'>Data Lake as Code; Featuring ChEMBL and Open Targets</h1>
 
 Companion code for upcoming AWS blogpost on enrolling chembl and opentargets into a data lake on AWS<br/>
 
