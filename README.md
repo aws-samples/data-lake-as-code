@@ -148,3 +148,9 @@ python ./script/local.datalake.RemoveIamAllowedPrincipals.py
 ```
 
 DONT RUN THIS COMMAND IF YOU HAVE PEOPLE ALREADY RELYING ON THE AWS GLUE CATALOG (via Athena for example). This will effectively remove their access until you grant them user/role/group specific Lake Formation permissions.
+
+##Attributions
+
+["ChEMBLdb"](https://chembl.gitbook.io/chembl-interface-documentation/downloads) by [European Bioinformatics Institute](https://www.ebi.ac.uk/about), [European Molecular Biology Laboratory](https://www.embl.org/) is licensed under [CC BY-SA 3.0](http://creativecommons.org/licenses/by-sa/3.0)
+
+["Open Targets Platform: new developments and updates two years on"](https://academic.oup.com/nar/article/47/D1/D1056/5193331) by Denise Carvalho-Silva, Andrea Pierleoni, Miguel Pignatelli, ChuangKee Ong, Luca Fumis, Nikiforos Karamanis, Miguel Carmona, Adam Faulconbridge, Andrew Hercules, Elaine McAuley, Alfredo Miranda, Gareth Peat, Michaela Spitzer, Jeffrey Barrett, David G Hulcoop, Eliseo Papa, Gautier Koscielny, Ian Dunham, [Open Targets](https://www.opentargets.org/) is licensed under [CC BY-SA 3.0](http://creativecommons.org/licenses/by-sa/3.0)
