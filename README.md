@@ -1,103 +1,150 @@
-<h1 id='HPG9CA7YL2o'>Data Lake as Code; Featuring ChEMBL and Open Targets</h1>
+# Data Lake as Code; Featuring ChEMBL and Open Targets
 
-Companion code for upcoming AWS blogpost on enrolling chembl and opentargets into a data lake on AWS<br/>
+Companion code for upcoming AWS blogpost on enrolling chembl and opentargets into a data lake on AWS  
 
-<div data-section-style='11' style=''><img src='https://quip-amazon.com/blob/HPG9AAwumxR/D5akZWKUWmfWEhA8u4loEA?a=U93UPcmkUsuoToxZr2QpWU5nosB1RwimIsIW5TtaJvEa' id='HPG9CASUn8g' alt='' width='800' height='380'></img></div><h2 id='HPG9CAlPR6i'>To install this in your own AWS account:</h2>
+![](https://quip-amazon.com/blob/HPG9AAwumxR/D5akZWKUWmfWEhA8u4loEA?a=U93UPcmkUsuoToxZr2QpWU5nosB1RwimIsIW5TtaJvEa)
 
-Your local machine needs to have the AWS CLI installed on your machine along with IAM permissions setup (through IAM role or .aws/credentials file). I like to use Cloud9 as my IDE as it comes with both of those already setup for me.<br/>
+## To install this in your own AWS account:
 
-<br/>
+Your local machine needs to have the AWS CLI installed on your machine along with IAM permissions setup (through IAM role or .aws/credentials file). I like to use Cloud9 as my IDE as it comes with both of those already setup for me.  
 
-Run the following commands<br/>
+Run the following commands  
 
-<pre id='HPG9CAKfUT3'>git clone https://github.com/paulu-aws/chembl-opentargets-data-lake-example.git<br>cd chembl-opentargets-data-lake-example<br>./InstallCdkDependencies.sh<br>./DeployChemblOpenTargetsEnv.sh</pre>
+```shell
+git clone https://github.com/paulu-aws/chembl-opentargets-data-lake-example.git  
+cd chembl-opentargets-data-lake-example  
+./InstallCdkDependencies.sh  
+./DeployChemblOpenTargetsEnv.sh
+```
 
-Wait for Chembl and OpenTargets to be ‘staged’ into the baseline stack.<br/>
+Wait for Chembl and OpenTargets to be ‘staged’ into the baseline stack.  
 
-<br/>
+The ‘baseline stack’ in the CDK application spins up a VPC with an S3 bucket (for OpenTargets) and an RDS Postgres instance (for ChEMBL). It also spins up a little helper EC2 instance that stages those assets in their ‘raw’ form after downloading them from [OpenTargets.org](http://OpenTargets.org) and EMBL-EBI.  
 
-The ‘baseline stack’ in the CDK application spins up a VPC with an S3 bucket (for OpenTargets) and an RDS Postgres instance (for Chembl). It also spins up a little helper EC2 instance that stages those assets in their ‘raw’ form after downloading them from<a href="http://OpenTargets.org"> OpenTargets.org</a> and EMBL-EBI.<br/>
+Go to Systems Manager in the AWS console, and then the ‘Run Command’ section. You will see the currently running command documents.   
 
-<br/>
+![](https://quip-amazon.com/blob/HPG9AAwumxR/x4lfduQeC3Ww-DyK8loIAg?a=6aMBuWAgnWaZ5pQaJndaM06ob734VpmiCI5xfguyPaca)
 
-Go to Systems Manager in the AWS console, and then the ‘Run Command’ section. You will see the currently running command documents. <br/>
+It takes about an hour for Chembl to build. If you get impatient and want to see the progress in real time, go to ‘Session Manager’ in the Systems Manager console, click the ‘Start session’ button, choose the ‘ChembDbImportInstance’ radio button, and click the ‘Start Session’ button.  
 
-<div data-section-style='11' style=''><img src='https://quip-amazon.com/blob/HPG9AAwumxR/x4lfduQeC3Ww-DyK8loIAg?a=6aMBuWAgnWaZ5pQaJndaM06ob734VpmiCI5xfguyPaca' id='HPG9CA9WNsB' alt='' width='1276' height='612'></img></div><br/>
+![](https://quip-amazon.com/blob/HPG9AAwumxR/Fj7sA3VuIuvdPOHl017Xcg?a=EYFlHaKY8weEGFezDR4ld3sEhBMWl88afFdDjJQ15H8a)
 
-It takes about an hour for Chembl to build. If you get impatient and want to see the progress in real time, go to ‘Session Manager’ in the Systems Manager console, click the ‘Start session’ button, choose the ‘ChembDbImportInstance’ radio button, and click the ‘Start Session’ button.<br/>
+That will open a SSM session window. Run the following command to tail the log output.  
 
-<br/>
+```tail -f /home/ssm-user/progressLog```
 
-<div data-section-style='11' style=''><img src='https://quip-amazon.com/blob/HPG9AAwumxR/Fj7sA3VuIuvdPOHl017Xcg?a=EYFlHaKY8weEGFezDR4ld3sEhBMWl88afFdDjJQ15H8a' id='HPG9CADqhgF' alt='' width='1242' height='666'></img></div><br/>
+![](https://quip-amazon.com/blob/HPG9AAwumxR/rMcRhjzUcIGQVYeBFxup4Q?a=2NRscRrktD9kLK7rDqqD9bO3aXtTYttCeaEWLwDXVgIa)
 
-That will open a SSM session window. Run the following command to tail the log output.<br/>
+## Enroll Chembl and OpenTargets into the data lake
 
-<pre id='HPG9CAuziva'>tail -f /home/ssm-user/progressLog</pre>
+Once the database has finished importing, go to Glue in the AWS console, and then the “Workflows” section  
 
-<br/>
+![](https://quip-amazon.com/blob/HPG9AAwumxR/K0liqaLzOGNHdODU_fN_MA?a=GQQahtSxVQNvaU6AkEjATwCE0WJglr630LH3bZcngB0a)
 
-<div data-section-style='11' class='tall' style=''><img src='https://quip-amazon.com/blob/HPG9AAwumxR/rMcRhjzUcIGQVYeBFxup4Q?a=2NRscRrktD9kLK7rDqqD9bO3aXtTYttCeaEWLwDXVgIa' id='HPG9CAgo8Yy' alt='' width='1115' height='1030'></img></div><br/>
+Select the openTargetsDataLakeEnrollment workflow, and click ‘Actions’, then 'Run'  
 
-<h2 id='HPG9CAe1Pmp'>Enroll Chembl and OpenTargets into the data lake</h2>
+![](https://quip-amazon.com/blob/HPG9AAwumxR/UV0-ZlwmK_KF9L9MfaUgfA?a=97k7vof4qlurzy3zSsmPVhomgCpRUJfREq8UCNZSzt4a)
 
-Once the database has finished importing, go to Glue in the AWS console, and then the “Workflows” section<br/>
+Do the same for the chemblDataLakeEnrollmentWorkflow. Wait for the workflows to finish.  
 
-<br/>
+Both workflows will run in parallel, but it will take the openTargetsDataLakeEnrollmentWorkflow ~170 minutes to complete while the ChEMBL enrollment will finish in about 30 minutes.   
 
-<div data-section-style='11' style=''><img src='https://quip-amazon.com/blob/HPG9AAwumxR/K0liqaLzOGNHdODU_fN_MA?a=GQQahtSxVQNvaU6AkEjATwCE0WJglr630LH3bZcngB0a' id='HPG9CADnepH' alt='' width='1177' height='631'></img></div><br/>
+## Query an Conquer!
 
-Select the openTargetsDataLakeEnrollment workflow, and click ‘Actions’, then 'Run'<br/>
+Go to Athena in the AWS Console.  
 
-<br/>
+If you haven't used Athena in your account before, you will need to define a storage location for your query results. Click on the ‘Settings’ tab in the top right and specify a bucket name where you would like Athena results stored and click save.  
 
-<div data-section-style='11' style=''><img src='https://quip-amazon.com/blob/HPG9AAwumxR/UV0-ZlwmK_KF9L9MfaUgfA?a=97k7vof4qlurzy3zSsmPVhomgCpRUJfREq8UCNZSzt4a' id='HPG9CAgkuAH' alt='' width='1177' height='631'></img></div><br/>
+![](https://quip-amazon.com/blob/HPG9AAwumxR/d9imQFzWnNdhWYDAo9Bt1A?a=8Q4UOXPqvG1fk3knDX9x2wr9Jeu9g8V2tPRYsnE3Vlga)
 
-Do the same for the chemblDataLakeEnrollmentWorkflow. Wait for the workflows to finish.<br/>
+Now, click the ‘Databases’ dropdown:  
 
-<br/>
+You will see 4 databases listed, you only want to use 2 of them:  
 
-Both workflows will run in parallel, but it will take the openTargetsDataLakeEnrollmentWorkflow ~170 minutes to complete while the Chembl enrollment will finish in about 30 minutes. <br/>
+_**Use:**_
 
-<h2 id='HPG9CAYpovV'>Query an Conquer!</h2>
+**chembl-25-dl**- This is the ‘dl’ or ‘data lake’ Chembl database. Always use tables in this database when running Chembl queries. Part of the chemblDataLakeEnrollment workflow converts the ‘source’ Chembl Postgres formats into a ‘data lake’ friendly parquet format optimized for Athena.   
 
-Go to Athena in the AWS Console.<br/>
+**opentargets-1911-dl**- This is the ‘dl’ or ‘data lake’ OpenTargets database. Always use this table when running OpenTarget queries. Part of the chemblDataLakeEnrollment workflow converts the ‘source’ OpenTargets json and csv formats into a ‘data lake’ parquet format optimized for Athena.   
 
-<br/>
+_**Dont use:**_
 
-If you havent used Athena in your account before, you will need to define a storage location for your query results. Click on the ‘Settings’ tab in the top right and specify a bucket name where you would like Athena results stored and click save.<br/>
+**chembl-25-src** - **This represents the ‘src’ or ‘source’ Chembl postgres database. By design, the source database is not directly queryable from Athena, so you will not use this database.   
 
-<div data-section-style='11' style=''><img src='https://quip-amazon.com/blob/HPG9AAwumxR/d9imQFzWnNdhWYDAo9Bt1A?a=8Q4UOXPqvG1fk3knDX9x2wr9Jeu9g8V2tPRYsnE3Vlga' id='HPG9CASHmiz' alt='' width='800' height='429'></img></div><br/>
+**opentargets-1911-src** - This is the ‘src’ or ‘source’ table. When you query this table, you are directly querying the original chembl json and csv filesfrom OpenTargets. The performance may be slow as those formats are not optimized for querying with Athena.
 
-Now, click the ‘Databases’ dropdown:<br/>
+  
+## Permissions & Lake Formation
 
-<br/>
+There are  [﻿two methods of security﻿](https://docs.aws.amazon.com/lake-formation/latest/dg/access-control-overview.html)  you can apply to your data lake. The default account configuration, which is likely what you are using at the moment, is essentially “open” Lake Formation permissions and “fine-grained” IAM polices. The DataSetStack construct implements a number of CDK-style grant*() methonds. The grantIamRead() method of the code grants a “fine-grained” IAM policy that gives users read access to just the tables in the data set you preform the grant on.
 
-You will see 4 databases listed, you only want to use 2 of them:<br/>
 
-<br/>
 
-<u><i><b>Use:</b></i></u><br/>
+For example, in the bin/aws.ts file you can see an example of granting that “fine-grained” IAM read permission. Pretty easy! Here we are passing the role from the notebook, but you can import an existing IAM user, role, or group using the CDK.
+```typescript
+chemblStack.grantIamRead(analyticsStack.NotebookRole);  
+openTargetsStack.grantIamRead(analyticsStack.NotebookRole);
+```
+The other method of security gives you more control. Specifically, the ability to control permissions at the database, table, and column level. This requires “fine-grained” Lake Formation permissions and “coarse” IAM permissions. The `grantDatabasePermissions()`, `grantTablePermissions()`, and `grantTableWithColumnPermissions()` setup both the fine-grained LakeFormation and coarse IAM permissions for you.
 
-<br/>
+  
 
-<b>chembl-25-dl </b>- This is the ‘dl’ or ‘data lake’ Chembl database. Always use tables in this database when running Chembl queries. Part of the chemblDataLakeEnrollment workflow converts the ‘source’ Chembl Postgres formats into a ‘data lake’ friendly parquet format optimized for Athena. <br/>
+Again, another example in the `bin/aws.ts` file:
 
-<br/>
+```typescript
+const exampleUser = iam.User.fromUserName(coreDataLake,  'exampleGrantee',  'paulUnderwood'  );  
 
-<b>opentargets-1911-dl </b>- This is the ‘dl’ or ‘data lake’ OpenTargets database. Always use this table when running OpenTarget queries. Part of the chemblDataLakeEnrollment workflow converts the ‘source’ OpenTargets json and csv formats into a ‘data lake’ parquet format optimized for Athena. <br/>
+var exampleTableWithColumnsGrant:  DataLakeEnrollment.TableWithColumnPermissionGrant  =  {  
+table:  "chembl_25_public_compound_structures",  
+// Note that we are NOT including 'canonical_smiles'. That effectivley prevents this user from querying that column.  
+columns:  ['molregno',  'molfile',  'standard_inchi',  'standard_inchi_key'],  
+DatabasePermissions:  [],  
+GrantableDatabasePermissions:  [],  
+TableColumnPermissions:  [DataLakeEnrollment.TablePermission.Select],  
+GrantableTableColumnPermissions:  []  
+};  
 
-<br/>
+chemblStack.grantTableWithColumnPermissions(exampleUser, exampleTableWithColumnsGrant);
+````
+  
 
-<u><i><b>Dont use:</b></i></u><br/>
+The `GrantableDatabasePermissions`, `GrantableTableColumnPermissions`, and `GrantableTableColumnPermissions` give the supplied IAM principal permissions to grant permissions others. If you have a data-set steward, or someone who should have the authority to grant permissions to others, you cant "grant the permission to grant" using those properties.
 
-<br/>
+  
 
-<b>chembl-25-src - </b>This represents the ‘src’ or ‘source’ Chembl postgres database. By design, the source database is not directly queryable from Athena, so you will not use this database. <br/>
+To illustrate the the relationship between the fine-grained and coarse permissions, think of it as two doors. An IAM principal needs to have permission to walk through both doors to query the data lake. The DataLakeEnrollment construct handles granting both the fine and coarse permissions for you.
 
-<br/>
+![image.png](https://api.quip-amazon.com/2/blob/HPG9AAwumxR/ACYxNvcfFhaRL15neEGWHA)
 
-<b>opentargets-1911-src - </b>This is the ‘src’ or ‘source’ table. When you query this table, you are directly querying the original chembl json and csv files<b> </b>from OpenTargets. The performance may be slow as those formats are not optimized for querying with Athena. <br/>
+  
 
-<br/>
+If you decide that you want the additional flexibility of Lake Formation permissions, you need to perform two manual actions before Lake Formation permissions will begin protecting your resources. Until you perform these two steps, you are only protecting your resources with the coarse IAM permission and the Lake Formation permissions wont apply.
 
-<br/>
+  
+
+1) Change the default permissions for newly created databases and tables
+
+  
+
+Visit the Lake Formation service page in the AWS console, and go to the “Settings” section on the left.
+
+ 
+You need to  **UNCHECK** the two boxes and hit “Save”
+
+![image.png](https://api.quip-amazon.com/2/blob/HPG9AAwumxR/luIf4C1WcTNeDeixOEbqsg)
+
+2) You need to revoke all of the Lake Formation permissions that have been granted to `IAM_ALLOWED_PRINCIPALS`. If you have used Glue in the past or the ChEMBL or OpenTarget workflows have already completed you can see a bunch of them in the “Data Permissions” section in the Lake Formation console. By unchecking the boxes before, we are now stopping the default behavior where Lake Formation adds a `IAM_ALLOWED_PRINCIPALS` grant to any Glue Tables/Resources created.
+
+  
+
+Now that we have stopped that default-add `IAM_ALLOWED_PRINCIPALS` behavior, we need to back out any existing grants to `IAM_ALLOWED_PRINCIPALS`. As long as they remain, any IAM principal with coarse IAM permissions to the resource will still be able to query columns or tables they shouldn't have access to.
+
+  
+
+The `local.datalake.RemoveIamAllowedPrincipals.py` python script will save you the effort of manually revoking those permissions from IAM_ALLOWED_PRINCIPALS. Running the following command will issue the revokes for all IAM_ALLOWED_PRINCIPALS granted permissions.
+
+```
+python ./script/local.datalake.RemoveIamAllowedPrincipals.py
+```
+
+DONT RUN THIS COMMAND IF YOU HAVE PEOPLE ALREADY RELYING ON THE AWS GLUE CATALOG (via Athena for example). This will effectively remove their access until you grant them user/role/group specific Lake Formation permissions.
