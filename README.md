@@ -114,7 +114,7 @@ The `GrantableDatabasePermissions`, `GrantableTableColumnPermissions`, and `Gran
 
 To illustrate the the relationship between the fine-grained and coarse permissions, think of it as two doors. An IAM principal needs to have permission to walk through both doors to query the data lake. The DataLakeEnrollment construct handles granting both the fine and coarse permissions for you.
 
-![image.png](https://api.quip-amazon.com/2/blob/HPG9AAwumxR/ACYxNvcfFhaRL15neEGWHA)
+![](https://docs.aws.amazon.com/lake-formation/latest/dg/images/permissions_doors.png)
 
   
 
@@ -131,7 +131,7 @@ Visit the Lake Formation service page in the AWS console, and go to the “Setti
  
 You need to  **UNCHECK** the two boxes and hit “Save”
 
-![image.png](https://api.quip-amazon.com/2/blob/HPG9AAwumxR/luIf4C1WcTNeDeixOEbqsg)
+![](https://devspacepaul.s3.us-west-2.amazonaws.com/DataCatalogSettings.png)
 
 2) You need to revoke all of the Lake Formation permissions that have been granted to `IAM_ALLOWED_PRINCIPALS`. If you have used Glue in the past or the ChEMBL or OpenTarget workflows have already completed you can see a bunch of them in the “Data Permissions” section in the Lake Formation console. By unchecking the boxes before, we are now stopping the default behavior where Lake Formation adds a `IAM_ALLOWED_PRINCIPALS` grant to any Glue Tables/Resources created.
 
