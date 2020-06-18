@@ -1,6 +1,6 @@
 # Data Lake as Code; Featuring ChEMBL and Open Targets
 
-Companion code for upcoming AWS blogpost on enrolling chembl and opentargets into a data lake on AWS  
+Companion code for the AWS ['Data Lake as Code' blog post](https://aws.amazon.com/blogs/startups/a-data-lake-as-code-featuring-chembl-and-opentargets/).
 
 ![](https://quip-amazon.com/blob/HPG9AAwumxR/D5akZWKUWmfWEhA8u4loEA?a=U93UPcmkUsuoToxZr2QpWU5nosB1RwimIsIW5TtaJvEa)
 
