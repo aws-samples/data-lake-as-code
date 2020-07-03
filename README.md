@@ -11,7 +11,7 @@ Your local machine needs to have the AWS CLI installed on your machine along wit
 Run the following commands  
 
 ```shell
-git clone https://github.com/paulu-aws/chembl-opentargets-data-lake-example.git  
+git clone https://github.com/aws-samples/data-lake-as-code.git  
 cd chembl-opentargets-data-lake-example  
 ./InstallCdkDependencies.sh  
 ./DeployChemblOpenTargetsEnv.sh
