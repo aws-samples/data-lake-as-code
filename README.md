@@ -12,7 +12,7 @@ Run the following commands
 
 ```shell
 git clone https://github.com/aws-samples/data-lake-as-code.git  
-cd chembl-opentargets-data-lake-example  
+cd data-lake-as-code  
 ./InstallCdkDependencies.sh  
 ./DeployChemblOpenTargetsEnv.sh
 ```
