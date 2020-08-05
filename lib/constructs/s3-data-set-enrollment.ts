@@ -62,6 +62,8 @@ export class S3dataSetEnrollment extends DataLakeEnrollment{
             s3AccessPolicy.addStatements(prefixAccessPolicy);
             
         }
+        
+        
 		
 		this.DataEnrollment = new DataSetEnrollment(this, `${props.DataSetName}-s3Enrollment`, {
 		    dataLakeBucket: props.dataLakeBucket,
@@ -74,8 +76,8 @@ export class S3dataSetEnrollment extends DataLakeEnrollment{
 			GlueScriptArguments: props.GlueScriptArguments
 		});
 	
+       
         this.createCoarseIamPolicy();
-
         this.grantGlueRoleLakeFormationPermissions(this.DataEnrollment.DataSetGlueRole, props.DataSetName); 
         
         

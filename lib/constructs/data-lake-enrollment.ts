@@ -398,8 +398,11 @@ export class DataLakeEnrollment extends cdk.Construct {
 
 
         const resolvedPrincipalType = this.determinePrincipalType(principal);
-
+        
+        
+        
 		if(resolvedPrincipalType === iam.Role){
+		    console.log("coarseAthenaAccessPolicy");
 		    this.CoarseAthenaAccessPolicy.attachToRole(principal as iam.Role);
 		    this.CoarseResourceAccessPolicy.attachToRole(principal as iam.Role);
 		    this.CoarseIamPolciesApplied = true;
@@ -412,7 +415,6 @@ export class DataLakeEnrollment extends cdk.Construct {
 		    this.CoarseIamPolciesApplied = true;
 		    return;
 		}
-
 
 
 

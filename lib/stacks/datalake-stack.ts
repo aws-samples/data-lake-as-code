@@ -29,20 +29,20 @@ export class DataLakeStack extends cdk.Stack {
   private readonly bucketRole: iam.Role; 
   private readonly starterAdminArn: string;
   
-  public grantAthenaResultsBucketPermission(principal: iam.IPrincipal){
+  public grantAthenaResultsBucketPermission(principal: iam.IPrincipal) {
     
-	if(principal instanceof iam.Role){
-	    this.AthenaResultsBucketAccessPolicy.attachToRole(principal);
-	    return;
-	}
-	
+    if(principal instanceof iam.Role){
+        this.AthenaResultsBucketAccessPolicy.attachToRole(principal);
+        return;
+    }
+    
     if(principal instanceof iam.User){
-	    this.AthenaResultsBucketAccessPolicy.attachToUser(principal);
-	    return;
-	}
+        this.AthenaResultsBucketAccessPolicy.attachToUser(principal);
+        return;
+    }
     
-	if(principal instanceof cdk.Resource){
-	    
+    if(principal instanceof cdk.Resource){
+        
         try{
             const user = principal as iam.User;
             this.AthenaResultsBucketAccessPolicy.attachToUser(user);
@@ -65,7 +65,9 @@ export class DataLakeStack extends cdk.Stack {
   constructor(scope: cdk.Construct, id: string, props: DataLakeStackProps) {
     super(scope, id, props);
 
-    this.DataLakeBucket = new s3.Bucket(this, 'dataLakeBucket');
+    this.DataLakeBucket = new s3.Bucket(this, 'dataLakeBucket',{
+        bucketName: "aws-roda-hcls-datalake"
+    });
     this.AthenaResultsBucket = new s3.Bucket(this, 'athenaResultsBucket');        
    
     new lakeformation.CfnDataLakeSettings(this, 'starterAdminPermission', {

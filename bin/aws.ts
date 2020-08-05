@@ -5,10 +5,13 @@ import { BaselineStack } from '../lib/baseline-stack';
 import { DataLakeStack } from '../lib/stacks/datalake-stack';
 import { OpenTargetsStack } from '../lib/opentargets-stack';
 import { ChemblStack } from '../lib/chembl-25-stack';
-import { AnalyticsStack } from '../lib/analytics-stack.js';
+import { BindingDBStack } from '../lib/bindingdb-stack';
+import { AnalyticsStack } from '../lib/analytics-stack';
 import iam = require('@aws-cdk/aws-iam');
 import s3 = require('@aws-cdk/aws-s3');
 import { DataLakeEnrollment } from '../lib/constructs/data-lake-enrollment';
+import { DataSetTemplateStack } from '../lib/stacks/dataset-stack';
+
 
 const app = new cdk.App();
 const baseline = new BaselineStack(app, 'BaselineStack');
@@ -31,22 +34,42 @@ const openTargetsStack = new OpenTargetsStack(app, 'OpenTargetsStack', {
     DataLake: coreDataLake
 });
 
+console.log('basic before binding dbstack');
+
+const bindingDBStack = new BindingDBStack(app, 'BindingDbStack', {
+    database: baseline.BindingDb,
+    accessSecurityGroup: baseline.BindingDBAccessSg,
+    databaseSecret: baseline.BindingDBSecret,
+    DataLake: coreDataLake
+});
+
 const analyticsStack = new AnalyticsStack(app, 'AnalyticsStack', {
     targetVpc: baseline.Vpc,
 });
 
 
+// chemblStack.grantIamRead(analyticsStack.NotebookRole);
+// openTargetsStack.grantIamRead(analyticsStack.NotebookRole);
+// bindingDBStack.grantIamRead(analyticsStack.NotebookRole);
 
 
+const OpenTargetsRodaTemplate = new DataSetTemplateStack(app, 'OpenTargetsRodaTemplate', {
+    DatabaseDescriptionPath: "../../RODA_templates/open_targets_1911_get_database.json",
+    DescribeTablesPath: "../../RODA_templates/open_targets_1911_get_tables.json",
+    DataSetName: openTargetsStack.Enrollment.DataSetName
+});
 
-chemblStack.grantIamRead(analyticsStack.NotebookRole);
-openTargetsStack.grantIamRead(analyticsStack.NotebookRole);
+const ChemblRodaTemplate = new DataSetTemplateStack(app, 'ChemblRodaTemplate', {
+    DatabaseDescriptionPath: "../../RODA_templates/chembl_25_get_database.json",
+    DescribeTablesPath: "../../RODA_templates/chembl_25_get_tables.json",
+    DataSetName: chemblStack.Enrollment.DataSetName
+});
 
-
-
-
-
-
+const BindinbDbRodaTemplate = new DataSetTemplateStack(app, 'BindingDbRodaTemplate', {
+    DatabaseDescriptionPath: "../../RODA_templates/binding_db_get_database.json",
+    DescribeTablesPath: "../../RODA_templates/binding_db_get_tables.json",
+    DataSetName: bindingDBStack.Enrollment.DataSetName
+});
 
 
 // const exampleUser = iam.User.fromUserName(coreDataLake, 'exampleGrantee', 'paul1' );

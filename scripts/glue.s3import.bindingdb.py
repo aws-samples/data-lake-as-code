@@ -16,6 +16,8 @@ sc = SparkContext()
 glueContext = GlueContext(sc)
 spark = glueContext.spark_session
 
+spark.sqlContext.setConf("spark.sql.parquet.writeLegacyFormat", "true")
+
 job = Job(glueContext)
 
 dataLakeBucket = args["DL_BUCKET"];

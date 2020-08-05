@@ -9,6 +9,73 @@ import s3assets = require('@aws-cdk/aws-s3-assets');
 import { URL } from "url";
 
 
+
+export interface FederatedDataSetProps extends cdk.StackProps {
+	databaseDescriptionPath: string
+	tablesDescriptionPath: string
+}
+
+
+export class FederatedDataSetTemplate extends cdk.Construct{
+
+	public readonly glueDatabase: glue.Database;
+	public readonly glueTables: glue.Table;
+	
+	constructor(scope: cdk.Construct, id: string, props: FederatedDataSetProps) {
+		super(scope, id);
+		
+		const databaseObj = require(props.databaseDescriptionPath);
+		const tablesObj = require(props.tablesDescriptionPath);
+		
+		// import databaseObj from props.databaseDescriptionPath;
+		// import tablesObj from props.tablesDescriptionPath;
+		
+		this.glueDatabase = new glue.Database(this, databaseObj['Database']['Name'], {
+			locationUri: `${databaseObj['Database']['LocationUri']}`,
+			databaseName: `${databaseObj['Database']['Name']}-awsroda`,
+		});	 	
+		
+
+		for (let table of tablesObj['TableList']) {
+			
+			var columnList = [];
+			
+			for(let column of table['StorageDescriptor']['Columns']){
+				
+				columnList.push({
+					name: column['Name'],
+					type: column['Type']
+				});
+			}
+			
+			new glue.CfnTable(this, table["Name"], {
+				catalogId: cdk.Aws.ACCOUNT_ID,
+				databaseName: this.glueDatabase.databaseName,
+				tableInput: {
+					name: table["Name"],
+					parameters: table['Parameters'],
+					storageDescriptor: {
+						columns: columnList,
+						inputFormat: table['StorageDescriptor']['InputFormat'],
+						outputFormat: table['StorageDescriptor']['OutputFormat'],
+						location:  table['StorageDescriptor']['Location'],
+						parameters: table['StorageDescriptor']['Parameters'],
+						serdeInfo: {
+							parameters: table['StorageDescriptor']['SerdeInfo']['Parameters'],
+							serializationLibrary: table['StorageDescriptor']['SerdeInfo']['SerializationLibrary']
+						}
+					}
+					
+				}
+			})
+			
+			
+		}
+		
+	}
+}
+
+
 export interface DataSetEnrollmentProps extends cdk.StackProps {
 		dataLakeBucket: s3.Bucket;
 		dataSetName: string;
@@ -18,9 +85,6 @@ export interface DataSetEnrollmentProps extends cdk.StackProps {
 		GlueScriptArguments: any;
 		SourceAccessPolicy?: iam.Policy;
 }
-
-
-
 
 
 export class DataSetEnrollment extends cdk.Construct {
@@ -100,10 +164,10 @@ export class DataSetEnrollment extends cdk.Construct {
 		this.DataSetGlueRole.addManagedPolicy(iam.ManagedPolicy.fromAwsManagedPolicyName('CloudWatchAgentServerPolicy'));
 		props.dataLakeBucket.grantReadWrite(this.DataSetGlueRole);
 		
-		if(props.SourceAccessPolicy){
+		
+		if(typeof props.SourceAccessPolicy !== 'undefined'){
 			props.SourceAccessPolicy.attachToRole(this.DataSetGlueRole);	
 		}
-		 
 		 
 		 
 		const sourceCrawler = this.setupCrawler(this.Dataset_Source, props.SourceTargets, true);

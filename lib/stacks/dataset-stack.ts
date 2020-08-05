@@ -5,13 +5,38 @@ import rds = require('@aws-cdk/aws-rds');
 import glue = require('@aws-cdk/aws-glue');
 import s3 = require('@aws-cdk/aws-s3');
 import s3assets = require('@aws-cdk/aws-s3-assets');
-import { DataSetEnrollmentProps, DataSetEnrollment } from '../constructs/data-set-enrollment';
+import { DataSetEnrollmentProps, DataSetEnrollment, FederatedDataSetTemplate, FederatedDataSetProps  } from '../constructs/data-set-enrollment';
 import { DataLakeEnrollment } from '../constructs/data-lake-enrollment';
 import { DataLakeStack } from './datalake-stack';
+
+
+
+
+export interface DataSetTemplateStackProps extends cdk.StackProps {
+	DatabaseDescriptionPath: string;
+	DescribeTablesPath: string;
+	DataSetName: string;
+}
+
+export class DataSetTemplateStack extends cdk.Stack {
+
+  constructor(scope: cdk.Construct, id: string, props: DataSetTemplateStackProps) {
+    super(scope, id, props);
+    
+    new FederatedDataSetTemplate(this, props.DataSetName, {
+      databaseDescriptionPath: props.DatabaseDescriptionPath,
+      tablesDescriptionPath: props.DescribeTablesPath
+    });
+  }
+  
+}
+
 
 export interface DataSetStackProps extends cdk.StackProps {
 	DataLake: DataLakeStack;
 }
+
+
 
 
 export class DataSetStack extends cdk.Stack {

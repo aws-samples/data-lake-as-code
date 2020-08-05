@@ -13,11 +13,18 @@ export interface RDSdataSetSetEnrollmentProps extends DataLakeEnrollment.DataLak
 	databaseSecret: rds.DatabaseSecret;
 	database: rds.DatabaseInstance;
 	accessSecurityGroup: ec2.SecurityGroup;
+	databaseSidOrServiceName: string;
 	JdbcTargetIncludePaths: string[];
 }
 
 
-export class RDSPostgresDataSetEnrollment extends DataLakeEnrollment {
+
+
+export class RDSDataSetEnrollment extends DataLakeEnrollment {
+	
+	jdbcConnStringPrefix: string; 
+	jdbcConnStringPort: string;
+	
 	constructor(scope: cdk.Construct, id: string, props: RDSdataSetSetEnrollmentProps) {
 		super(scope, id, props);
 	
@@ -43,7 +50,7 @@ export class RDSPostgresDataSetEnrollment extends DataLakeEnrollment {
 					USERNAME: props.databaseSecret.secretValueFromJson('username'),
 					JDBC_ENFORCE_SSL: "false", 
 					PASSWORD: props.databaseSecret.secretValueFromJson('password'),
-					JDBC_CONNECTION_URL: `jdbc:postgresql://${props.database.dbInstanceEndpointAddress}:5432/chembl_25`			
+					JDBC_CONNECTION_URL: `${this.jdbcConnStringPrefix}${props.database.dbInstanceEndpointAddress}:${this.jdbcConnStringPort}/${props.databaseSidOrServiceName}`			
 				}
 				,connectionType: "JDBC"
 				,description: `${dataSetName} connection`
@@ -66,5 +73,34 @@ export class RDSPostgresDataSetEnrollment extends DataLakeEnrollment {
 		this.createCoarseIamPolicy();
 		this.grantGlueRoleLakeFormationPermissions(this.DataEnrollment.DataSetGlueRole, props.DataSetName); 
 
+	}
+}
+
+
+export class RDSPostgresDataSetEnrollment extends RDSDataSetEnrollment{
+	
+    get jdbcConnStringPrefix(): string {
+        return "jdbc:postgresql://";
+    }
+    get jdbcConnStringPort(): string {
+        return "5432";
+    }
+
+	constructor(scope: cdk.Construct, id: string, props: RDSdataSetSetEnrollmentProps) {
+		super(scope, id, props);
+		console.log("RDSPostgresDataSetEnrollment");
+	}
+}
+export class RDSOracleDataSetEnrollment extends RDSDataSetEnrollment{
+
+	get jdbcConnStringPrefix(): string {
+        return "jdbc:oracle:thin://@";
+    }
+    get jdbcConnStringPort(): string {
+        return "1521";
+    }
+
+	constructor(scope: cdk.Construct, id: string, props: RDSdataSetSetEnrollmentProps) {
+		super(scope, id, props);
 	}
 }
