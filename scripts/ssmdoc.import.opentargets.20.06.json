@@ -1,0 +1,32 @@
+{
+   "schemaVersion":"2.2",
+   "description":"Downloads OpenTargets 20.06 source files and moves them to S3",
+   "parameters":{
+        "openTargetsSourceFileTargetBucketLocation": {
+          "type": "String",
+          "description": "Bucket to store the open targets files in."
+        }
+    },
+    "mainSteps":[
+      {
+        "action":"aws:runShellScript",
+        "name":"DownloadAndImportOpenTargets2006intoS3",
+        "inputs":{
+            "runCommand": [
+              "rm -rf opentargets/sourceExports/open-targets-data-releases/20.06/",
+              "wget https://storage.googleapis.com/open-targets-data-releases/20.06/output/20.06_association_data.json.gz -P opentargets/sourceExports/open-targets-data-releases/20.06/output/20.06_association_data/",
+              "wget https://storage.googleapis.com/open-targets-data-releases/20.06/output/20.06_evidence_data.json.gz -P opentargets/sourceExports/open-targets-data-releases/20.06/output/20.06_evidence_data/",
+              "wget https://storage.googleapis.com/open-targets-data-releases/20.06/output/20.06_target_list.json.gz -P opentargets/sourceExports/open-targets-data-releases/20.06/output/20.06_target_list/",
+              "wget https://storage.googleapis.com/open-targets-data-releases/20.06/output/20.06_disease_list.json.gz -P opentargets/sourceExports/open-targets-data-releases/20.06/output/20.06_disease_list/",
+              "wget https://storage.googleapis.com/open-targets-data-releases/20.06/input/annotation-files/known_target_safety-2020-06-01.json -P opentargets/sourceExports/open-targets-data-releases/20.06/output/20.06_known_target_safety/",
+              "wget https://storage.googleapis.com/open-targets-data-releases/20.06/input/annotation-files/experimental-toxicity-2020-04-07.tsv -P opentargets/sourceExports/open-targets-data-releases/20.06/output/20.06_experimental-toxicity/",
+              "wget https://storage.googleapis.com/open-targets-data-releases/20.06/input/annotation-files/tractability_buckets-2020-05-14.tsv -P opentargets/sourceExports/open-targets-data-releases/20.06/output/20.06_tractability_buckets/",
+              "wget https://storage.googleapis.com/open-targets-data-releases/20.06/input/annotation-files/baseline_expression_counts-2020-05-07.tsv -P opentargets/sourceExports/open-targets-data-releases/20.06/output/20.06_baseline_expression_counts/",
+              "aws s3 sync opentargets/sourceExports/* s3://{{openTargetsSourceFileTargetBucketLocation}}/opentargets/sourceExports/"
+            ]
+         }
+      }
+   ]
+}
+
+

@@ -11,6 +11,7 @@ import { DataLakeEnrollment } from './data-lake-enrollment';
 export interface S3dataSetEnrollmentProps extends DataLakeEnrollment.DataLakeEnrollmentProps {
     sourceBucket: s3.IBucket;
     sourceBucketDataPrefixes: string[];
+    MaxDPUs: number;
 }
 
 
@@ -40,6 +41,8 @@ export class S3dataSetEnrollment extends DataLakeEnrollment{
 		const s3AccessPolicy = new iam.Policy(this, 'dataSourceAccessPolicy');
 		
 		let s3TargetPaths = new Array<glue.CfnCrawler.S3TargetProperty>();
+		let s3DataLakePaths = new Array<glue.CfnCrawler.S3TargetProperty>();
+		
 		
         const bucketListPolicy = new iam.PolicyStatement({
             actions: ["s3:ListBucket"],
@@ -48,19 +51,28 @@ export class S3dataSetEnrollment extends DataLakeEnrollment{
         });   
 		s3AccessPolicy.addStatements(bucketListPolicy);
 		
+		
+        const prefixAccessPolicy = new iam.PolicyStatement({
+            actions: ["s3:GetObject"],
+            effect: iam.Effect.ALLOW,
+            resources: [`arn:aws:s3:::${props.sourceBucket.bucketName}/*`]
+        });    
+        
+        s3AccessPolicy.addStatements(prefixAccessPolicy);
+		
         for(let bucketPrefix of props.sourceBucketDataPrefixes){
             s3TargetPaths.push({
                 path: `s3://${props.sourceBucket.bucketName}${bucketPrefix}`
-            })
+            });
             
-            const prefixAccessPolicy = new iam.PolicyStatement({
-                actions: ["s3:GetObject"],
-                effect: iam.Effect.ALLOW,
-                resources: [`arn:aws:s3:::${props.sourceBucket.bucketName}${bucketPrefix}*`]
-            });    
             
-            s3AccessPolicy.addStatements(prefixAccessPolicy);
+            var prefixFolders = bucketPrefix.split('/')
+            var tableFolderName = prefixFolders[prefixFolders.length-2]
+            var tableFolderName = tableFolderName.toLowerCase().replace(/\./g,"_").replace(/-/g,"_");
             
+            s3DataLakePaths.push({
+                path: `s3://${props.dataLakeBucket.bucketName}/${dataSetName}/${tableFolderName}/`
+            });
         }
         
         
@@ -72,7 +84,11 @@ export class S3dataSetEnrollment extends DataLakeEnrollment{
 			SourceTargets: {
                 s3Targets: s3TargetPaths, 
             },
+            MaxDPUs: props.MaxDPUs,
 			GlueScriptPath: props.GlueScriptPath,
+			DataLakeTargets: {
+			    s3Targets: s3DataLakePaths
+			},
 			GlueScriptArguments: props.GlueScriptArguments
 		});
 	

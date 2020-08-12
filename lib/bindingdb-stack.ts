@@ -24,9 +24,10 @@ export class BindingDBStack extends DataSetStack{
 	
 		const dataSetName = "binding_db";
 
-		this.Enrollment = new RDSOracleDataSetEnrollment(this, 'binding-db-enrollment', {
+		this.Enrollments.push(new RDSOracleDataSetEnrollment(this, 'binding-db-enrollment', {
 	    	databaseSecret: props.databaseSecret,
 	    	database: props.database,
+	    	MaxDPUs: 5.0,
 	    	databaseSidOrServiceName: "orcl",
 	    	accessSecurityGroup: props.accessSecurityGroup,
 	    	dataLakeBucket: props.DataLake.DataLakeBucket,
@@ -42,7 +43,7 @@ export class BindingDBStack extends DataSetStack{
 				"--DL_REGION": cdk.Stack.of(this).region,
 				"--GLUE_SRC_DATABASE": "binding_db_src"
 			}	    	
-		});
+		}));
 		
 		
 	}

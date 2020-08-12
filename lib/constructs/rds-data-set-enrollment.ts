@@ -15,6 +15,7 @@ export interface RDSdataSetSetEnrollmentProps extends DataLakeEnrollment.DataLak
 	accessSecurityGroup: ec2.SecurityGroup;
 	databaseSidOrServiceName: string;
 	JdbcTargetIncludePaths: string[];
+	MaxDPUs: number;
 }
 
 
@@ -44,6 +45,7 @@ export class RDSDataSetEnrollment extends DataLakeEnrollment {
 		
         this.DataEnrollment = new DataSetEnrollment(this, 'rdsDatasetEnrollment', {
 			dataLakeBucket: props.dataLakeBucket,
+			MaxDPUs: props.MaxDPUs,
 			dataSetName: dataSetName,
 			SourceConnectionInput: {
 				connectionProperties: {
@@ -63,6 +65,9 @@ export class RDSDataSetEnrollment extends DataLakeEnrollment {
 			},
 			SourceTargets: {
 				jdbcTargets: includeTargets
+			},
+			DataLakeTargets: {
+			    s3Targets: [{ path: `s3://${props.dataLakeBucket.bucketName}/${dataSetName}/` }]
 			},
 			GlueScriptPath: props.GlueScriptPath,
 			GlueScriptArguments: props.GlueScriptArguments
@@ -88,7 +93,6 @@ export class RDSPostgresDataSetEnrollment extends RDSDataSetEnrollment{
 
 	constructor(scope: cdk.Construct, id: string, props: RDSdataSetSetEnrollmentProps) {
 		super(scope, id, props);
-		console.log("RDSPostgresDataSetEnrollment");
 	}
 }
 export class RDSOracleDataSetEnrollment extends RDSDataSetEnrollment{

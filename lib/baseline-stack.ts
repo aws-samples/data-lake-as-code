@@ -6,21 +6,25 @@ import ssm = require('@aws-cdk/aws-ssm');
 import s3 = require('@aws-cdk/aws-s3');
 import s3assets = require('@aws-cdk/aws-s3-assets');
 import fs = require('fs');
-
+import { OpenTargetsBaseline } from './baseline-stacks/baseline-opentargets';
+import { ChemblBaseline } from './baseline-stacks/baseline-chembl';
+import { GTExBaseline } from './baseline-stacks/baseline-gtex';
 
 
 
 export class BaselineStack extends cdk.Stack {
     
-    public readonly ChemblDb: rds.DatabaseInstance;
-    public readonly chemblDBChemblDbAccessSg: ec2.SecurityGroup;
-    public readonly chemblDBSecret: rds.DatabaseSecret; 
+    public readonly ChemblDb25: rds.DatabaseInstance;
+    public readonly ChemblDb27: rds.DatabaseInstance;
+    public readonly ChemblDBChemblDbAccessSg: ec2.SecurityGroup;
+    public readonly ChemblDBSecret: rds.DatabaseSecret; 
     public readonly OpenTargetsSourceBucket: s3.Bucket; 
     public readonly Vpc: ec2.Vpc;
     public readonly BindingDBSourceBucket: s3.Bucket;
     public readonly BindingDb: rds.DatabaseInstance;
     public readonly BindingDBAccessSg: ec2.SecurityGroup;
     public readonly BindingDBSecret: rds.DatabaseSecret;
+    public readonly GTExSourceBucket: s3.Bucket;
     
     constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
         
@@ -49,54 +53,15 @@ export class BaselineStack extends cdk.Stack {
         
         this.Vpc = baselineVpc;
         
-        const chemblAccessSG = new ec2.SecurityGroup(this, 'chemblAccessSg', {
-            vpc: baselineVpc,
-            allowAllOutbound: true,
-            description: "Grants access to the chembl25 rds instance",
-            securityGroupName: "ChemblAccessSecurityGroup"
-        });
+        /// Start ChEMBL
         
-        this.chemblDBChemblDbAccessSg = chemblAccessSG;
         
-        const chemblDbSG = new ec2.SecurityGroup(this, 'chemblDbSG', {
-            vpc: baselineVpc,
-            allowAllOutbound: true,
-            description: "Security group for chembl dbs",
-            securityGroupName: "ChemblDbSecurityGroup"
-        });
-        
-        chemblAccessSG.addIngressRule( chemblAccessSG , ec2.Port.allTraffic(),  "Recursive SG rule for Glue" );
-        chemblDbSG.addIngressRule( chemblAccessSG , ec2.Port.tcp(5432),  "Gives chembl access security group access to postgres port" );
         
         const dmzSubnetSelection = { subnetType: ec2.SubnetType.PUBLIC };
         const appSubnetSelection = { subnetType: ec2.SubnetType.PRIVATE };
         const dbSubnetSelection = { subnetType: ec2.SubnetType.ISOLATED };
         
         baselineVpc.addS3Endpoint('s3Endpoint', [dmzSubnetSelection,appSubnetSelection,dbSubnetSelection  ] );
-        
-        
-        const appSubnets = baselineVpc.selectSubnets(appSubnetSelection);
-        
-        const chemblDBSecret = new rds.DatabaseSecret(this, 'chembldbSecret', {
-            username: 'master',
-        });
-        this.chemblDBSecret = chemblDBSecret;
-        
-        
-        const chemblDb = new rds.DatabaseInstance(this, 'chembl25', {
-            engine: rds.DatabaseInstanceEngine.POSTGRES,
-            masterUsername: 'master',
-            vpc: baselineVpc,
-            vpcPlacement: appSubnetSelection, 
-            instanceType: ec2.InstanceType.of(ec2.InstanceClass.BURSTABLE2, ec2.InstanceSize.SMALL),
-            instanceIdentifier: 'chembl-25-00',
-            masterUserPassword: chemblDBSecret.secretValueFromJson('password'),
-            securityGroups: [chemblDbSG],
-            deletionProtection: false
-        });
-        
-        
-        this.ChemblDb = chemblDb;
         
         
         const importInstanceRole = new iam.Role(this, 'importInstanceRole', {
@@ -106,7 +71,7 @@ export class BaselineStack extends cdk.Stack {
         importInstanceRole.addManagedPolicy(iam.ManagedPolicy.fromAwsManagedPolicyName('AmazonSSMManagedInstanceCore'));
         importInstanceRole.addManagedPolicy(iam.ManagedPolicy.fromAwsManagedPolicyName('CloudWatchAgentServerPolicy'));
         
-        chemblDBSecret.grantRead(importInstanceRole);
+        
         
         const importInstance = new ec2.Instance(this, 'importInstance2', {
             
@@ -114,7 +79,6 @@ export class BaselineStack extends cdk.Stack {
             machineImage: new ec2.AmazonLinuxImage({ generation: ec2.AmazonLinuxGeneration.AMAZON_LINUX_2 }),
             vpc: baselineVpc,
             vpcSubnets: appSubnetSelection,
-            securityGroup: chemblAccessSG,
             instanceName: "ChemblDbImportInstance",
             role: importInstanceRole,
             blockDevices:[{
@@ -125,52 +89,50 @@ export class BaselineStack extends cdk.Stack {
         });
         
         
-        
-        
-        const loadChemblDbDoc = new ssm.CfnDocument(this, 'loadChemblDbDoc', {
-            content: JSON.parse(fs.readFileSync('scripts/ssmdoc.importchembl25.json', { encoding: 'utf-8' })),
-            documentType: "Command"
+        const importInstanceGtexBindingDb = new ec2.Instance(this, 'importInstanceGtexBindingDb', {
+            
+            instanceType: ec2.InstanceType.of(ec2.InstanceClass.T2, ec2.InstanceSize.LARGE),
+            machineImage: new ec2.AmazonLinuxImage({ generation: ec2.AmazonLinuxGeneration.AMAZON_LINUX_2 }),
+            vpc: baselineVpc,
+            vpcSubnets: appSubnetSelection,
+            instanceName: "GTExImportInstance",
+            role: importInstanceRole,
+            blockDevices:[{
+                deviceName: '/dev/xvda',
+                volume: ec2.BlockDeviceVolume.ebs(200),
+            }]
+            
         });
         
         
+        //// Start ChEMBL ////   
         
-        const loadChemblAssociation = new ssm.CfnAssociation(this, 'loadChemblAssociation',{
-            name: loadChemblDbDoc.ref,
-            targets: [
-                { key: "InstanceIds", values: [importInstance.instanceId] }
-            ]
+        const chemblBaseline = new ChemblBaseline(this, 'chemblBaseline', {
+            TargetVPC: baselineVpc,
+            ImportInstance: importInstance
         });
         
-        loadChemblAssociation.addPropertyOverride('Parameters',{
-            databaseSecretArn: [chemblDBSecret.secretArn],
-            databaseHostName: [chemblDb.dbInstanceEndpointAddress],
-            executionTimeout: ['7200']
+        this.ChemblDb25 = chemblBaseline.Chembl25DatabaseInstance;
+        this.ChemblDb27 = chemblBaseline.Chembl27DatabaseInstance;
+        this.ChemblDBSecret = chemblBaseline.DbSecret;
+        this.ChemblDBChemblDbAccessSg = chemblBaseline.DbAccessSg;
+        
+
+        //// Start OpenTargets ////       
+        
+
+        const openTargetsBaseline = new OpenTargetsBaseline(this, 'openTargetsBaseline', {
+            ImportInstance: importInstance
         });
+        this.OpenTargetsSourceBucket = openTargetsBaseline.OpenTargetsSourceBucket;
         
+        //// Start GTEx ////
         
-        
-        
-        const openTargetsBucket = new s3.Bucket(this, 'openTargetsBucket');
-        this.OpenTargetsSourceBucket = openTargetsBucket;
-        
-        this.OpenTargetsSourceBucket.grantReadWrite(importInstanceRole);
-        
-        const loadOpenTargetsDoc = new ssm.CfnDocument(this, 'loadOpenTargetsDoc', {
-            content: JSON.parse(fs.readFileSync('scripts/ssmdoc.import.opentargets.1911.json', { encoding: 'utf-8' })),
-            documentType: "Command"
+        const gtexBaseline = new GTExBaseline(this, 'gtexBaseline',{
+            ImportInstance: importInstanceGtexBindingDb
         });
-        
-        const loadOpenTargetsAssociation = new ssm.CfnAssociation(this, 'loadOpenTargetsAssociation',{
-            name: loadOpenTargetsDoc.ref,
-            targets: [
-                { key: "InstanceIds", values: [importInstance.instanceId] }
-            ]
-        });
-        
-        loadOpenTargetsAssociation.addPropertyOverride('Parameters',{
-            openTargetsSourceFileTargetBucketLocation: [openTargetsBucket.bucketName]
-        });
-        
+        this.GTExSourceBucket = gtexBaseline.GTExSourceBucket;
+
         //// Start Binding DB  ////
         
         const bindingDbAccessSg = new ec2.SecurityGroup(this, 'bindingDbAccessSg', {
@@ -179,6 +141,8 @@ export class BaselineStack extends cdk.Stack {
             description: "Grants access to the BindingDB rds instance",
             securityGroupName: "BindingDBAccessSecurityGroup"
         });
+        
+        
         
         this.BindingDBSourceBucket = new s3.Bucket(this, 'BindingDbSourceBucket');
         
@@ -256,11 +220,11 @@ export class BaselineStack extends cdk.Stack {
 
 
         const instantClientBasic = new s3assets.Asset(this, `instantClientBasicRpm`, {
-			path: "oracle-instantclient19.8-basic-19.8.0.0.0-1.x86_64.rpm"
+			path: "baseline_binaries/oracle-instantclient19.8-basic-19.8.0.0.0-1.x86_64.rpm"
 		});
 		instantClientBasic.grantRead(importInstanceRole);
         const instantClientSqlPlus = new s3assets.Asset(this, `instantClientSqlPlusRpm`, {
-			path: "oracle-instantclient19.8-sqlplus-19.8.0.0.0-1.x86_64.rpm"
+			path: "baseline_binaries/oracle-instantclient19.8-sqlplus-19.8.0.0.0-1.x86_64.rpm"
 		});
 		instantClientSqlPlus.grantRead(importInstanceRole);
         

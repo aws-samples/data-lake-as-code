@@ -41,7 +41,7 @@ export interface DataSetStackProps extends cdk.StackProps {
 
 export class DataSetStack extends cdk.Stack {
 
-  public Enrollment: DataLakeEnrollment;
+  public Enrollments: Array<DataLakeEnrollment> = [];
   public DataLake: DataLakeStack;
 
   constructor(scope: cdk.Construct, id: string, props: DataSetStackProps) {
@@ -51,24 +51,35 @@ export class DataSetStack extends cdk.Stack {
 
   
   public grantDatabasePermissions( principal: iam.IPrincipal, permissionGrant: DataLakeEnrollment.DatabasePermissionGrant){
-    this.Enrollment.grantDatabasePermission(principal, permissionGrant);
+    
+    for(let enrollment of this.Enrollments){
+      enrollment.grantDatabasePermission(principal, permissionGrant);
+    }
   }
 
   public grantTablePermissions(principal: iam.IPrincipal, permissionGrant: DataLakeEnrollment.TablePermissionGrant){
 
     this.DataLake.grantAthenaResultsBucketPermission(principal);
-    this.Enrollment.grantTablePermissions(principal, permissionGrant);
+
+    for(let enrollment of this.Enrollments){
+      enrollment.grantTablePermissions(principal, permissionGrant);
+    }
   }
 
   public grantTableWithColumnPermissions(principal: iam.IPrincipal, permissionGrant: DataLakeEnrollment.TableWithColumnPermissionGrant){
 
     this.DataLake.grantAthenaResultsBucketPermission(principal);
-    this.Enrollment.grantTableWithColumnPermissions(principal, permissionGrant);
+    
+    for(let enrollment of this.Enrollments){
+      enrollment.grantTableWithColumnPermissions(principal, permissionGrant);
+    }
+    
   }
-
 
   public grantIamRead(principal: iam.IPrincipal){
     this.DataLake.grantAthenaResultsBucketPermission(principal);
-    this.Enrollment.grantCoarseIamRead(principal);
+    for(let enrollment of this.Enrollments){
+      enrollment.grantCoarseIamRead(principal);
+    }
   }
 }

@@ -13,6 +13,7 @@
         "name":"DownloadAndImportOpenTargets1911intoS3",
         "inputs":{
             "runCommand": [
+              "rm -rf opentargets/sourceExports/open-targets-data-releases/19.11/",
               "wget https://storage.googleapis.com/open-targets-data-releases/19.11/output/19.11_association_data.json.gz -P opentargets/sourceExports/open-targets-data-releases/19.11/output/19.11_association_data/",
               "wget https://storage.googleapis.com/open-targets-data-releases/19.11/output/19.11_evidence_data.json.gz -P opentargets/sourceExports/open-targets-data-releases/19.11/output/19.11_evidence_data/",
               "wget https://storage.googleapis.com/open-targets-data-releases/19.11/output/19.11_target_list.csv.gz -P opentargets/sourceExports/open-targets-data-releases/19.11/output/19.11_target_list/",

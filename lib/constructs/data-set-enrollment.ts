@@ -81,9 +81,11 @@ export interface DataSetEnrollmentProps extends cdk.StackProps {
 		dataSetName: string;
 		SourceConnectionInput?: glue.CfnConnection.ConnectionInputProperty;
 		SourceTargets: glue.CfnCrawler.TargetsProperty;
+		DataLakeTargets: glue.CfnCrawler.TargetsProperty;
 		GlueScriptPath: string;
 		GlueScriptArguments: any;
 		SourceAccessPolicy?: iam.Policy;
+		MaxDPUs: number;
 }
 
 
@@ -189,7 +191,7 @@ export class DataSetEnrollment extends cdk.Construct {
 			name: `${props.dataSetName}_src_to_dl_etl`, 
 			timeout: 2880, 
 			glueVersion: "1.0", 
-			maxCapacity: 10.0,
+			maxCapacity: props.MaxDPUs,
 			command: {
 				scriptLocation: `s3://${glueScript.s3BucketName}/${glueScript.s3ObjectKey}`, 
 				name: "glueetl", 
@@ -207,14 +209,15 @@ export class DataSetEnrollment extends cdk.Construct {
 		const etl_job = new glue.CfnJob(this, `${props.dataSetName}-EtlJob`, jobParams );
 		
 		
+		const datalake_crawler = this.setupCrawler(this.Dataset_Datalake, props.DataLakeTargets, false);
 		
-		const datalake_crawler = this.setupCrawler(this.Dataset_Datalake, {
-				s3Targets: [
-					{
-						path: `s3://${props.dataLakeBucket.bucketName}/${props.dataSetName}/`
-					}
-				]
-		}, false);
+		// const datalake_crawler = this.setupCrawler(this.Dataset_Datalake, {
+		// 		s3Targets: [
+		// 			{
+		// 				path: `s3://${props.dataLakeBucket.bucketName}/${props.dataSetName}/`
+		// 			}
+		// 		]
+		// }, false);
 
 		
 		const datalakeEnrollmentWorkflow = new DataLakeEnrollmentWorkflow(this,`${props.dataSetName}DataLakeWorkflow`,{
@@ -223,7 +226,7 @@ export class DataSetEnrollment extends cdk.Construct {
 			etlJob: etl_job,
 			datalakeCrawler: datalake_crawler
 			
-		})
+		});
 		
 	}
 	
