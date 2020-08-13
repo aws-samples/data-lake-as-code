@@ -23,13 +23,26 @@ glue_database = args["GLUE_SRC_DATABASE"];
 target_format = "parquet"
 
 client = boto3.client(service_name='glue', region_name=aws_region)
-responseGetTables = client.get_tables(DatabaseName=glue_database)
 
-tableList = responseGetTables['TableList']
+
 tables = []
-for tableDict in tableList:
-  tables.append(tableDict['Name'])
+keepPullingTables = True
+nextToken = ''
+
+while keepPullingTables:
+  responseGetTables = client.get_tables(DatabaseName=glue_database, NextToken=nextToken)
+  tableList = responseGetTables['TableList']
+  for tableDict in tableList:
+    tables.append(tableDict['Name'])
   
+  if 'NextToken' in responseGetTables:
+    nextToken = responseGetTables['NextToken']
+  else:
+    nextToken = ''
+    
+  keepPullingTables = True if nextToken != '' else False
+  
+
 for table in tables:
     
   datasource = glueContext.create_dynamic_frame.from_catalog(database = glue_database, table_name = table)   
