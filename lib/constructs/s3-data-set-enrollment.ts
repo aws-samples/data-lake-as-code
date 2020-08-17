@@ -96,6 +96,8 @@ export class S3dataSetEnrollment extends DataLakeEnrollment{
         this.createCoarseIamPolicy();
         this.grantGlueRoleLakeFormationPermissions(this.DataEnrollment.DataSetGlueRole, props.DataSetName); 
         
+        this.grantCoarseIamRead(this.DataEnrollment.DataSetGlueRole);
+        
         
 
 

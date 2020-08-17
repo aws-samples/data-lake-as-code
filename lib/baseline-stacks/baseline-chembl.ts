@@ -96,12 +96,12 @@ export class ChemblBaseline extends cdk.Construct {
     
     createAndApplyImportCommand(commandDoc: string, instance: ec2.Instance, database: rds.DatabaseInstance, secret: rds.DatabaseSecret, resourceSuffix: string) {
         
-        const loadChemblDoc = new ssm.CfnDocument(this, 'loadOpenTargetsDoc'+ resourceSuffix, {
+        const loadChemblDoc = new ssm.CfnDocument(this, 'loadChemblDoc'+ resourceSuffix, {
             content: JSON.parse(fs.readFileSync(commandDoc, { encoding: 'utf-8' })),
             documentType: "Command"
         });
         
-        const loadChemblAssociation = new ssm.CfnAssociation(this, 'loadOpenTargetsAssociation' + resourceSuffix,{
+        const loadChemblAssociation = new ssm.CfnAssociation(this, 'loadChemblAssociation' + resourceSuffix,{
             name: loadChemblDoc.ref,
             targets: [
                 { key: "InstanceIds", values: [instance.instanceId] }
@@ -111,7 +111,7 @@ export class ChemblBaseline extends cdk.Construct {
         loadChemblAssociation.addPropertyOverride('Parameters',{
             databaseSecretArn: [secret.secretArn],
             databaseHostName: [database.dbInstanceEndpointAddress],
-            executionTimeout: ['7200']
+            executionTimeout: ['10800']
         });
 
         

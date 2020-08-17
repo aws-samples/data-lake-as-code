@@ -42,7 +42,7 @@
                 "chmod 0600 ~/.pgpass",
                 "escapedDbPw=$(echo $dbPw | sed 's|:|\\\\:|g')",
                 "echo $chembl27HostName:5432:*:$dbUn:$escapedDbPw >> ~/.pgpass",
-                "dropdb --if-exists -h $chembl27HostName --username=$dbUn chembl_27 >> /home/ssm-user/progressLogChembl27 2>/home/ssm-user/progressLogChembl27",
+                "dropdb --if-exists -h $chembl27HostName --username=$dbUn chembl_27 >> /home/ssm-user/progressLogChemblDrop27 2>/home/ssm-user/progressLogChemblDrop27",
                 "createdb -h $chembl27HostName --username=$dbUn chembl_27",
                 "createuser -h $chembl27HostName --username=$dbUn user",
                 "pg_restore -v -h $chembl27HostName -p 5432 -U $dbUn -d chembl_27 chembl/sourceExports/ChEMBLdb/releases/chembl_27/chembl_27/chembl_27_postgresql/chembl_27_postgresql.dmp >> /home/ssm-user/progressLogChembl27 2>/home/ssm-user/progressLogChembl27",

@@ -15,7 +15,7 @@ export class DataLakeEnrollment extends cdk.Construct {
 
     public DataEnrollment: DataSetEnrollment;
     public DataSetName: string;
-    private CoarseAthenaAccessPolicy: iam.ManagedPolicy;
+    public CoarseAthenaAccessPolicy: iam.ManagedPolicy;
     private CoarseResourceAccessPolicy: iam.ManagedPolicy;
     private CoarseIamPolciesApplied: boolean;
 
@@ -415,7 +415,6 @@ export class DataLakeEnrollment extends cdk.Construct {
 		    this.CoarseIamPolciesApplied = true;
 		    return;
 		}
-
 
 
 
