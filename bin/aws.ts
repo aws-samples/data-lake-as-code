@@ -18,14 +18,14 @@ const coreDataLake = new DataLakeStack(app, 'CoreDataLake', {
 });
 
 
-// const exampleS3DataSet = new ExampleS3DataSet(app, 'exampleS3DataSet', {
+// const exampleS3DataSet = new ExampleS3DataSet(app, 'ExampleS3DataSet', {
 //     sourceBucket: s3.Bucket.fromBucketName(app, 'exampleS3DataSetSourceBucket', '--- YOUR EXISTING BUCKET NAME GOES HERE ---'),
 //     sourceBucketDataPrefix: '/prefixToParentFolderofTableFolders/',
 //     DataLake: coreDataLake
 // });
 
 
-// const examplePgRdsDataSet = new ExamplePgRdsDataSet(app, 'examplePgRdsDataSet', {
+// const examplePgRdsDataSet = new ExamplePgRdsDataSet(app, 'ExamplePgRdsDataSet', {
     
 //     database: rds.DatabaseInstance.fromDatabaseInstanceAttributes(app, 'exampleRdsDataSet', {
 //         instanceEndpointAddress: '--- RDS INSTANCE ENDPOINT ADDRESS GOES HERE ---',

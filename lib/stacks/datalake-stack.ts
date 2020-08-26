@@ -66,7 +66,6 @@ export class DataLakeStack extends cdk.Stack {
     super(scope, id, props);
 
     this.DataLakeBucket = new s3.Bucket(this, 'dataLakeBucket',{
-        bucketName: "aws-roda-hcls-datalake"
     });
     this.AthenaResultsBucket = new s3.Bucket(this, 'athenaResultsBucket');        
    
