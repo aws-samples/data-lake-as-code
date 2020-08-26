@@ -1,0 +1,14 @@
+aws-cdk.core
+aws-cdk.aws_s3
+aws-cdk.aws_ec2
+aws-cdk.aws_batch
+aws-cdk.aws_iam
+aws-cdk.aws_glue
+aws-cdk.aws_lambda
+aws-cdk.aws_athena
+aws-cdk.aws_ecs
+aws-cdk.aws_ecr
+aws_cdk.aws_secretsmanager
+aws_cdk.aws_lambda
+aws-cdk.aws_s3_notifications
+aws_cdk.aws_lambda_event_sources
