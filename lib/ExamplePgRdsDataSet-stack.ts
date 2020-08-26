@@ -4,36 +4,38 @@ import iam = require('@aws-cdk/aws-iam');
 import rds = require('@aws-cdk/aws-rds');
 import glue = require('@aws-cdk/aws-glue');
 import s3 = require('@aws-cdk/aws-s3');
+import sm = require('@aws-cdk/aws-secretsmanager');
 import s3assets = require('@aws-cdk/aws-s3-assets');
-import { RDSdataSetSetEnrollmentProps, RDSOracleDataSetEnrollment } from './constructs/rds-data-set-enrollment';
+import { RDSdataSetSetEnrollmentProps, RDSPostgresDataSetEnrollment } from './constructs/rds-data-set-enrollment';
 import { DataSetStack, DataSetStackProps} from './stacks/dataset-stack';
 
 
 
 
-export interface BindingDBEnrollmentProps extends DataSetStackProps {
+export interface ExamplePgRdsDataSetParams extends DataSetStackProps {
 	databaseSecret: rds.DatabaseSecret;
 	database: rds.DatabaseInstance;
 	accessSecurityGroup: ec2.SecurityGroup;
 }
 
-export class BindingDBStack extends DataSetStack{
-	constructor(scope: cdk.Construct, id: string, props: BindingDBEnrollmentProps) {
+export class ExamplePgRdsDataSet extends DataSetStack{
+	constructor(scope: cdk.Construct, id: string, props: ExamplePgRdsDataSetParams) {
 		super(scope, id, props);
 	
 	
-		const dataSetName = "binding_db";
-
-		this.Enrollments.push(new RDSOracleDataSetEnrollment(this, 'binding-db-enrollment', {
+		const dataSetName = "exampleRDS";
+		
+		
+		this.Enrollments.push(new RDSPostgresDataSetEnrollment(this, 'examplePgRds-enrollment', {
 	    	databaseSecret: props.databaseSecret,
 	    	database: props.database,
+	    	databaseSidOrServiceName: "database_sid",
 	    	MaxDPUs: 5.0,
-	    	databaseSidOrServiceName: "orcl",
 	    	accessSecurityGroup: props.accessSecurityGroup,
 	    	dataLakeBucket: props.DataLake.DataLakeBucket,
 	    	DataSetName: dataSetName,
-	    	JdbcTargetIncludePaths: ["orcl/%"],
-	    	GlueScriptPath: "scripts/glue.s3import.bindingdb.py",
+	    	JdbcTargetIncludePaths: ["database_name/%"],
+	    	GlueScriptPath: "scripts/glue.s3import.exampledataset.rds.py",
 			GlueScriptArguments: {
 				"--job-language": "python", 
 				"--job-bookmark-option": "job-bookmark-disable",
@@ -41,14 +43,14 @@ export class BindingDBStack extends DataSetStack{
 				"--DL_BUCKET": props.DataLake.DataLakeBucket.bucketName,
 				"--DL_PREFIX": "/"+dataSetName+"/",
 				"--DL_REGION": cdk.Stack.of(this).region,
-				"--GLUE_SRC_DATABASE": "binding_db_src"
+				"--GLUE_SRC_DATABASE": "exampleRDS_src"
 			}	    	
 		}));
 		
 		
+		
 	}
 }
-
 
 
 

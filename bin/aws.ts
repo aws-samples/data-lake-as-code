@@ -1,120 +1,49 @@
 #!/usr/bin/env node
 import 'source-map-support/register';
 import * as cdk from '@aws-cdk/core';
-import { BaselineStack } from '../lib/baseline-stack';
 import { DataLakeStack } from '../lib/stacks/datalake-stack';
-import { OpenTargetsStack } from '../lib/opentargets-stack';
-import { ChemblStack } from '../lib/chembl-25-stack';
-import { GTExStack } from '../lib/gtex-stack';
-import { BindingDBStack } from '../lib/bindingdb-stack';
-import { AnalyticsStack } from '../lib/analytics-stack';
 import iam = require('@aws-cdk/aws-iam');
 import s3 = require('@aws-cdk/aws-s3');
+import ec2 = require('@aws-cdk/aws-ec2');
+import rds = require('@aws-cdk/aws-rds');
 import { DataLakeEnrollment } from '../lib/constructs/data-lake-enrollment';
 import { DataSetTemplateStack, CrawlerTemplateStack } from '../lib/stacks/dataset-stack';
-
+import { ExampleS3DataSet } from '../lib/ExampleS3DataSet-stack';
+import { ExamplePgRdsDataSet } from '../lib/ExamplePgRdsDataSet-stack';
 
 const app = new cdk.App();
-
-//console.log("Setting up dataset baselines.");
-
-const baseline = new BaselineStack(app, 'BaselineStack');
-
-//console.log("Setting up core data lake.");
 
 const coreDataLake = new DataLakeStack(app, 'CoreDataLake', {
     starterLakeFormationAdminPrincipalArn: app.node.tryGetContext("starterLakeFormationAdmin")
 });
 
-//console.log("Setting up ChEMBL enrollment stack.");
 
-const chemblStack = new ChemblStack(app, 'ChemblStack', {
-    ChemblDb25: baseline.ChemblDb25,
-    ChemblDb27: baseline.ChemblDb27,
-    accessSecurityGroup: baseline.ChemblDBChemblDbAccessSg,
-    databaseSecret: baseline.ChemblDBSecret,
-    DataLake: coreDataLake
-});
-
-//console.log("Setting up OpenTargets enrollment stack.");
-
-const openTargetsStack = new OpenTargetsStack(app, 'OpenTargetsStack', {
-    sourceBucket: baseline.OpenTargetsSourceBucket,
-    sourceBucketDataPrefix: '/opentargets/sourceExports/',
-    DataLake: coreDataLake
-});
-
-//console.log("Setting up BindingDB enrollment stack.");
-
-const bindingDBStack = new BindingDBStack(app, 'BindingDbStack', {
-    database: baseline.BindingDb,
-    accessSecurityGroup: baseline.BindingDBAccessSg,
-    databaseSecret: baseline.BindingDBSecret,
+const exampleS3DataSet = new ExampleS3DataSet(app, 'exampleS3DataSet', {
+    sourceBucket: s3.Bucket.fromBucketName(app, 'exampleS3DataSetSourceBucket', '--- YOUR EXISTING BUCKET NAME GOES HERE ---'),
+    sourceBucketDataPrefix: '/prefixToParentFolderofTableFolders/',
     DataLake: coreDataLake
 });
 
 
-//console.log("Setting up GTEx enrollment stack.");
-
-const gtexStack = new GTExStack(app, 'GTExStack', {
-    sourceBucket: baseline.GTExSourceBucket,
-    sourceBucketDataPrefix: '/gtex/sourceExports/',
-    DataLake: coreDataLake
+const examplePgRdsDataSet = new ExamplePgRdsDataSet(app, 'exampleS3DataSet', {
+    
+    database: rds.DatabaseInstance.fromDatabaseInstanceAttributes(app, 'exampleRdsDataSet', {
+        instanceEndpointAddress: '--- RDS INSTANCE ENDPOINT ADDRESS GOES HERE ---',
+        instanceIdentifier: '--- RDS INSTANCE IDENTIFIRE GOES HERE ---',
+        port: 5432,
+        securityGroups: []}) as rds.DatabaseInstance,
+    databaseSecret: rds.DatabaseSecret.fromSecretArn(app, 'exampleRdsDataSetSecret', 
+        '---SECRET ARN GOES HERE ---') as rds.DatabaseSecret,
+    accessSecurityGroup: ec2.SecurityGroup.fromSecurityGroupId(app, 'exampleRdsAccessSecurityGroup',
+        '---SECURITY GROUP ID THAT ALLOWS INBOUND ACCESS TO DATABASE GOES HERE ---') as ec2.SecurityGroup,
+    DataLake: coreDataLake    
 });
 
 
-const analyticsStack = new AnalyticsStack(app, 'AnalyticsStack', {
-    targetVpc: baseline.Vpc,
-});
+
 
 
 // chemblStack.grantIamRead(analyticsStack.NotebookRole);
-// openTargetsStack.grantIamRead(analyticsStack.NotebookRole);
-// bindingDBStack.grantIamRead(analyticsStack.NotebookRole);
-
-
-
-
-const OpenTargetsRodaTemplate = new DataSetTemplateStack(app, 'OpenTargets1911RodaTemplate', {
-    DatabaseDescriptionPath: "../../RODA_templates/open_targets_1911_get_database.json",
-    DescribeTablesPath: "../../RODA_templates/open_targets_1911_get_tables.json",
-    DataSetName: openTargetsStack.Enrollments[0].DataSetName
-});
-
-const OpenTargets2006RodaTemplate = new DataSetTemplateStack(app, 'OpenTargets2006RodaTemplate', {
-    DatabaseDescriptionPath: "../../RODA_templates/opentargets_20_06_get_database.json",
-    DescribeTablesPath: "../../RODA_templates/opentargets_20_06_get_tables.json",
-    DataSetName: openTargetsStack.Enrollments[1].DataSetName
-});
-
-
-const Chembl25RodaTemplate = new DataSetTemplateStack(app, 'Chembl25RodaTemplate', {
-    DatabaseDescriptionPath: "../../RODA_templates/chembl_25_get_database.json",
-    DescribeTablesPath: "../../RODA_templates/chembl_25_get_tables.json",
-    DataSetName: chemblStack.Enrollments[0].DataSetName
-});
-
-const Chembl27RodaTemplate = new DataSetTemplateStack(app, 'Chembl27RodaTemplate', {
-    DatabaseDescriptionPath: "../../RODA_templates/chembl_27_get_database.json",
-    DescribeTablesPath: "../../RODA_templates/chembl_27_get_tables.json",
-    DataSetName: chemblStack.Enrollments[1].DataSetName
-});
-
-
-const BindinbDbRodaTemplate = new DataSetTemplateStack(app, 'BindingDbRodaTemplate', {
-    DatabaseDescriptionPath: "../../RODA_templates/binding_db_get_database.json",
-    DescribeTablesPath: "../../RODA_templates/binding_db_get_tables.json",
-    DataSetName: bindingDBStack.Enrollments[0].DataSetName
-});
-
-
-const GTExRodaTemplate8 = new CrawlerTemplateStack(app, 'GTExRodaTemplate8', {
-    databaseDescriptionPath: "../../RODA_templates/gtex_8_get_database.json",
-    crawlerDescriptionPath: "../../RODA_templates/gtex_8_get_crawler.json",
-    DataSetName: gtexStack.Enrollments[0].DataSetName
-});
-
-
 
 // const exampleUser = iam.User.fromUserName(coreDataLake, 'exampleGrantee', 'paul1' );
 
@@ -127,7 +56,6 @@ const GTExRodaTemplate8 = new CrawlerTemplateStack(app, 'GTExRodaTemplate8', {
 // };
 
 // openTargetsStack.grantTablePermissions(exampleUser, exampleGrant);
-
 
 
 

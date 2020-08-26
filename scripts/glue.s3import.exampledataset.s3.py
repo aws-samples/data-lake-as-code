@@ -56,4 +56,3 @@ for table in tables:
 job.commit()
 
 
-
