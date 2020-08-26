@@ -29,7 +29,7 @@ export class AnalyticsStack extends cdk.Stack {
     
     const lifecycleCode = [
             {"content": cdk.Fn.base64(`
-            wget -O /home/ec2-user/SageMaker/opentargets.chembl.example.ipynb https://raw.githubusercontent.com/paulu-aws/chembl-opentargets-data-lake-example/master/scripts/sagemaker.opentargets.chembl.example.ipynb
+            wget -O /home/ec2-user/SageMaker/opentargets.chembl.example.ipynb https://raw.githubusercontent.com/aws-samples/data-lake-as-code/master/scripts/sagemaker.opentargets.chembl.example.ipynb
             sudo chown ec2-user /home/ec2-user/SageMaker/opentargets.chembl.example.ipynb
             sed -i 's/XXXXAthenaStagingDirectoryXXXX/${athenaStagingDirectory.bucketName}/g' /home/ec2-user/SageMaker/opentargets.chembl.example.ipynb
             sed -i 's/XXXXAthenaRegionXXXX/${cdk.Stack.of(this).region}/g' /home/ec2-user/SageMaker/opentargets.chembl.example.ipynb

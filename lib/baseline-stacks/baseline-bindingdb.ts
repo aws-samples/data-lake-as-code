@@ -5,6 +5,7 @@ import rds = require('@aws-cdk/aws-rds');
 import ssm = require('@aws-cdk/aws-ssm');
 import s3 = require('@aws-cdk/aws-s3');
 import s3assets = require('@aws-cdk/aws-s3-assets');
+import sm = require('@aws-cdk/aws-secretsmanager');
 import fs = require('fs');
 
 
@@ -60,6 +61,10 @@ export class BindingDBBaseline extends cdk.Construct {
             username: 'master',
         });
         this.DbSecret = DbSecret;
+        
+        
+        const cfnSecret = this.DbSecret.node.defaultChild as sm.CfnSecret;
+        cfnSecret.addPropertyOverride('GenerateSecretString.ExcludeCharacters', '\'"@!/\\;');
         
         this.DbSecret.grantRead(props.ImportInstance.role);
         

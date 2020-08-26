@@ -33,9 +33,9 @@
             "averageRecordSize": "18",
             "classification": "parquet",
             "compressionType": "none",
-            "objectCount": "20",
-            "recordCount": "315802",
-            "sizeKey": "5345369",
+            "objectCount": "40",
+            "recordCount": "646405",
+            "sizeKey": "10919980",
             "typeOfData": "file"
           },
           "StorageDescriptor": {
@@ -75,9 +75,9 @@
               "averageRecordSize": "18",
               "classification": "parquet",
               "compressionType": "none",
-              "objectCount": "20",
-              "recordCount": "315802",
-              "sizeKey": "5345369",
+              "objectCount": "40",
+              "recordCount": "646405",
+              "sizeKey": "10919980",
               "typeOfData": "file"
             },
             "SerdeInfo": {
@@ -108,12 +108,12 @@
             "CrawlerSchemaDeserializerVersion": "1.0",
             "CrawlerSchemaSerializerVersion": "1.0",
             "UPDATED_BY_CRAWLER": "binding_db_dl_crawler",
-            "averageRecordSize": "881",
+            "averageRecordSize": "874",
             "classification": "parquet",
             "compressionType": "none",
-            "objectCount": "20",
-            "recordCount": "35309",
-            "sizeKey": "17776919",
+            "objectCount": "40",
+            "recordCount": "72238",
+            "sizeKey": "36219355",
             "typeOfData": "file"
           },
           "StorageDescriptor": {
@@ -174,12 +174,12 @@
               "CrawlerSchemaDeserializerVersion": "1.0",
               "CrawlerSchemaSerializerVersion": "1.0",
               "UPDATED_BY_CRAWLER": "binding_db_dl_crawler",
-              "averageRecordSize": "881",
+              "averageRecordSize": "874",
               "classification": "parquet",
               "compressionType": "none",
-              "objectCount": "20",
-              "recordCount": "35309",
-              "sizeKey": "17776919",
+              "objectCount": "40",
+              "recordCount": "72238",
+              "sizeKey": "36219355",
               "typeOfData": "file"
             },
             "SerdeInfo": {
@@ -213,9 +213,9 @@
             "averageRecordSize": "24",
             "classification": "parquet",
             "compressionType": "none",
-            "objectCount": "20",
-            "recordCount": "6280",
-            "sizeKey": "138070",
+            "objectCount": "40",
+            "recordCount": "12560",
+            "sizeKey": "276140",
             "typeOfData": "file"
           },
           "StorageDescriptor": {
@@ -239,9 +239,9 @@
               "averageRecordSize": "24",
               "classification": "parquet",
               "compressionType": "none",
-              "objectCount": "20",
-              "recordCount": "6280",
-              "sizeKey": "138070",
+              "objectCount": "40",
+              "recordCount": "12560",
+              "sizeKey": "276140",
               "typeOfData": "file"
             },
             "SerdeInfo": {
@@ -275,9 +275,9 @@
             "averageRecordSize": "164",
             "classification": "parquet",
             "compressionType": "none",
-            "objectCount": "20",
-            "recordCount": "130570",
-            "sizeKey": "11561524",
+            "objectCount": "40",
+            "recordCount": "267265",
+            "sizeKey": "24233555",
             "typeOfData": "file"
           },
           "StorageDescriptor": {
@@ -309,9 +309,9 @@
               "averageRecordSize": "164",
               "classification": "parquet",
               "compressionType": "none",
-              "objectCount": "20",
-              "recordCount": "130570",
-              "sizeKey": "11561524",
+              "objectCount": "40",
+              "recordCount": "267265",
+              "sizeKey": "24233555",
               "typeOfData": "file"
             },
             "SerdeInfo": {
@@ -345,9 +345,9 @@
             "averageRecordSize": "47",
             "classification": "parquet",
             "compressionType": "none",
-            "objectCount": "20",
-            "recordCount": "1379504",
-            "sizeKey": "35539319",
+            "objectCount": "40",
+            "recordCount": "2868501",
+            "sizeKey": "73730373",
             "typeOfData": "file"
           },
           "StorageDescriptor": {
@@ -399,9 +399,9 @@
               "averageRecordSize": "47",
               "classification": "parquet",
               "compressionType": "none",
-              "objectCount": "20",
-              "recordCount": "1379504",
-              "sizeKey": "35539319",
+              "objectCount": "40",
+              "recordCount": "2868501",
+              "sizeKey": "73730373",
               "typeOfData": "file"
             },
             "SerdeInfo": {
@@ -432,12 +432,12 @@
             "CrawlerSchemaDeserializerVersion": "1.0",
             "CrawlerSchemaSerializerVersion": "1.0",
             "UPDATED_BY_CRAWLER": "binding_db_dl_crawler",
-            "averageRecordSize": "607",
+            "averageRecordSize": "616",
             "classification": "parquet",
             "compressionType": "none",
-            "objectCount": "20",
-            "recordCount": "925",
-            "sizeKey": "432363",
+            "objectCount": "40",
+            "recordCount": "1889",
+            "sizeKey": "906130",
             "typeOfData": "file"
           },
           "StorageDescriptor": {
@@ -486,12 +486,12 @@
               "CrawlerSchemaDeserializerVersion": "1.0",
               "CrawlerSchemaSerializerVersion": "1.0",
               "UPDATED_BY_CRAWLER": "binding_db_dl_crawler",
-              "averageRecordSize": "607",
+              "averageRecordSize": "616",
               "classification": "parquet",
               "compressionType": "none",
-              "objectCount": "20",
-              "recordCount": "925",
-              "sizeKey": "432363",
+              "objectCount": "40",
+              "recordCount": "1889",
+              "sizeKey": "906130",
               "typeOfData": "file"
             },
             "SerdeInfo": {
@@ -525,9 +525,9 @@
             "averageRecordSize": "11",
             "classification": "parquet",
             "compressionType": "none",
-            "objectCount": "20",
-            "recordCount": "2290",
-            "sizeKey": "47447",
+            "objectCount": "40",
+            "recordCount": "4669",
+            "sizeKey": "95497",
             "typeOfData": "file"
           },
           "StorageDescriptor": {
@@ -563,9 +563,9 @@
               "averageRecordSize": "11",
               "classification": "parquet",
               "compressionType": "none",
-              "objectCount": "20",
-              "recordCount": "2290",
-              "sizeKey": "47447",
+              "objectCount": "40",
+              "recordCount": "4669",
+              "sizeKey": "95497",
               "typeOfData": "file"
             },
             "SerdeInfo": {
@@ -596,12 +596,12 @@
             "CrawlerSchemaDeserializerVersion": "1.0",
             "CrawlerSchemaSerializerVersion": "1.0",
             "UPDATED_BY_CRAWLER": "binding_db_dl_crawler",
-            "averageRecordSize": "44",
+            "averageRecordSize": "41",
             "classification": "parquet",
             "compressionType": "none",
-            "objectCount": "20",
-            "recordCount": "305",
-            "sizeKey": "24414",
+            "objectCount": "40",
+            "recordCount": "627",
+            "sizeKey": "49160",
             "typeOfData": "file"
           },
           "StorageDescriptor": {
@@ -622,12 +622,12 @@
               "CrawlerSchemaDeserializerVersion": "1.0",
               "CrawlerSchemaSerializerVersion": "1.0",
               "UPDATED_BY_CRAWLER": "binding_db_dl_crawler",
-              "averageRecordSize": "44",
+              "averageRecordSize": "41",
               "classification": "parquet",
               "compressionType": "none",
-              "objectCount": "20",
-              "recordCount": "305",
-              "sizeKey": "24414",
+              "objectCount": "40",
+              "recordCount": "627",
+              "sizeKey": "49160",
               "typeOfData": "file"
             },
             "SerdeInfo": {
@@ -661,9 +661,9 @@
             "averageRecordSize": "538",
             "classification": "parquet",
             "compressionType": "none",
-            "objectCount": "7",
-            "recordCount": "6",
-            "sizeKey": "10964",
+            "objectCount": "14",
+            "recordCount": "12",
+            "sizeKey": "21928",
             "typeOfData": "file"
           },
           "StorageDescriptor": {
@@ -699,9 +699,9 @@
               "averageRecordSize": "538",
               "classification": "parquet",
               "compressionType": "none",
-              "objectCount": "7",
-              "recordCount": "6",
-              "sizeKey": "10964",
+              "objectCount": "14",
+              "recordCount": "12",
+              "sizeKey": "21928",
               "typeOfData": "file"
             },
             "SerdeInfo": {
@@ -732,12 +732,12 @@
             "CrawlerSchemaDeserializerVersion": "1.0",
             "CrawlerSchemaSerializerVersion": "1.0",
             "UPDATED_BY_CRAWLER": "binding_db_dl_crawler",
-            "averageRecordSize": "192",
+            "averageRecordSize": "185",
             "classification": "parquet",
             "compressionType": "none",
-            "objectCount": "20",
-            "recordCount": "66",
-            "sizeKey": "36507",
+            "objectCount": "40",
+            "recordCount": "132",
+            "sizeKey": "73014",
             "typeOfData": "file"
           },
           "StorageDescriptor": {
@@ -770,12 +770,12 @@
               "CrawlerSchemaDeserializerVersion": "1.0",
               "CrawlerSchemaSerializerVersion": "1.0",
               "UPDATED_BY_CRAWLER": "binding_db_dl_crawler",
-              "averageRecordSize": "192",
+              "averageRecordSize": "185",
               "classification": "parquet",
               "compressionType": "none",
-              "objectCount": "20",
-              "recordCount": "66",
-              "sizeKey": "36507",
+              "objectCount": "40",
+              "recordCount": "132",
+              "sizeKey": "73014",
               "typeOfData": "file"
             },
             "SerdeInfo": {
@@ -809,9 +809,9 @@
             "averageRecordSize": "224",
             "classification": "parquet",
             "compressionType": "none",
-            "objectCount": "2",
-            "recordCount": "1",
-            "sizeKey": "1625",
+            "objectCount": "4",
+            "recordCount": "2",
+            "sizeKey": "3250",
             "typeOfData": "file"
           },
           "StorageDescriptor": {
@@ -843,9 +843,9 @@
               "averageRecordSize": "224",
               "classification": "parquet",
               "compressionType": "none",
-              "objectCount": "2",
-              "recordCount": "1",
-              "sizeKey": "1625",
+              "objectCount": "4",
+              "recordCount": "2",
+              "sizeKey": "3250",
               "typeOfData": "file"
             },
             "SerdeInfo": {
@@ -879,9 +879,9 @@
             "averageRecordSize": "0",
             "classification": "parquet",
             "compressionType": "none",
-            "objectCount": "1",
+            "objectCount": "2",
             "recordCount": "0",
-            "sizeKey": "558",
+            "sizeKey": "1116",
             "typeOfData": "file"
           },
           "StorageDescriptor": {
@@ -913,9 +913,9 @@
               "averageRecordSize": "0",
               "classification": "parquet",
               "compressionType": "none",
-              "objectCount": "1",
+              "objectCount": "2",
               "recordCount": "0",
-              "sizeKey": "558",
+              "sizeKey": "1116",
               "typeOfData": "file"
             },
             "SerdeInfo": {
@@ -946,12 +946,12 @@
             "CrawlerSchemaDeserializerVersion": "1.0",
             "CrawlerSchemaSerializerVersion": "1.0",
             "UPDATED_BY_CRAWLER": "binding_db_dl_crawler",
-            "averageRecordSize": "208",
+            "averageRecordSize": "207",
             "classification": "parquet",
             "compressionType": "none",
-            "objectCount": "5",
-            "recordCount": "4",
-            "sizeKey": "4029",
+            "objectCount": "10",
+            "recordCount": "8",
+            "sizeKey": "8058",
             "typeOfData": "file"
           },
           "StorageDescriptor": {
@@ -976,12 +976,12 @@
               "CrawlerSchemaDeserializerVersion": "1.0",
               "CrawlerSchemaSerializerVersion": "1.0",
               "UPDATED_BY_CRAWLER": "binding_db_dl_crawler",
-              "averageRecordSize": "208",
+              "averageRecordSize": "207",
               "classification": "parquet",
               "compressionType": "none",
-              "objectCount": "5",
-              "recordCount": "4",
-              "sizeKey": "4029",
+              "objectCount": "10",
+              "recordCount": "8",
+              "sizeKey": "8058",
               "typeOfData": "file"
             },
             "SerdeInfo": {
@@ -1012,12 +1012,12 @@
             "CrawlerSchemaDeserializerVersion": "1.0",
             "CrawlerSchemaSerializerVersion": "1.0",
             "UPDATED_BY_CRAWLER": "binding_db_dl_crawler",
-            "averageRecordSize": "498",
+            "averageRecordSize": "493",
             "classification": "parquet",
             "compressionType": "none",
-            "objectCount": "15",
-            "recordCount": "14",
-            "sizeKey": "28744",
+            "objectCount": "30",
+            "recordCount": "28",
+            "sizeKey": "57488",
             "typeOfData": "file"
           },
           "StorageDescriptor": {
@@ -1062,12 +1062,12 @@
               "CrawlerSchemaDeserializerVersion": "1.0",
               "CrawlerSchemaSerializerVersion": "1.0",
               "UPDATED_BY_CRAWLER": "binding_db_dl_crawler",
-              "averageRecordSize": "498",
+              "averageRecordSize": "493",
               "classification": "parquet",
               "compressionType": "none",
-              "objectCount": "15",
-              "recordCount": "14",
-              "sizeKey": "28744",
+              "objectCount": "30",
+              "recordCount": "28",
+              "sizeKey": "57488",
               "typeOfData": "file"
             },
             "SerdeInfo": {
@@ -1098,12 +1098,12 @@
             "CrawlerSchemaDeserializerVersion": "1.0",
             "CrawlerSchemaSerializerVersion": "1.0",
             "UPDATED_BY_CRAWLER": "binding_db_dl_crawler",
-            "averageRecordSize": "157",
+            "averageRecordSize": "156",
             "classification": "parquet",
             "compressionType": "none",
-            "objectCount": "20",
-            "recordCount": "35315",
-            "sizeKey": "3024080",
+            "objectCount": "40",
+            "recordCount": "72251",
+            "sizeKey": "6175400",
             "typeOfData": "file"
           },
           "StorageDescriptor": {
@@ -1156,12 +1156,12 @@
               "CrawlerSchemaDeserializerVersion": "1.0",
               "CrawlerSchemaSerializerVersion": "1.0",
               "UPDATED_BY_CRAWLER": "binding_db_dl_crawler",
-              "averageRecordSize": "157",
+              "averageRecordSize": "156",
               "classification": "parquet",
               "compressionType": "none",
-              "objectCount": "20",
-              "recordCount": "35315",
-              "sizeKey": "3024080",
+              "objectCount": "40",
+              "recordCount": "72251",
+              "sizeKey": "6175400",
               "typeOfData": "file"
             },
             "SerdeInfo": {
@@ -1195,9 +1195,9 @@
             "averageRecordSize": "12",
             "classification": "parquet",
             "compressionType": "none",
-            "objectCount": "20",
-            "recordCount": "35324",
-            "sizeKey": "404349",
+            "objectCount": "40",
+            "recordCount": "72270",
+            "sizeKey": "829296",
             "typeOfData": "file"
           },
           "StorageDescriptor": {
@@ -1225,9 +1225,9 @@
               "averageRecordSize": "12",
               "classification": "parquet",
               "compressionType": "none",
-              "objectCount": "20",
-              "recordCount": "35324",
-              "sizeKey": "404349",
+              "objectCount": "40",
+              "recordCount": "72270",
+              "sizeKey": "829296",
               "typeOfData": "file"
             },
             "SerdeInfo": {
@@ -1261,9 +1261,9 @@
             "averageRecordSize": "24",
             "classification": "parquet",
             "compressionType": "none",
-            "objectCount": "20",
-            "recordCount": "5875",
-            "sizeKey": "129989",
+            "objectCount": "40",
+            "recordCount": "11750",
+            "sizeKey": "259978",
             "typeOfData": "file"
           },
           "StorageDescriptor": {
@@ -1287,9 +1287,9 @@
               "averageRecordSize": "24",
               "classification": "parquet",
               "compressionType": "none",
-              "objectCount": "20",
-              "recordCount": "5875",
-              "sizeKey": "129989",
+              "objectCount": "40",
+              "recordCount": "11750",
+              "sizeKey": "259978",
               "typeOfData": "file"
             },
             "SerdeInfo": {
@@ -1323,9 +1323,9 @@
             "averageRecordSize": "50",
             "classification": "parquet",
             "compressionType": "none",
-            "objectCount": "20",
-            "recordCount": "1751193",
-            "sizeKey": "58782861",
+            "objectCount": "40",
+            "recordCount": "3647615",
+            "sizeKey": "122928932",
             "typeOfData": "file"
           },
           "StorageDescriptor": {
@@ -1421,9 +1421,9 @@
               "averageRecordSize": "50",
               "classification": "parquet",
               "compressionType": "none",
-              "objectCount": "20",
-              "recordCount": "1751193",
-              "sizeKey": "58782861",
+              "objectCount": "40",
+              "recordCount": "3647615",
+              "sizeKey": "122928932",
               "typeOfData": "file"
             },
             "SerdeInfo": {
@@ -1454,12 +1454,12 @@
             "CrawlerSchemaDeserializerVersion": "1.0",
             "CrawlerSchemaSerializerVersion": "1.0",
             "UPDATED_BY_CRAWLER": "binding_db_dl_crawler",
-            "averageRecordSize": "269",
+            "averageRecordSize": "261",
             "classification": "parquet",
             "compressionType": "none",
-            "objectCount": "20",
-            "recordCount": "51",
-            "sizeKey": "42945",
+            "objectCount": "40",
+            "recordCount": "102",
+            "sizeKey": "85890",
             "typeOfData": "file"
           },
           "StorageDescriptor": {
@@ -1500,12 +1500,12 @@
               "CrawlerSchemaDeserializerVersion": "1.0",
               "CrawlerSchemaSerializerVersion": "1.0",
               "UPDATED_BY_CRAWLER": "binding_db_dl_crawler",
-              "averageRecordSize": "269",
+              "averageRecordSize": "261",
               "classification": "parquet",
               "compressionType": "none",
-              "objectCount": "20",
-              "recordCount": "51",
-              "sizeKey": "42945",
+              "objectCount": "40",
+              "recordCount": "102",
+              "sizeKey": "85890",
               "typeOfData": "file"
             },
             "SerdeInfo": {
@@ -1539,9 +1539,9 @@
             "averageRecordSize": "0",
             "classification": "parquet",
             "compressionType": "none",
-            "objectCount": "1",
+            "objectCount": "2",
             "recordCount": "0",
-            "sizeKey": "6126",
+            "sizeKey": "12252",
             "typeOfData": "file"
           },
           "StorageDescriptor": {
@@ -1789,9 +1789,9 @@
               "averageRecordSize": "0",
               "classification": "parquet",
               "compressionType": "none",
-              "objectCount": "1",
+              "objectCount": "2",
               "recordCount": "0",
-              "sizeKey": "6126",
+              "sizeKey": "12252",
               "typeOfData": "file"
             },
             "SerdeInfo": {
@@ -1822,12 +1822,12 @@
             "CrawlerSchemaDeserializerVersion": "1.0",
             "CrawlerSchemaSerializerVersion": "1.0",
             "UPDATED_BY_CRAWLER": "binding_db_dl_crawler",
-            "averageRecordSize": "216",
+            "averageRecordSize": "212",
             "classification": "parquet",
             "compressionType": "none",
-            "objectCount": "20",
-            "recordCount": "1779",
-            "sizeKey": "479059",
+            "objectCount": "40",
+            "recordCount": "3558",
+            "sizeKey": "958832",
             "typeOfData": "file"
           },
           "StorageDescriptor": {
@@ -2024,12 +2024,12 @@
               "CrawlerSchemaDeserializerVersion": "1.0",
               "CrawlerSchemaSerializerVersion": "1.0",
               "UPDATED_BY_CRAWLER": "binding_db_dl_crawler",
-              "averageRecordSize": "216",
+              "averageRecordSize": "212",
               "classification": "parquet",
               "compressionType": "none",
-              "objectCount": "20",
-              "recordCount": "1779",
-              "sizeKey": "479059",
+              "objectCount": "40",
+              "recordCount": "3558",
+              "sizeKey": "958832",
               "typeOfData": "file"
             },
             "SerdeInfo": {
@@ -2063,9 +2063,9 @@
             "averageRecordSize": "0",
             "classification": "parquet",
             "compressionType": "none",
-            "objectCount": "1",
+            "objectCount": "2",
             "recordCount": "0",
-            "sizeKey": "1340",
+            "sizeKey": "2680",
             "typeOfData": "file"
           },
           "StorageDescriptor": {
@@ -2125,9 +2125,9 @@
               "averageRecordSize": "0",
               "classification": "parquet",
               "compressionType": "none",
-              "objectCount": "1",
+              "objectCount": "2",
               "recordCount": "0",
-              "sizeKey": "1340",
+              "sizeKey": "2680",
               "typeOfData": "file"
             },
             "SerdeInfo": {
@@ -2161,9 +2161,9 @@
             "averageRecordSize": "19",
             "classification": "parquet",
             "compressionType": "none",
-            "objectCount": "20",
-            "recordCount": "1731",
-            "sizeKey": "78375",
+            "objectCount": "40",
+            "recordCount": "3462",
+            "sizeKey": "156750",
             "typeOfData": "file"
           },
           "StorageDescriptor": {
@@ -2223,9 +2223,9 @@
               "averageRecordSize": "19",
               "classification": "parquet",
               "compressionType": "none",
-              "objectCount": "20",
-              "recordCount": "1731",
-              "sizeKey": "78375",
+              "objectCount": "40",
+              "recordCount": "3462",
+              "sizeKey": "156750",
               "typeOfData": "file"
             },
             "SerdeInfo": {
@@ -2256,12 +2256,12 @@
             "CrawlerSchemaDeserializerVersion": "1.0",
             "CrawlerSchemaSerializerVersion": "1.0",
             "UPDATED_BY_CRAWLER": "binding_db_dl_crawler",
-            "averageRecordSize": "82",
+            "averageRecordSize": "77",
             "classification": "parquet",
             "compressionType": "none",
-            "objectCount": "20",
-            "recordCount": "324",
-            "sizeKey": "38094",
+            "objectCount": "40",
+            "recordCount": "648",
+            "sizeKey": "76188",
             "typeOfData": "file"
           },
           "StorageDescriptor": {
@@ -2290,12 +2290,12 @@
               "CrawlerSchemaDeserializerVersion": "1.0",
               "CrawlerSchemaSerializerVersion": "1.0",
               "UPDATED_BY_CRAWLER": "binding_db_dl_crawler",
-              "averageRecordSize": "82",
+              "averageRecordSize": "77",
               "classification": "parquet",
               "compressionType": "none",
-              "objectCount": "20",
-              "recordCount": "324",
-              "sizeKey": "38094",
+              "objectCount": "40",
+              "recordCount": "648",
+              "sizeKey": "76188",
               "typeOfData": "file"
             },
             "SerdeInfo": {
@@ -2326,12 +2326,12 @@
             "CrawlerSchemaDeserializerVersion": "1.0",
             "CrawlerSchemaSerializerVersion": "1.0",
             "UPDATED_BY_CRAWLER": "binding_db_dl_crawler",
-            "averageRecordSize": "275",
+            "averageRecordSize": "270",
             "classification": "parquet",
             "compressionType": "none",
-            "objectCount": "20",
-            "recordCount": "25",
-            "sizeKey": "23618",
+            "objectCount": "40",
+            "recordCount": "50",
+            "sizeKey": "47156",
             "typeOfData": "file"
           },
           "StorageDescriptor": {
@@ -2356,12 +2356,12 @@
               "CrawlerSchemaDeserializerVersion": "1.0",
               "CrawlerSchemaSerializerVersion": "1.0",
               "UPDATED_BY_CRAWLER": "binding_db_dl_crawler",
-              "averageRecordSize": "275",
+              "averageRecordSize": "270",
               "classification": "parquet",
               "compressionType": "none",
-              "objectCount": "20",
-              "recordCount": "25",
-              "sizeKey": "23618",
+              "objectCount": "40",
+              "recordCount": "50",
+              "sizeKey": "47156",
               "typeOfData": "file"
             },
             "SerdeInfo": {
@@ -2395,9 +2395,9 @@
             "averageRecordSize": "403",
             "classification": "parquet",
             "compressionType": "none",
-            "objectCount": "16",
-            "recordCount": "15",
-            "sizeKey": "20362",
+            "objectCount": "28",
+            "recordCount": "26",
+            "sizeKey": "35448",
             "typeOfData": "file"
           },
           "StorageDescriptor": {
@@ -2425,9 +2425,9 @@
               "averageRecordSize": "403",
               "classification": "parquet",
               "compressionType": "none",
-              "objectCount": "16",
-              "recordCount": "15",
-              "sizeKey": "20362",
+              "objectCount": "28",
+              "recordCount": "26",
+              "sizeKey": "35448",
               "typeOfData": "file"
             },
             "SerdeInfo": {
@@ -2458,12 +2458,12 @@
             "CrawlerSchemaDeserializerVersion": "1.0",
             "CrawlerSchemaSerializerVersion": "1.0",
             "UPDATED_BY_CRAWLER": "binding_db_dl_crawler",
-            "averageRecordSize": "28",
+            "averageRecordSize": "8",
             "classification": "parquet",
             "compressionType": "none",
-            "objectCount": "20",
-            "recordCount": "195",
-            "sizeKey": "16964",
+            "objectCount": "40",
+            "recordCount": "924",
+            "sizeKey": "36301",
             "typeOfData": "file"
           },
           "StorageDescriptor": {
@@ -2484,12 +2484,12 @@
               "CrawlerSchemaDeserializerVersion": "1.0",
               "CrawlerSchemaSerializerVersion": "1.0",
               "UPDATED_BY_CRAWLER": "binding_db_dl_crawler",
-              "averageRecordSize": "28",
+              "averageRecordSize": "8",
               "classification": "parquet",
               "compressionType": "none",
-              "objectCount": "20",
-              "recordCount": "195",
-              "sizeKey": "16964",
+              "objectCount": "40",
+              "recordCount": "924",
+              "sizeKey": "36301",
               "typeOfData": "file"
             },
             "SerdeInfo": {
@@ -2520,12 +2520,12 @@
             "CrawlerSchemaDeserializerVersion": "1.0",
             "CrawlerSchemaSerializerVersion": "1.0",
             "UPDATED_BY_CRAWLER": "binding_db_dl_crawler",
-            "averageRecordSize": "22",
+            "averageRecordSize": "21",
             "classification": "parquet",
             "compressionType": "none",
-            "objectCount": "20",
-            "recordCount": "1751196",
-            "sizeKey": "29552828",
+            "objectCount": "40",
+            "recordCount": "3647571",
+            "sizeKey": "61169729",
             "typeOfData": "file"
           },
           "StorageDescriptor": {
@@ -2702,12 +2702,12 @@
               "CrawlerSchemaDeserializerVersion": "1.0",
               "CrawlerSchemaSerializerVersion": "1.0",
               "UPDATED_BY_CRAWLER": "binding_db_dl_crawler",
-              "averageRecordSize": "22",
+              "averageRecordSize": "21",
               "classification": "parquet",
               "compressionType": "none",
-              "objectCount": "20",
-              "recordCount": "1751196",
-              "sizeKey": "29552828",
+              "objectCount": "40",
+              "recordCount": "3647571",
+              "sizeKey": "61169729",
               "typeOfData": "file"
             },
             "SerdeInfo": {
@@ -2741,9 +2741,9 @@
             "averageRecordSize": "50",
             "classification": "parquet",
             "compressionType": "none",
-            "objectCount": "20",
-            "recordCount": "1553504",
-            "sizeKey": "46247568",
+            "objectCount": "40",
+            "recordCount": "3218434",
+            "sizeKey": "95887330",
             "typeOfData": "file"
           },
           "StorageDescriptor": {
@@ -2767,9 +2767,9 @@
               "averageRecordSize": "50",
               "classification": "parquet",
               "compressionType": "none",
-              "objectCount": "20",
-              "recordCount": "1553504",
-              "sizeKey": "46247568",
+              "objectCount": "40",
+              "recordCount": "3218434",
+              "sizeKey": "95887330",
               "typeOfData": "file"
             },
             "SerdeInfo": {
@@ -2800,12 +2800,12 @@
             "CrawlerSchemaDeserializerVersion": "1.0",
             "CrawlerSchemaSerializerVersion": "1.0",
             "UPDATED_BY_CRAWLER": "binding_db_dl_crawler",
-            "averageRecordSize": "274",
+            "averageRecordSize": "256",
             "classification": "parquet",
             "compressionType": "none",
-            "objectCount": "20",
-            "recordCount": "794208",
-            "sizeKey": "133288464",
+            "objectCount": "40",
+            "recordCount": "1653378",
+            "sizeKey": "267924979",
             "typeOfData": "file"
           },
           "StorageDescriptor": {
@@ -2886,12 +2886,12 @@
               "CrawlerSchemaDeserializerVersion": "1.0",
               "CrawlerSchemaSerializerVersion": "1.0",
               "UPDATED_BY_CRAWLER": "binding_db_dl_crawler",
-              "averageRecordSize": "274",
+              "averageRecordSize": "256",
               "classification": "parquet",
               "compressionType": "none",
-              "objectCount": "20",
-              "recordCount": "794208",
-              "sizeKey": "133288464",
+              "objectCount": "40",
+              "recordCount": "1653378",
+              "sizeKey": "267924979",
               "typeOfData": "file"
             },
             "SerdeInfo": {
@@ -2922,12 +2922,12 @@
             "CrawlerSchemaDeserializerVersion": "1.0",
             "CrawlerSchemaSerializerVersion": "1.0",
             "UPDATED_BY_CRAWLER": "binding_db_dl_crawler",
-            "averageRecordSize": "2345",
+            "averageRecordSize": "2289",
             "classification": "parquet",
             "compressionType": "none",
-            "objectCount": "20",
-            "recordCount": "779528",
-            "sizeKey": "643011948",
+            "objectCount": "40",
+            "recordCount": "1622273",
+            "sizeKey": "1327646787",
             "typeOfData": "file"
           },
           "StorageDescriptor": {
@@ -3056,12 +3056,12 @@
               "CrawlerSchemaDeserializerVersion": "1.0",
               "CrawlerSchemaSerializerVersion": "1.0",
               "UPDATED_BY_CRAWLER": "binding_db_dl_crawler",
-              "averageRecordSize": "2345",
+              "averageRecordSize": "2289",
               "classification": "parquet",
               "compressionType": "none",
-              "objectCount": "20",
-              "recordCount": "779528",
-              "sizeKey": "643011948",
+              "objectCount": "40",
+              "recordCount": "1622273",
+              "sizeKey": "1327646787",
               "typeOfData": "file"
             },
             "SerdeInfo": {
@@ -3095,9 +3095,9 @@
             "averageRecordSize": "27",
             "classification": "parquet",
             "compressionType": "none",
-            "objectCount": "20",
-            "recordCount": "318853",
-            "sizeKey": "4411537",
+            "objectCount": "40",
+            "recordCount": "688289",
+            "sizeKey": "9585371",
             "typeOfData": "file"
           },
           "StorageDescriptor": {
@@ -3125,9 +3125,9 @@
               "averageRecordSize": "27",
               "classification": "parquet",
               "compressionType": "none",
-              "objectCount": "20",
-              "recordCount": "318853",
-              "sizeKey": "4411537",
+              "objectCount": "40",
+              "recordCount": "688289",
+              "sizeKey": "9585371",
               "typeOfData": "file"
             },
             "SerdeInfo": {
@@ -3158,12 +3158,12 @@
             "CrawlerSchemaDeserializerVersion": "1.0",
             "CrawlerSchemaSerializerVersion": "1.0",
             "UPDATED_BY_CRAWLER": "binding_db_dl_crawler",
-            "averageRecordSize": "479",
+            "averageRecordSize": "473",
             "classification": "parquet",
             "compressionType": "none",
-            "objectCount": "20",
-            "recordCount": "34",
-            "sizeKey": "52027",
+            "objectCount": "40",
+            "recordCount": "68",
+            "sizeKey": "104054",
             "typeOfData": "file"
           },
           "StorageDescriptor": {
@@ -3212,12 +3212,12 @@
               "CrawlerSchemaDeserializerVersion": "1.0",
               "CrawlerSchemaSerializerVersion": "1.0",
               "UPDATED_BY_CRAWLER": "binding_db_dl_crawler",
-              "averageRecordSize": "479",
+              "averageRecordSize": "473",
               "classification": "parquet",
               "compressionType": "none",
-              "objectCount": "20",
-              "recordCount": "34",
-              "sizeKey": "52027",
+              "objectCount": "40",
+              "recordCount": "68",
+              "sizeKey": "104054",
               "typeOfData": "file"
             },
             "SerdeInfo": {
@@ -3248,12 +3248,12 @@
             "CrawlerSchemaDeserializerVersion": "1.0",
             "CrawlerSchemaSerializerVersion": "1.0",
             "UPDATED_BY_CRAWLER": "binding_db_dl_crawler",
-            "averageRecordSize": "25",
+            "averageRecordSize": "24",
             "classification": "parquet",
             "compressionType": "none",
-            "objectCount": "20",
-            "recordCount": "99459",
-            "sizeKey": "1803503",
+            "objectCount": "40",
+            "recordCount": "216060",
+            "sizeKey": "3793588",
             "typeOfData": "file"
           },
           "StorageDescriptor": {
@@ -3302,12 +3302,12 @@
               "CrawlerSchemaDeserializerVersion": "1.0",
               "CrawlerSchemaSerializerVersion": "1.0",
               "UPDATED_BY_CRAWLER": "binding_db_dl_crawler",
-              "averageRecordSize": "25",
+              "averageRecordSize": "24",
               "classification": "parquet",
               "compressionType": "none",
-              "objectCount": "20",
-              "recordCount": "99459",
-              "sizeKey": "1803503",
+              "objectCount": "40",
+              "recordCount": "216060",
+              "sizeKey": "3793588",
               "typeOfData": "file"
             },
             "SerdeInfo": {
@@ -3338,12 +3338,12 @@
             "CrawlerSchemaDeserializerVersion": "1.0",
             "CrawlerSchemaSerializerVersion": "1.0",
             "UPDATED_BY_CRAWLER": "binding_db_dl_crawler",
-            "averageRecordSize": "119",
+            "averageRecordSize": "118",
             "classification": "parquet",
             "compressionType": "none",
-            "objectCount": "20",
-            "recordCount": "315684",
-            "sizeKey": "21591673",
+            "objectCount": "40",
+            "recordCount": "646169",
+            "sizeKey": "44123339",
             "typeOfData": "file"
           },
           "StorageDescriptor": {
@@ -3420,12 +3420,12 @@
               "CrawlerSchemaDeserializerVersion": "1.0",
               "CrawlerSchemaSerializerVersion": "1.0",
               "UPDATED_BY_CRAWLER": "binding_db_dl_crawler",
-              "averageRecordSize": "119",
+              "averageRecordSize": "118",
               "classification": "parquet",
               "compressionType": "none",
-              "objectCount": "20",
-              "recordCount": "315684",
-              "sizeKey": "21591673",
+              "objectCount": "40",
+              "recordCount": "646169",
+              "sizeKey": "44123339",
               "typeOfData": "file"
             },
             "SerdeInfo": {
@@ -3459,9 +3459,9 @@
             "averageRecordSize": "15",
             "classification": "parquet",
             "compressionType": "none",
-            "objectCount": "20",
-            "recordCount": "1678",
-            "sizeKey": "45398",
+            "objectCount": "40",
+            "recordCount": "3356",
+            "sizeKey": "90796",
             "typeOfData": "file"
           },
           "StorageDescriptor": {
@@ -3493,9 +3493,9 @@
               "averageRecordSize": "15",
               "classification": "parquet",
               "compressionType": "none",
-              "objectCount": "20",
-              "recordCount": "1678",
-              "sizeKey": "45398",
+              "objectCount": "40",
+              "recordCount": "3356",
+              "sizeKey": "90796",
               "typeOfData": "file"
             },
             "SerdeInfo": {
@@ -3529,9 +3529,9 @@
             "averageRecordSize": "13",
             "classification": "parquet",
             "compressionType": "none",
-            "objectCount": "20",
-            "recordCount": "3492",
-            "sizeKey": "63451",
+            "objectCount": "40",
+            "recordCount": "6984",
+            "sizeKey": "126902",
             "typeOfData": "file"
           },
           "StorageDescriptor": {
@@ -3563,9 +3563,9 @@
               "averageRecordSize": "13",
               "classification": "parquet",
               "compressionType": "none",
-              "objectCount": "20",
-              "recordCount": "3492",
-              "sizeKey": "63451",
+              "objectCount": "40",
+              "recordCount": "6984",
+              "sizeKey": "126902",
               "typeOfData": "file"
             },
             "SerdeInfo": {
@@ -3599,9 +3599,9 @@
             "averageRecordSize": "27",
             "classification": "parquet",
             "compressionType": "none",
-            "objectCount": "20",
-            "recordCount": "19339",
-            "sizeKey": "391004",
+            "objectCount": "40",
+            "recordCount": "39733",
+            "sizeKey": "799960",
             "typeOfData": "file"
           },
           "StorageDescriptor": {
@@ -3625,9 +3625,9 @@
               "averageRecordSize": "27",
               "classification": "parquet",
               "compressionType": "none",
-              "objectCount": "20",
-              "recordCount": "19339",
-              "sizeKey": "391004",
+              "objectCount": "40",
+              "recordCount": "39733",
+              "sizeKey": "799960",
               "typeOfData": "file"
             },
             "SerdeInfo": {
@@ -3661,9 +3661,9 @@
             "averageRecordSize": "0",
             "classification": "parquet",
             "compressionType": "none",
-            "objectCount": "1",
+            "objectCount": "2",
             "recordCount": "0",
-            "sizeKey": "794",
+            "sizeKey": "1588",
             "typeOfData": "file"
           },
           "StorageDescriptor": {
@@ -3703,9 +3703,9 @@
               "averageRecordSize": "0",
               "classification": "parquet",
               "compressionType": "none",
-              "objectCount": "1",
+              "objectCount": "2",
               "recordCount": "0",
-              "sizeKey": "794",
+              "sizeKey": "1588",
               "typeOfData": "file"
             },
             "SerdeInfo": {
@@ -3736,12 +3736,12 @@
             "CrawlerSchemaDeserializerVersion": "1.0",
             "CrawlerSchemaSerializerVersion": "1.0",
             "UPDATED_BY_CRAWLER": "binding_db_dl_crawler",
-            "averageRecordSize": "41",
+            "averageRecordSize": "40",
             "classification": "parquet",
             "compressionType": "none",
-            "objectCount": "20",
-            "recordCount": "415",
-            "sizeKey": "45710",
+            "objectCount": "40",
+            "recordCount": "830",
+            "sizeKey": "91420",
             "typeOfData": "file"
           },
           "StorageDescriptor": {
@@ -3782,12 +3782,12 @@
               "CrawlerSchemaDeserializerVersion": "1.0",
               "CrawlerSchemaSerializerVersion": "1.0",
               "UPDATED_BY_CRAWLER": "binding_db_dl_crawler",
-              "averageRecordSize": "41",
+              "averageRecordSize": "40",
               "classification": "parquet",
               "compressionType": "none",
-              "objectCount": "20",
-              "recordCount": "415",
-              "sizeKey": "45710",
+              "objectCount": "40",
+              "recordCount": "830",
+              "sizeKey": "91420",
               "typeOfData": "file"
             },
             "SerdeInfo": {
@@ -3821,9 +3821,9 @@
             "averageRecordSize": "11",
             "classification": "parquet",
             "compressionType": "none",
-            "objectCount": "20",
-            "recordCount": "4856",
-            "sizeKey": "69300",
+            "objectCount": "40",
+            "recordCount": "9712",
+            "sizeKey": "138600",
             "typeOfData": "file"
           },
           "StorageDescriptor": {
@@ -3855,9 +3855,9 @@
               "averageRecordSize": "11",
               "classification": "parquet",
               "compressionType": "none",
-              "objectCount": "20",
-              "recordCount": "4856",
-              "sizeKey": "69300",
+              "objectCount": "40",
+              "recordCount": "9712",
+              "sizeKey": "138600",
               "typeOfData": "file"
             },
             "SerdeInfo": {
@@ -3888,12 +3888,12 @@
             "CrawlerSchemaDeserializerVersion": "1.0",
             "CrawlerSchemaSerializerVersion": "1.0",
             "UPDATED_BY_CRAWLER": "binding_db_dl_crawler",
-            "averageRecordSize": "226",
+            "averageRecordSize": "220",
             "classification": "parquet",
             "compressionType": "none",
-            "objectCount": "20",
-            "recordCount": "3666",
-            "sizeKey": "501877",
+            "objectCount": "40",
+            "recordCount": "7332",
+            "sizeKey": "1003754",
             "typeOfData": "file"
           },
           "StorageDescriptor": {
@@ -3930,12 +3930,12 @@
               "CrawlerSchemaDeserializerVersion": "1.0",
               "CrawlerSchemaSerializerVersion": "1.0",
               "UPDATED_BY_CRAWLER": "binding_db_dl_crawler",
-              "averageRecordSize": "226",
+              "averageRecordSize": "220",
               "classification": "parquet",
               "compressionType": "none",
-              "objectCount": "20",
-              "recordCount": "3666",
-              "sizeKey": "501877",
+              "objectCount": "40",
+              "recordCount": "7332",
+              "sizeKey": "1003754",
               "typeOfData": "file"
             },
             "SerdeInfo": {
@@ -3966,12 +3966,12 @@
             "CrawlerSchemaDeserializerVersion": "1.0",
             "CrawlerSchemaSerializerVersion": "1.0",
             "UPDATED_BY_CRAWLER": "binding_db_dl_crawler",
-            "averageRecordSize": "203",
+            "averageRecordSize": "199",
             "classification": "parquet",
             "compressionType": "none",
-            "objectCount": "20",
-            "recordCount": "26",
-            "sizeKey": "27140",
+            "objectCount": "40",
+            "recordCount": "52",
+            "sizeKey": "54280",
             "typeOfData": "file"
           },
           "StorageDescriptor": {
@@ -4008,12 +4008,12 @@
               "CrawlerSchemaDeserializerVersion": "1.0",
               "CrawlerSchemaSerializerVersion": "1.0",
               "UPDATED_BY_CRAWLER": "binding_db_dl_crawler",
-              "averageRecordSize": "203",
+              "averageRecordSize": "199",
               "classification": "parquet",
               "compressionType": "none",
-              "objectCount": "20",
-              "recordCount": "26",
-              "sizeKey": "27140",
+              "objectCount": "40",
+              "recordCount": "52",
+              "sizeKey": "54280",
               "typeOfData": "file"
             },
             "SerdeInfo": {
@@ -4047,9 +4047,9 @@
             "averageRecordSize": "8",
             "classification": "parquet",
             "compressionType": "none",
-            "objectCount": "20",
-            "recordCount": "2419",
-            "sizeKey": "40325",
+            "objectCount": "40",
+            "recordCount": "4838",
+            "sizeKey": "80650",
             "typeOfData": "file"
           },
           "StorageDescriptor": {
@@ -4081,9 +4081,9 @@
               "averageRecordSize": "8",
               "classification": "parquet",
               "compressionType": "none",
-              "objectCount": "20",
-              "recordCount": "2419",
-              "sizeKey": "40325",
+              "objectCount": "40",
+              "recordCount": "4838",
+              "sizeKey": "80650",
               "typeOfData": "file"
             },
             "SerdeInfo": {
@@ -4114,12 +4114,12 @@
             "CrawlerSchemaDeserializerVersion": "1.0",
             "CrawlerSchemaSerializerVersion": "1.0",
             "UPDATED_BY_CRAWLER": "binding_db_dl_crawler",
-            "averageRecordSize": "640",
+            "averageRecordSize": "636",
             "classification": "parquet",
             "compressionType": "none",
-            "objectCount": "20",
-            "recordCount": "1592",
-            "sizeKey": "690548",
+            "objectCount": "40",
+            "recordCount": "3184",
+            "sizeKey": "1381096",
             "typeOfData": "file"
           },
           "StorageDescriptor": {
@@ -4532,12 +4532,12 @@
               "CrawlerSchemaDeserializerVersion": "1.0",
               "CrawlerSchemaSerializerVersion": "1.0",
               "UPDATED_BY_CRAWLER": "binding_db_dl_crawler",
-              "averageRecordSize": "640",
+              "averageRecordSize": "636",
               "classification": "parquet",
               "compressionType": "none",
-              "objectCount": "20",
-              "recordCount": "1592",
-              "sizeKey": "690548",
+              "objectCount": "40",
+              "recordCount": "3184",
+              "sizeKey": "1381096",
               "typeOfData": "file"
             },
             "SerdeInfo": {
@@ -4551,6 +4551,460 @@
       },
       "Metadata": {
         "aws:cdk:path": "BindingDbRodaTemplate/binding_db/orcl_bind_2000_05_sys_export_schema_01"
+      }
+    },
+    "bindingdborclbind200005sysexportschema0269AAF4D8": {
+      "Type": "AWS::Glue::Table",
+      "Properties": {
+        "CatalogId": {
+          "Ref": "AWS::AccountId"
+        },
+        "DatabaseName": {
+          "Ref": "bindingdbbindingdbdlD9261731"
+        },
+        "TableInput": {
+          "Name": "orcl_bind_2000_05_sys_export_schema_02",
+          "Parameters": {
+            "CrawlerSchemaDeserializerVersion": "1.0",
+            "CrawlerSchemaSerializerVersion": "1.0",
+            "UPDATED_BY_CRAWLER": "binding_db_dl_crawler",
+            "averageRecordSize": "754",
+            "classification": "parquet",
+            "compressionType": "none",
+            "objectCount": "20",
+            "recordCount": "1659",
+            "sizeKey": "725118",
+            "typeOfData": "file"
+          },
+          "StorageDescriptor": {
+            "Columns": [
+              {
+                "Name": "abort_step",
+                "Type": "decimal(38,10)"
+              },
+              {
+                "Name": "ancestor_process_order",
+                "Type": "decimal(38,10)"
+              },
+              {
+                "Name": "base_object_name",
+                "Type": "string"
+              },
+              {
+                "Name": "base_object_schema",
+                "Type": "string"
+              },
+              {
+                "Name": "base_object_type",
+                "Type": "string"
+              },
+              {
+                "Name": "base_process_order",
+                "Type": "decimal(38,10)"
+              },
+              {
+                "Name": "block_size",
+                "Type": "decimal(38,10)"
+              },
+              {
+                "Name": "cluster_ok",
+                "Type": "decimal(38,10)"
+              },
+              {
+                "Name": "completed_bytes",
+                "Type": "decimal(38,10)"
+              },
+              {
+                "Name": "completed_rows",
+                "Type": "decimal(38,10)"
+              },
+              {
+                "Name": "completion_time",
+                "Type": "timestamp"
+              },
+              {
+                "Name": "control_queue",
+                "Type": "string"
+              },
+              {
+                "Name": "creation_level",
+                "Type": "decimal(38,10)"
+              },
+              {
+                "Name": "cumulative_time",
+                "Type": "decimal(38,10)"
+              },
+              {
+                "Name": "data_buffer_size",
+                "Type": "decimal(38,10)"
+              },
+              {
+                "Name": "data_io",
+                "Type": "decimal(38,10)"
+              },
+              {
+                "Name": "dataobj_num",
+                "Type": "decimal(38,10)"
+              },
+              {
+                "Name": "db_version",
+                "Type": "string"
+              },
+              {
+                "Name": "degree",
+                "Type": "decimal(38,10)"
+              },
+              {
+                "Name": "domain_process_order",
+                "Type": "decimal(38,10)"
+              },
+              {
+                "Name": "dump_allocation",
+                "Type": "decimal(38,10)"
+              },
+              {
+                "Name": "dump_fileid",
+                "Type": "decimal(38,10)"
+              },
+              {
+                "Name": "dump_length",
+                "Type": "decimal(38,10)"
+              },
+              {
+                "Name": "dump_orig_length",
+                "Type": "decimal(38,10)"
+              },
+              {
+                "Name": "dump_position",
+                "Type": "decimal(38,10)"
+              },
+              {
+                "Name": "duplicate",
+                "Type": "decimal(38,10)"
+              },
+              {
+                "Name": "elapsed_time",
+                "Type": "decimal(38,10)"
+              },
+              {
+                "Name": "error_count",
+                "Type": "decimal(38,10)"
+              },
+              {
+                "Name": "extend_size",
+                "Type": "decimal(38,10)"
+              },
+              {
+                "Name": "file_max_size",
+                "Type": "decimal(38,10)"
+              },
+              {
+                "Name": "file_name",
+                "Type": "string"
+              },
+              {
+                "Name": "file_type",
+                "Type": "decimal(38,10)"
+              },
+              {
+                "Name": "flags",
+                "Type": "decimal(38,10)"
+              },
+              {
+                "Name": "grantor",
+                "Type": "string"
+              },
+              {
+                "Name": "granules",
+                "Type": "decimal(38,10)"
+              },
+              {
+                "Name": "guid",
+                "Type": "binary"
+              },
+              {
+                "Name": "in_progress",
+                "Type": "string"
+              },
+              {
+                "Name": "instance",
+                "Type": "string"
+              },
+              {
+                "Name": "instance_id",
+                "Type": "decimal(38,10)"
+              },
+              {
+                "Name": "is_default",
+                "Type": "decimal(38,10)"
+              },
+              {
+                "Name": "job_mode",
+                "Type": "string"
+              },
+              {
+                "Name": "job_version",
+                "Type": "string"
+              },
+              {
+                "Name": "last_file",
+                "Type": "decimal(38,10)"
+              },
+              {
+                "Name": "last_update",
+                "Type": "timestamp"
+              },
+              {
+                "Name": "load_method",
+                "Type": "decimal(38,10)"
+              },
+              {
+                "Name": "metadata_buffer_size",
+                "Type": "decimal(38,10)"
+              },
+              {
+                "Name": "metadata_io",
+                "Type": "decimal(38,10)"
+              },
+              {
+                "Name": "name",
+                "Type": "string"
+              },
+              {
+                "Name": "object_int_oid",
+                "Type": "string"
+              },
+              {
+                "Name": "object_long_name",
+                "Type": "string"
+              },
+              {
+                "Name": "object_name",
+                "Type": "string"
+              },
+              {
+                "Name": "object_number",
+                "Type": "decimal(38,10)"
+              },
+              {
+                "Name": "object_path_seqno",
+                "Type": "decimal(38,10)"
+              },
+              {
+                "Name": "object_row",
+                "Type": "decimal(38,10)"
+              },
+              {
+                "Name": "object_schema",
+                "Type": "string"
+              },
+              {
+                "Name": "object_tablespace",
+                "Type": "string"
+              },
+              {
+                "Name": "object_type",
+                "Type": "string"
+              },
+              {
+                "Name": "object_type_path",
+                "Type": "string"
+              },
+              {
+                "Name": "old_value",
+                "Type": "string"
+              },
+              {
+                "Name": "operation",
+                "Type": "string"
+              },
+              {
+                "Name": "option_tag",
+                "Type": "string"
+              },
+              {
+                "Name": "orig_base_object_schema",
+                "Type": "string"
+              },
+              {
+                "Name": "original_object_name",
+                "Type": "string"
+              },
+              {
+                "Name": "original_object_schema",
+                "Type": "string"
+              },
+              {
+                "Name": "packet_number",
+                "Type": "decimal(38,10)"
+              },
+              {
+                "Name": "parallelization",
+                "Type": "decimal(38,10)"
+              },
+              {
+                "Name": "parent_process_order",
+                "Type": "decimal(38,10)"
+              },
+              {
+                "Name": "partition_name",
+                "Type": "string"
+              },
+              {
+                "Name": "phase",
+                "Type": "decimal(38,10)"
+              },
+              {
+                "Name": "platform",
+                "Type": "string"
+              },
+              {
+                "Name": "process_name",
+                "Type": "string"
+              },
+              {
+                "Name": "process_order",
+                "Type": "decimal(38,10)"
+              },
+              {
+                "Name": "processing_state",
+                "Type": "string"
+              },
+              {
+                "Name": "processing_status",
+                "Type": "string"
+              },
+              {
+                "Name": "property",
+                "Type": "decimal(38,10)"
+              },
+              {
+                "Name": "queue_tabnum",
+                "Type": "decimal(38,10)"
+              },
+              {
+                "Name": "remote_link",
+                "Type": "string"
+              },
+              {
+                "Name": "scn",
+                "Type": "decimal(38,10)"
+              },
+              {
+                "Name": "seed",
+                "Type": "decimal(38,10)"
+              },
+              {
+                "Name": "service_name",
+                "Type": "string"
+              },
+              {
+                "Name": "size_estimate",
+                "Type": "decimal(38,10)"
+              },
+              {
+                "Name": "start_time",
+                "Type": "timestamp"
+              },
+              {
+                "Name": "state",
+                "Type": "string"
+              },
+              {
+                "Name": "status_queue",
+                "Type": "string"
+              },
+              {
+                "Name": "subpartition_name",
+                "Type": "string"
+              },
+              {
+                "Name": "target_xml_clob",
+                "Type": "string"
+              },
+              {
+                "Name": "tde_rewrapped_key",
+                "Type": "binary"
+              },
+              {
+                "Name": "template_table",
+                "Type": "string"
+              },
+              {
+                "Name": "timezone",
+                "Type": "string"
+              },
+              {
+                "Name": "total_bytes",
+                "Type": "decimal(38,10)"
+              },
+              {
+                "Name": "trigflag",
+                "Type": "decimal(38,10)"
+              },
+              {
+                "Name": "unload_method",
+                "Type": "decimal(38,10)"
+              },
+              {
+                "Name": "user_directory",
+                "Type": "string"
+              },
+              {
+                "Name": "user_file_name",
+                "Type": "string"
+              },
+              {
+                "Name": "user_name",
+                "Type": "string"
+              },
+              {
+                "Name": "value_n",
+                "Type": "decimal(38,10)"
+              },
+              {
+                "Name": "value_t",
+                "Type": "string"
+              },
+              {
+                "Name": "version",
+                "Type": "decimal(38,10)"
+              },
+              {
+                "Name": "work_item",
+                "Type": "string"
+              },
+              {
+                "Name": "xml_clob",
+                "Type": "string"
+              }
+            ],
+            "InputFormat": "org.apache.hadoop.hive.ql.io.parquet.MapredParquetInputFormat",
+            "Location": "s3://aws-roda-hcls-datalake/binding_db/orcl_bind_2000_05_sys_export_schema_02/",
+            "OutputFormat": "org.apache.hadoop.hive.ql.io.parquet.MapredParquetOutputFormat",
+            "Parameters": {
+              "CrawlerSchemaDeserializerVersion": "1.0",
+              "CrawlerSchemaSerializerVersion": "1.0",
+              "UPDATED_BY_CRAWLER": "binding_db_dl_crawler",
+              "averageRecordSize": "754",
+              "classification": "parquet",
+              "compressionType": "none",
+              "objectCount": "20",
+              "recordCount": "1659",
+              "sizeKey": "725118",
+              "typeOfData": "file"
+            },
+            "SerdeInfo": {
+              "Parameters": {
+                "serialization.format": "1"
+              },
+              "SerializationLibrary": "org.apache.hadoop.hive.ql.io.parquet.serde.ParquetHiveSerDe"
+            }
+          }
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "BindingDbRodaTemplate/binding_db/orcl_bind_2000_05_sys_export_schema_02"
       }
     },
     "bindingdborclbind200005sysimportfull02721DBB7B": {
@@ -4568,12 +5022,12 @@
             "CrawlerSchemaDeserializerVersion": "1.0",
             "CrawlerSchemaSerializerVersion": "1.0",
             "UPDATED_BY_CRAWLER": "binding_db_dl_crawler",
-            "averageRecordSize": "672",
+            "averageRecordSize": "668",
             "classification": "parquet",
             "compressionType": "none",
-            "objectCount": "20",
-            "recordCount": "1737",
-            "sizeKey": "740649",
+            "objectCount": "40",
+            "recordCount": "3474",
+            "sizeKey": "1481298",
             "typeOfData": "file"
           },
           "StorageDescriptor": {
@@ -4986,12 +5440,12 @@
               "CrawlerSchemaDeserializerVersion": "1.0",
               "CrawlerSchemaSerializerVersion": "1.0",
               "UPDATED_BY_CRAWLER": "binding_db_dl_crawler",
-              "averageRecordSize": "672",
+              "averageRecordSize": "668",
               "classification": "parquet",
               "compressionType": "none",
-              "objectCount": "20",
-              "recordCount": "1737",
-              "sizeKey": "740649",
+              "objectCount": "40",
+              "recordCount": "3474",
+              "sizeKey": "1481298",
               "typeOfData": "file"
             },
             "SerdeInfo": {
@@ -5025,9 +5479,9 @@
             "averageRecordSize": "319",
             "classification": "parquet",
             "compressionType": "none",
-            "objectCount": "4",
-            "recordCount": "3",
-            "sizeKey": "3885",
+            "objectCount": "8",
+            "recordCount": "6",
+            "sizeKey": "7770",
             "typeOfData": "file"
           },
           "StorageDescriptor": {
@@ -5055,9 +5509,9 @@
               "averageRecordSize": "319",
               "classification": "parquet",
               "compressionType": "none",
-              "objectCount": "4",
-              "recordCount": "3",
-              "sizeKey": "3885",
+              "objectCount": "8",
+              "recordCount": "6",
+              "sizeKey": "7770",
               "typeOfData": "file"
             },
             "SerdeInfo": {
@@ -5091,9 +5545,9 @@
             "averageRecordSize": "0",
             "classification": "parquet",
             "compressionType": "none",
-            "objectCount": "1",
+            "objectCount": "2",
             "recordCount": "0",
-            "sizeKey": "359",
+            "sizeKey": "718",
             "typeOfData": "file"
           },
           "StorageDescriptor": {
@@ -5117,9 +5571,9 @@
               "averageRecordSize": "0",
               "classification": "parquet",
               "compressionType": "none",
-              "objectCount": "1",
+              "objectCount": "2",
               "recordCount": "0",
-              "sizeKey": "359",
+              "sizeKey": "718",
               "typeOfData": "file"
             },
             "SerdeInfo": {
@@ -5153,9 +5607,9 @@
             "averageRecordSize": "0",
             "classification": "parquet",
             "compressionType": "none",
-            "objectCount": "1",
+            "objectCount": "2",
             "recordCount": "0",
-            "sizeKey": "455",
+            "sizeKey": "910",
             "typeOfData": "file"
           },
           "StorageDescriptor": {
@@ -5183,9 +5637,9 @@
               "averageRecordSize": "0",
               "classification": "parquet",
               "compressionType": "none",
-              "objectCount": "1",
+              "objectCount": "2",
               "recordCount": "0",
-              "sizeKey": "455",
+              "sizeKey": "910",
               "typeOfData": "file"
             },
             "SerdeInfo": {
@@ -5219,9 +5673,9 @@
             "averageRecordSize": "0",
             "classification": "parquet",
             "compressionType": "none",
-            "objectCount": "1",
+            "objectCount": "2",
             "recordCount": "0",
-            "sizeKey": "365",
+            "sizeKey": "730",
             "typeOfData": "file"
           },
           "StorageDescriptor": {
@@ -5245,9 +5699,9 @@
               "averageRecordSize": "0",
               "classification": "parquet",
               "compressionType": "none",
-              "objectCount": "1",
+              "objectCount": "2",
               "recordCount": "0",
-              "sizeKey": "365",
+              "sizeKey": "730",
               "typeOfData": "file"
             },
             "SerdeInfo": {

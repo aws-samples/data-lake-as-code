@@ -11,7 +11,7 @@ import { AnalyticsStack } from '../lib/analytics-stack';
 import iam = require('@aws-cdk/aws-iam');
 import s3 = require('@aws-cdk/aws-s3');
 import { DataLakeEnrollment } from '../lib/constructs/data-lake-enrollment';
-import { DataSetTemplateStack } from '../lib/stacks/dataset-stack';
+import { DataSetTemplateStack, CrawlerTemplateStack } from '../lib/stacks/dataset-stack';
 
 
 const app = new cdk.App();
@@ -108,6 +108,11 @@ const BindinbDbRodaTemplate = new DataSetTemplateStack(app, 'BindingDbRodaTempla
 });
 
 
+const GTExRodaTemplate8 = new CrawlerTemplateStack(app, 'GTExRodaTemplate8', {
+    databaseDescriptionPath: "../../RODA_templates/gtex_8_get_database.json",
+    crawlerDescriptionPath: "../../RODA_templates/gtex_8_get_crawler.json",
+    DataSetName: gtexStack.Enrollments[0].DataSetName
+});
 
 
 

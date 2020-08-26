@@ -9,6 +9,74 @@ import s3assets = require('@aws-cdk/aws-s3-assets');
 import { URL } from "url";
 
 
+export interface FederatedCrawlerTemplateProps extends cdk.StackProps {
+	databaseDescriptionPath: string;
+	crawlerDescriptionPath: string;
+	dataSetName: string;
+}
+
+export class FederatedCrawlerTemplate extends cdk.Construct{
+
+	public readonly glueDatabase: glue.Database;
+	public readonly glueCrawler: glue.CfnCrawler;
+	public readonly glueRole: iam.Role;
+
+	constructor(scope: cdk.Construct, id: string, props: FederatedCrawlerTemplateProps) {
+		super(scope, id);
+		
+		const databaseObj = require(props.databaseDescriptionPath);
+		const crawlerObj = require(props.crawlerDescriptionPath);
+		
+		// import databaseObj from props.databaseDescriptionPath;
+		// import tablesObj from props.tablesDescriptionPath;
+		
+		this.glueDatabase = new glue.Database(this, 'GlueDatabase', {
+			locationUri: `${databaseObj['Database']['LocationUri']}`,
+			databaseName: `${databaseObj['Database']['Name']}-awsroda`,
+		});	 
+		
+		
+		this.glueRole = new iam.Role(this, `GlueCrawlerRole`, {
+			assumedBy: new iam.ServicePrincipal('glue.amazonaws.com')
+		});
+		
+		this.glueRole.addManagedPolicy(iam.ManagedPolicy.fromAwsManagedPolicyName('service-role/AWSGlueServiceRole'));
+		this.glueRole.addManagedPolicy(iam.ManagedPolicy.fromAwsManagedPolicyName('CloudWatchAgentServerPolicy'));
+		
+		var protocolPathTuple = databaseObj['Database']['LocationUri'].split("//");
+		var pathArray = protocolPathTuple[1].split("/");
+		
+		let s3DataLakePaths = new Array<glue.CfnCrawler.S3TargetProperty>();
+		
+		this.glueRole.addToPolicy(new iam.PolicyStatement({
+		  actions: ["s3:*"],
+		  resources: [`arn:aws:s3:::${pathArray[0]}`, `arn:aws:s3:::${pathArray[0]}/${pathArray[1]}/*`]
+		}));
+		
+		for (let s3Target of crawlerObj['Crawler']['Targets']['S3Targets']) {
+            s3DataLakePaths.push({
+                path: s3Target['Path']
+                //TODO: add exclusions
+            });
+		}
+		
+		this.glueCrawler = new glue.CfnCrawler(this,  `awsroda-crawler`,{
+			name: `${props.dataSetName}_awsroda_crawler`, 
+			targets: {
+				s3Targets: s3DataLakePaths	
+			},
+			role: this.glueRole.roleName,
+			databaseName: this.glueDatabase.databaseName, 
+			schemaChangePolicy: {
+				deleteBehavior: "DEPRECATE_IN_DATABASE", 
+				updateBehavior: "UPDATE_IN_DATABASE",
+			}, 
+			tablePrefix: "", 
+			classifiers: []
+		});
+	}
+}
+
 
 export interface FederatedDataSetProps extends cdk.StackProps {
 	databaseDescriptionPath: string
@@ -103,7 +171,7 @@ export class DataSetEnrollment extends cdk.Construct {
     
     public readonly DataLakeBucketName: string;
     public readonly DataLakePrefix: string;
-
+	public readonly DataLakeTargets: glue.CfnCrawler.TargetsProperty;
 
 
 	private setupCrawler(targetGlueDatabase: glue.Database, targets: glue.CfnCrawler.TargetsProperty, isSourceCrawler: boolean){
@@ -128,7 +196,7 @@ export class DataSetEnrollment extends cdk.Construct {
 	constructor(scope: cdk.Construct, id: string, props: DataSetEnrollmentProps) {
 		super(scope, id);	
 		
-		
+		this.DataLakeTargets = props.DataLakeTargets;
 		this.DataLakeBucketName	= props.GlueScriptArguments['--DL_BUCKET'];
 		this.DataLakePrefix = props.GlueScriptArguments['--DL_PREFIX'];
 		
@@ -136,11 +204,11 @@ export class DataSetEnrollment extends cdk.Construct {
 		
 		this.Dataset_Source = new glue.Database(this, `${props.dataSetName}_src`, {
 			databaseName: `${props.dataSetName}_src`,
-			locationUri: `s3://${props.dataLakeBucket.bucketName}/${props.dataSetName}/src/`
+			locationUri: `s3://${props.dataLakeBucket.bucketName}/${props.dataSetName}/`
 		});
 		this.Dataset_Datalake = new glue.Database(this, `${props.dataSetName}_dl`, {
 			databaseName:  `${props.dataSetName}_dl`,
-			locationUri: `s3://${props.dataLakeBucket.bucketName}/${props.dataSetName}/dl/`
+			locationUri: `s3://${props.dataLakeBucket.bucketName}/${props.dataSetName}/`
 		});
 		
 
@@ -209,7 +277,7 @@ export class DataSetEnrollment extends cdk.Construct {
 		const etl_job = new glue.CfnJob(this, `${props.dataSetName}-EtlJob`, jobParams );
 		
 		
-		const datalake_crawler = this.setupCrawler(this.Dataset_Datalake, props.DataLakeTargets, false);
+		const datalake_crawler = this.setupCrawler(this.Dataset_Datalake, this.DataLakeTargets, false);
 		
 		// const datalake_crawler = this.setupCrawler(this.Dataset_Datalake, {
 		// 		s3Targets: [

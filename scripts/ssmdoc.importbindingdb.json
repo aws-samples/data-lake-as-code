@@ -65,7 +65,9 @@
                 "rm -f bindingdb/importScript.sql",
                 "touch bindingdb/importScript.sql",
                 "tee -a bindingdb/importScript.sql <<EOF",
-                "CREATE TABLESPACE USER_BIND; ",
+                "DROP TABLESPACE USER_BIND INCLUDING CONTENTS;",
+                "CREATE TABLESPACE USER_BIND;",
+                "DROP USER BIND_2000_05 CASCADE;",
                 "create user BIND_2000_05 identified by \"$dbPw\";",
                 "grant create session, resource, dba, DATAPUMP_IMP_FULL_DATABASE to BIND_2000_05;",
                 "alter user BIND_2000_05 quota 20000M on users;",
@@ -75,15 +77,15 @@
                 "BEGIN",
                 "dbms_lock.sleep(240);",
                 "hdnl := DBMS_DATAPUMP.OPEN( operation => 'IMPORT', job_mode => 'SCHEMA', job_name=>null, version => 'LATEST');",
-                "DBMS_DATAPUMP.ADD_FILE( handle => hdnl, filename => 'BindingDB_All_Oracle.dmp', directory => 'DATA_PUMP_DIR', filetype => dbms_datapump.ku$_file_type_dump_file);",
-                "DBMS_DATAPUMP.ADD_FILE( handle => hdnl, filename => 'sample_imp.log', directory => 'DATA_PUMP_DIR', filetype => dbms_datapump.ku$_file_type_log_file); ",
+                "DBMS_DATAPUMP.ADD_FILE( handle => hdnl, filename => 'BindingDB_All_Oracle.dmp', directory => 'DATA_PUMP_DIR', filetype => dbms_datapump.ku\\$_file_type_dump_file);",
+                "DBMS_DATAPUMP.ADD_FILE( handle => hdnl, filename => 'sample_imp.log', directory => 'DATA_PUMP_DIR', filetype => dbms_datapump.ku\\$_file_type_log_file); ",
                 "DBMS_DATAPUMP.METADATA_FILTER(hdnl,'SCHEMA_EXPR','IN (''BIND_2000_05'')');",
                 "DBMS_DATAPUMP.START_JOB(hdnl);",
                 "END;",
                 "/",                
                 "quit",                
                 "EOF",
-                "sqlplus '$dbUn/$dbPw@$bindingDbHostName:1521/orcl' @bindingdb/importScript.sql"
+                "sqlplus \"$dbUn/$dbPw@$bindingDbHostName:1521/orcl\" @bindingdb/importScript.sql >> /home/ssm-user/progressLogBindingDB 2>/home/ssm-user/progressLogBindingDB"
             ]
          }
       }

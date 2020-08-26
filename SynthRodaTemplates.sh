@@ -1,19 +1,46 @@
 aws glue get-tables --database-name opentargets_1911_dl > RODA_templates/open_targets_1911_get_tables.json
 aws glue get-database --name opentargets_1911_dl > RODA_templates/open_targets_1911_get_database.json
-npm run build && cdk synth OpenTargetsRodaTemplate
-aws s3 cp cdk.out/OpenTargetsRodaTemplate.template.json s3://aws-roda-hcls-datalake/OpenTargetsRodaTemplate.json
 
+aws glue get-tables --database-name opentargets_20_06_dl > RODA_templates/opentargets_20_06_get_tables.json
+aws glue get-database --name opentargets_20_06_dl > RODA_templates/opentargets_20_06_get_database.json
 
 aws glue get-tables --database-name chembl_25_dl > RODA_templates/chembl_25_get_tables.json
 aws glue get-database --name chembl_25_dl > RODA_templates/chembl_25_get_database.json
-npm run build && cdk synth ChemblRodaTemplate
-aws s3 cp cdk.out/ChemblRodaTemplate.template.json s3://aws-roda-hcls-datalake/ChemblRodaTemplate.json
+
+aws glue get-tables --database-name chembl_27_dl > RODA_templates/chembl_27_get_tables.json
+aws glue get-database --name chembl_27_dl > RODA_templates/chembl_27_get_database.json
 
 aws glue get-tables --database-name binding_db_dl > RODA_templates/binding_db_get_tables.json
 aws glue get-database --name binding_db_dl > RODA_templates/binding_db_get_database.json
-npm run build && cdk synth BindingDbRodaTemplate
-aws s3 cp cdk.out/BindingDbRodaTemplate.template.json s3://aws-roda-hcls-datalake/BindingDbRodaTemplate.json
 
-#https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/quickcreate?templateUrl=https%3A%2F%2Faws-roda-hcls-datalake.s3.amazonaws.com%2FChemblRodaTemplate.json&stackName=Chembl25-RODA
-#https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/quickcreate?templateUrl=https%3A%2F%2Faws-roda-hcls-datalake.s3.amazonaws.com%2FOpenTargetsRodaTemplate.json&stackName=OpenTargets-1911-RODA
-#https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/quickcreate?templateUrl=https%3A%2F%2Faws-roda-hcls-datalake.s3.amazonaws.com%BindingDbRodaTemplate.json&stackName=BindingDB-RODA
+aws glue get-crawler --name gtex_8_dl_crawler > RODA_templates/gtex_8_get_crawler.json
+aws glue get-database --name gtex_8_dl > RODA_templates/gtex_8_get_database.json
+
+npm run build
+
+
+
+cdk synth OpenTargets1911RodaTemplate
+cdk synth OpenTargets2006RodaTemplate
+cdk synth Chembl25RodaTemplate
+cdk synth Chembl27RodaTemplate
+cdk synth BindingDbRodaTemplate
+cdk synth GTExRodaTemplate8
+
+aws s3 cp cdk.out/OpenTargets1911RodaTemplate.template.json s3://aws-roda-hcls-datalake/OpenTargets.19.11.RodaTemplate.json
+aws s3 cp cdk.out/OpenTargets2006RodaTemplate.template.json s3://aws-roda-hcls-datalake/OpenTargets.20.06.RodaTemplate.json
+aws s3 cp cdk.out/Chembl25RodaTemplate.template.json s3://aws-roda-hcls-datalake/Chembl.25.RodaTemplate.json
+aws s3 cp cdk.out/Chembl27RodaTemplate.template.json s3://aws-roda-hcls-datalake/Chembl.27.RodaTemplate.json
+aws s3 cp cdk.out/BindingDbRodaTemplate.template.json s3://aws-roda-hcls-datalake/BindingDbRodaTemplate.json
+aws s3 cp cdk.out/GTExRodaTemplate8.template.json s3://aws-roda-hcls-datalake/GTEx.8.RodaTemplate.json
+
+
+#https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/quickcreate?templateUrl=https%3A%2F%2Faws-roda-hcls-datalake.s3.amazonaws.com%2FOpenTargets.20.06.RodaTemplate.json&stackName=OpenTargets-20-06-RODA
+#https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/quickcreate?templateUrl=https%3A%2F%2Faws-roda-hcls-datalake.s3.amazonaws.com%2FOpenTargets.19.11.RodaTemplate.json&stackName=OpenTargets-19-11-RODA
+
+#https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/quickcreate?templateUrl=https%3A%2F%2Faws-roda-hcls-datalake.s3.amazonaws.com%2FChembl.27.RodaTemplate.json&stackName=Chembl27-RODA
+#https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/quickcreate?templateUrl=https%3A%2F%2Faws-roda-hcls-datalake.s3.amazonaws.com%2FChembl.25.RodaTemplate.json&stackName=Chembl25-RODA
+
+#https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/quickcreate?templateUrl=https%3A%2F%2Faws-roda-hcls-datalake.s3.amazonaws.com%2FBindingDbRodaTemplate.json&stackName=BindingDB-RODA
+
+#https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/quickcreate?templateUrl=https%3A%2F%2Faws-roda-hcls-datalake.s3.amazonaws.com%2FGTEx.8.RodaTemplate.json&stackName=GTEx-8-RODA
