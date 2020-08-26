@@ -1,8 +1,12 @@
-# Data Lake as Code; Featuring ChEMBL and Open Targets
+# Data Lake as Code 
 
-Companion code for the AWS ['Data Lake as Code' blog post](https://aws.amazon.com/blogs/startups/a-data-lake-as-code-featuring-chembl-and-opentargets/).
+There are three primary branches for this repo. 
 
-![](https://quip-amazon.com/blob/HPG9AAwumxR/D5akZWKUWmfWEhA8u4loEA?a=U93UPcmkUsuoToxZr2QpWU5nosB1RwimIsIW5TtaJvEa)
+- [mainline]([https://github.com/aws-samples/data-lake-as-code/tree/mainline) - Allows you to use the Data Lake as Code architecture and constructs in your own enviornment. It excludes the RODA data sets and 'baseline' stack documented in the blog.
+- [roda]([https://github.com/aws-samples/data-lake-as-code/tree/roda)- This branch tracks new AWS Registry of Open Data (RODA) data sets enrolled by the Data Lake as Code architecture. More on this coming soon...
+- [blog]([https://github.com/aws-samples/data-lake-as-code/tree/roda) - This branch tracks the ['Data Lake as Code' blog post](https://aws.amazon.com/blogs/startups/a-data-lake-as-code-featuring-chembl-and-opentargets/)
+
+
 
 ## To install this in your own AWS account:
 
@@ -11,43 +15,61 @@ Your local machine needs to have the AWS CLI installed on your machine along wit
 Run the following commands  
 
 ```shell
-git clone https://github.com/aws-samples/data-lake-as-code  
+git clone -b mainline https://github.com/aws-samples/data-lake-as-code  
 cd data-lake-as-code 
 ./InstallCdkDependencies.sh  
-./DeployChemblOpenTargetsEnv.sh
+./DeployOrUpdateDataLake.sh
 ```
+This will install the CDK into your environment and create the core resources for you data lake. Should only take a few minutes. 
 
-Wait for Chembl and OpenTargets to be ‘staged’ into the baseline stack.  
+This includes the 'Data Lake' bucket where your enrolled datasets will reside in perpetuity along with some Lake Formation setup. 
 
-The ‘baseline stack’ in the CDK application spins up a VPC with an S3 bucket (for OpenTargets) and an RDS Postgres instance (for ChEMBL). It also spins up a little helper EC2 instance that stages those assets in their ‘raw’ form after downloading them from [OpenTargets.org](http://OpenTargets.org) and EMBL-EBI.  
+## Enroll your own S3 data sets
+There are three steps you need to complete to enroll your own data set.
 
-Go to Systems Manager in the AWS console, and then the ‘Run Command’ section. You will see the currently running command documents.   
+### Organize your source S3 location
+The Glue crawler expects your data to be organized into folders based on the table. In the example below, the Glue Crawler will create tables called "orders", "products", "customers", etc and automatically detect the table specific schemas based on the the data it samples in each folder. 
 
-![](https://quip-amazon.com/blob/HPG9AAwumxR/x4lfduQeC3Ww-DyK8loIAg?a=6aMBuWAgnWaZ5pQaJndaM06ob734VpmiCI5xfguyPaca)
+Its likely that many of your tables may just be one file. However, in the event your data set is broken up across multiple files, just keep those parts in the same shared table parent folder. See the customers/ example below. 
 
-It takes about an hour for Chembl to build. If you get impatient and want to see the progress in real time, go to ‘Session Manager’ in the Systems Manager console, click the ‘Start session’ button, choose the ‘ChembDbImportInstance’ radio button, and click the ‘Start Session’ button.  
+```
+s3://source-bucket
+│   ...
+└───folder1
+│   │   ...
+│   └───SupplierData
+│       │   orders/
+|		|	|	ordersFile.csv
+│       │   products/
+|		|	|	productsDump.json
+│       │   customers/
+|		|	|	part000-customerDataFile.parquet
+|		|	|	part001-customerDataFile.parquet
+|		|	|	...
+│       │   table3/
+|		|	|	table3File.gz
+│       │   ...
+```
+### Create a new CDK stack for you data set
+Create a new file by copying the `lib/ExampleS3DataSet-stack.ts` file.
+```
+cp lib/ExampleS3DataSet-stack.ts lib/SupplierDataSet-stack.ts
+```
+Open up the new `SupplierDataSet-stack.ts` file.
 
-![](https://quip-amazon.com/blob/HPG9AAwumxR/Fj7sA3VuIuvdPOHl017Xcg?a=EYFlHaKY8weEGFezDR4ld3sEhBMWl88afFdDjJQ15H8a)
+Update the `ExampleS3DataSet` and `exampledataset_v1` lines with a more meaningful name to your data set:
+```
+export class ExampleS3DataSet extends DataSetStack{
+...
+const dataSetName = "exampledataset_v1"
+```
+### Create a new Glue script
 
-That will open a SSM session window. Run the following command to tail the log output.  
+Create a new Glue script for your data set in the scripts folder. If you are just looking to do straight column for column enrollment, you can just copy the `glue.s3import.exampledataset.s3.py'
 
-```tail -f /home/ssm-user/progressLog```
 
-![](https://quip-amazon.com/blob/HPG9AAwumxR/rMcRhjzUcIGQVYeBFxup4Q?a=2NRscRrktD9kLK7rDqqD9bO3aXtTYttCeaEWLwDXVgIa)
 
-## Enroll Chembl and OpenTargets into the data lake
 
-Once the database has finished importing, go to Glue in the AWS console, and then the “Workflows” section  
-
-![](https://quip-amazon.com/blob/HPG9AAwumxR/K0liqaLzOGNHdODU_fN_MA?a=GQQahtSxVQNvaU6AkEjATwCE0WJglr630LH3bZcngB0a)
-
-Select the openTargetsDataLakeEnrollment workflow, and click ‘Actions’, then 'Run'  
-
-![](https://quip-amazon.com/blob/HPG9AAwumxR/UV0-ZlwmK_KF9L9MfaUgfA?a=97k7vof4qlurzy3zSsmPVhomgCpRUJfREq8UCNZSzt4a)
-
-Do the same for the chemblDataLakeEnrollmentWorkflow. Wait for the workflows to finish.  
-
-Both workflows will run in parallel, but it will take the openTargetsDataLakeEnrollmentWorkflow ~170 minutes to complete while the ChEMBL enrollment will finish in about 30 minutes.   
 
 ## Query an Conquer!
 
