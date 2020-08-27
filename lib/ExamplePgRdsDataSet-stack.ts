@@ -23,7 +23,7 @@ export class ExamplePgRdsDataSet extends DataSetStack{
 		super(scope, id, props);
 	
 	
-		const dataSetName = "exampleRDS";
+		const dataSetName = "example_rds"; // NO CAPS!!!!
 		
 		
 		this.Enrollments.push(new RDSPostgresDataSetEnrollment(this, 'examplePgRds-enrollment', {
