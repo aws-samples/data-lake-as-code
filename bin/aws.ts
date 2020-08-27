@@ -27,14 +27,17 @@ const coreDataLake = new DataLakeStack(app, 'CoreDataLake', {
 
 // const examplePgRdsDataSet = new ExamplePgRdsDataSet(app, 'ExamplePgRdsDataSet', {
     
-//     database: rds.DatabaseInstance.fromDatabaseInstanceAttributes(app, 'exampleRdsDataSet', {
+//     database: rds.DatabaseInstance.fromDatabaseInstanceAttributes(coreDataLake, 'sourceDatabase', {
 //         instanceEndpointAddress: '--- RDS INSTANCE ENDPOINT ADDRESS GOES HERE ---',
 //         instanceIdentifier: '--- RDS INSTANCE IDENTIFIRE GOES HERE ---',
 //         port: 5432,
 //         securityGroups: []}) as rds.DatabaseInstance,
-//     databaseSecret: rds.DatabaseSecret.fromSecretArn(app, 'exampleRdsDataSetSecret', 
+//     databaseSecret: rds.DatabaseSecret.fromSecretArn(coreDataLake, 'databaseSecret', 
 //         '---SECRET ARN GOES HERE ---') as rds.DatabaseSecret,
-//     accessSecurityGroup: ec2.SecurityGroup.fromSecurityGroupId(app, 'exampleRdsAccessSecurityGroup',
+//     accessSubnet: ec2.Subnet.fromSubnetAttributes(coreDataLake, 'accessSubnet', {
+//         subnetId: '--- SUBNET ID THAT CAN ROUTE TO BOTH THE SOURCE DATABASE AND OUTBOUND TO INTERNET ---',
+//         availabilityZone: '--- AVAILABILITY ZONE ASSOCIATED WITH THIS SUBNET ---'}) as ec2.Subnet,
+//     accessSecurityGroup: ec2.SecurityGroup.fromSecurityGroupId(coreDataLake, 'accessSecurityGroup',
 //         '---SECURITY GROUP ID THAT ALLOWS INBOUND ACCESS TO DATABASE GOES HERE ---') as ec2.SecurityGroup,
 //     DataLake: coreDataLake    
 // });
