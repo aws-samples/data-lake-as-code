@@ -30,11 +30,11 @@ export class ExamplePgRdsDataSet extends DataSetStack{
 	    	databaseSecret: props.databaseSecret,
 	    	database: props.database,
 	    	databaseSidOrServiceName: "database_sid",
+	    	JdbcTargetIncludePaths: ["database_name/%"],
 	    	MaxDPUs: 5.0,
 	    	accessSecurityGroup: props.accessSecurityGroup,
 	    	dataLakeBucket: props.DataLake.DataLakeBucket,
 	    	DataSetName: dataSetName,
-	    	JdbcTargetIncludePaths: ["database_name/%"],
 	    	GlueScriptPath: "scripts/glue.s3import.fullcopy.rds.py",
 			GlueScriptArguments: {
 				"--job-language": "python", 
