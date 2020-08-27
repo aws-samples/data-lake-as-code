@@ -26,7 +26,7 @@ export class ExamplePgRdsDataSet extends DataSetStack{
 		const dataSetName = "example_rds"; // NO CAPS!!!!
 		
 		
-		this.Enrollments.push(new RDSPostgresDataSetEnrollment(this, 'examplePgRds-enrollment', {
+		this.Enrollments.push(new RDSPostgresDataSetEnrollment(this, `${dataSetName}-enrollment`, {
 	    	databaseSecret: props.databaseSecret,
 	    	database: props.database,
 	    	databaseSidOrServiceName: "database_sid",
@@ -43,7 +43,7 @@ export class ExamplePgRdsDataSet extends DataSetStack{
 				"--DL_BUCKET": props.DataLake.DataLakeBucket.bucketName,
 				"--DL_PREFIX": "/"+dataSetName+"/",
 				"--DL_REGION": cdk.Stack.of(this).region,
-				"--GLUE_SRC_DATABASE": "exampleRDS_src"
+				"--GLUE_SRC_DATABASE": `${dataSetName}_src`
 			}	    	
 		}));
 		
