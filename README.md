@@ -3,9 +3,9 @@
 
 There are three primary branches for this repo. 
 
-- [mainline]([https://github.com/aws-samples/data-lake-as-code/tree/mainline) - Allows you to use the Data Lake as Code architecture and constructs in your own enviornment. It excludes the RODA data sets and 'baseline' stack documented in the blog.
-- [roda]([https://github.com/aws-samples/data-lake-as-code/tree/roda)- This branch tracks new AWS Registry of Open Data (RODA) data sets enrolled by the Data Lake as Code architecture. More on this coming soon...
-- [blog]([https://github.com/aws-samples/data-lake-as-code/tree/roda) - This branch tracks the ['Data Lake as Code' blog post](https://aws.amazon.com/blogs/startups/a-data-lake-as-code-featuring-chembl-and-opentargets/)
+- **[mainline](https://github.com/aws-samples/data-lake-as-code/tree/mainline)** - You are here. Allows you to use the Data Lake as Code architecture and constructs in your own enviornment. It excludes the RODA data sets and 'baseline' stack documented in the blog.
+- **[roda](https://github.com/aws-samples/data-lake-as-code/tree/roda)** - This branch tracks new AWS Registry of Open Data (RODA) data sets enrolled by the Data Lake as Code architecture. More on this coming soon...
+- **[blog](https://github.com/aws-samples/data-lake-as-code/tree/roda)** - This branch tracks the ['Data Lake as Code' blog post](https://aws.amazon.com/blogs/startups/a-data-lake-as-code-featuring-chembl-and-opentargets/)
 
 
 
@@ -61,7 +61,7 @@ cp lib/ExampleS3DataSet-stack.ts lib/SupplierDataSet-stack.ts
 Open up the new `SupplierDataSet-stack.ts` file.
 
 Update the `ExampleS3DataSet` and `exampledataset_v1` lines below with a more meaningful name to your data set. To keep the example from above going, I'm calling the class `SupplierDataSet` and setting the `dataSetName` to `supplier_data`.
-```
+```typescript
 ...
 export class ExampleS3DataSet extends DataSetStack{
 ...
@@ -80,7 +80,7 @@ You will also want to update the `sourceBucketDataPrefixes` property with paths 
 ### Optionally create a new AWS Glue script
 
 You will notice the following line in your `lib/SupplierDataSet-stack.ts` file
-```
+```typescript
 ...
 GlueScriptPath: "scripts/glue.s3import.fullcopy.s3.py",
 ...
