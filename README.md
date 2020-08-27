@@ -30,7 +30,7 @@ This includes the 'Data Lake' bucket where your enrolled datasets will reside in
 
 
 ### Organize your source S3 location
-The Glue crawler expects your data to be organized into folders based on the table. In the example below, the Glue Crawler will create tables called `orders`, `products`, `customers`, etc and automatically detect the table specific schemas based on the the data it samples in each folder. 
+The Glue crawler expects your data to be organized into folders based on the table. In the example below, the Glue Crawler will create tables called `orders`, `products`, `customers`, etc and automatically detect the table specific schemas based on the the data it samples in each folder. Note that the file types can be different between the different tables. 
 
 ```
 s3://source-bucket
@@ -38,17 +38,17 @@ s3://source-bucket
 └───folder1/
 │   │   ...
 │   └───SupplierData/
-│       │   orders/
-|		|	|	ordersFile.csv
-│       │   products/
-|		|	|	productsDump.json
-│       │   customers/
-|		|	|	part000-customerDataFile.parquet
-|		|	|	part001-customerDataFile.parquet
-|		|	|	...
-│       │   table3/
-|		|	|	table3File.gz
-│       │   ...
+│       └─── orders/
+|       │   │   ordersFile.csv
+│       └─── products/
+|       │   │   productsDump.json
+│       └─── customers/
+|       │   │   part000-customerDataFile.parquet
+|       │   │   part001-customerDataFile.parquet
+|       │   │   ...
+│       └───table3/
+|       │   │   table3File.gz
+│       └───...
 ```
 Its likely that many of your tables may just be one file. However, in the event your data set is broken up across multiple files, just keep those parts in the same shared table parent folder. See the `customers/` folder above as an example. 
 
