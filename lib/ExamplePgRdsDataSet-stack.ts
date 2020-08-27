@@ -16,6 +16,7 @@ export interface ExamplePgRdsDataSetParams extends DataSetStackProps {
 	databaseSecret: rds.DatabaseSecret;
 	database: rds.DatabaseInstance;
 	accessSecurityGroup: ec2.SecurityGroup;
+	accessSubnetId: string;
 }
 
 export class ExamplePgRdsDataSet extends DataSetStack{
@@ -25,7 +26,6 @@ export class ExamplePgRdsDataSet extends DataSetStack{
 	
 		const dataSetName = "example_rds"; // NO CAPS!!!!
 		
-		
 		this.Enrollments.push(new RDSPostgresDataSetEnrollment(this, `${dataSetName}-enrollment`, {
 	    	databaseSecret: props.databaseSecret,
 	    	database: props.database,
@@ -33,6 +33,7 @@ export class ExamplePgRdsDataSet extends DataSetStack{
 	    	JdbcTargetIncludePaths: ["database_name/%"],
 	    	MaxDPUs: 5.0,
 	    	accessSecurityGroup: props.accessSecurityGroup,
+	    	AccessSubnet: ec2.Subnet.fromSubnetId(this, 'accessSubnet', props.accessSubnetId) as ec2.Subnet,
 	    	dataLakeBucket: props.DataLake.DataLakeBucket,
 	    	DataSetName: dataSetName,
 	    	GlueScriptPath: "scripts/glue.s3import.fullcopy.rds.py",

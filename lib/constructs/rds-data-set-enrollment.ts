@@ -13,6 +13,7 @@ export interface RDSdataSetSetEnrollmentProps extends DataLakeEnrollment.DataLak
 	databaseSecret: rds.DatabaseSecret;
 	database: rds.DatabaseInstance;
 	accessSecurityGroup: ec2.SecurityGroup;
+	AccessSubnet: ec2.Subnet;
 	databaseSidOrServiceName: string;
 	JdbcTargetIncludePaths: string[];
 	MaxDPUs: number;
@@ -58,8 +59,8 @@ export class RDSDataSetEnrollment extends DataLakeEnrollment {
 				,description: `${dataSetName} connection`
 				,name: dataSetSourceConnectionName
 				,physicalConnectionRequirements: {
-					availabilityZone: props.database.vpc.privateSubnets[0].availabilityZone,
-					subnetId: props.database.vpc.privateSubnets[0].subnetId,
+					availabilityZone: props.AccessSubnet.availabilityZone,
+					subnetId: props.AccessSubnet.subnetId,
 					securityGroupIdList: [props.accessSecurityGroup.securityGroupId],
 				}
 			},
