@@ -19,7 +19,7 @@ export class ExampleS3DataSet extends DataSetStack{
 	constructor(scope: cdk.Construct, id: string, props: ExampleS3DataSetProps) {
 	    super(scope, id, props);
 	    
-        const dataSetName = "exampledataset_v1"
+        const dataSetName = "exampledataset_v1"; // NO CAPS!!!!
 
 	    this.Enrollments.push(new S3dataSetEnrollment(this, `${dataSetName}Enrollment`, {
 	        DataSetName: dataSetName,
