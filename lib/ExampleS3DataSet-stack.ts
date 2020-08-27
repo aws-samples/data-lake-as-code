@@ -32,7 +32,7 @@ export class ExampleS3DataSet extends DataSetStack{
                 `${props.sourceBucketDataPrefix}tableX/`
             ],
 	        dataLakeBucket: props.DataLake.DataLakeBucket,
-	        GlueScriptPath: "scripts/glue.s3import.exampledataset.s3.py",
+	        GlueScriptPath: "scripts/scripts/glue.s3import.fullcopy.s3.py",
 	        GlueScriptArguments: {
                 "--job-language": "python", 
                 "--job-bookmark-option": "job-bookmark-disable",

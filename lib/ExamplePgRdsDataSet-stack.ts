@@ -35,7 +35,7 @@ export class ExamplePgRdsDataSet extends DataSetStack{
 	    	dataLakeBucket: props.DataLake.DataLakeBucket,
 	    	DataSetName: dataSetName,
 	    	JdbcTargetIncludePaths: ["database_name/%"],
-	    	GlueScriptPath: "scripts/glue.s3import.exampledataset.rds.py",
+	    	GlueScriptPath: "scripts/glue.s3import.fullcopy.rds.py",
 			GlueScriptArguments: {
 				"--job-language": "python", 
 				"--job-bookmark-option": "job-bookmark-disable",
