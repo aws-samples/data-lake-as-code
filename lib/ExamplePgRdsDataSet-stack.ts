@@ -14,7 +14,7 @@ export interface ExamplePgRdsDataSetParams extends DataSetStackProps {
 	databaseSecret: rds.DatabaseSecret;
 	database: rds.DatabaseInstance;
 	accessSecurityGroup: ec2.SecurityGroup;
-	accessVPC: ec2.Vpc;
+	accessSubnet: ec2.Subnet;
 }
 
 export class ExamplePgRdsDataSet extends DataSetStack{
@@ -31,7 +31,7 @@ export class ExamplePgRdsDataSet extends DataSetStack{
 	    	JdbcTargetIncludePaths: ["database_name/%"],
 	    	MaxDPUs: 5.0,
 	    	accessSecurityGroup: props.accessSecurityGroup,
-	    	AccessSubnet: props.accessVPC.privateSubnets[0] as ec2.Subnet,
+	    	AccessSubnet: props.accessSubnet,
 	    	dataLakeBucket: props.DataLake.DataLakeBucket,
 	    	DataSetName: dataSetName,
 	    	GlueScriptPath: "scripts/glue.s3import.fullcopy.rds.py",
