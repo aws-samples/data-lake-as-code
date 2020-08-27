@@ -3,9 +3,9 @@
 
 There are three primary branches for this repo. 
 
-- [mainline]([https://github.com/aws-samples/data-lake-as-code/tree/mainline) - Allows you to use the Data Lake as Code architecture and constructs in your own enviornment. It excludes the RODA data sets and 'baseline' stack documented in the blog.
-- [roda]([https://github.com/aws-samples/data-lake-as-code/tree/roda)- This branch tracks new AWS Registry of Open Data (RODA) data sets enrolled by the Data Lake as Code architecture. More on this coming soon...
-- [blog]([https://github.com/aws-samples/data-lake-as-code/tree/roda) - This branch tracks the ['Data Lake as Code' blog post](https://aws.amazon.com/blogs/startups/a-data-lake-as-code-featuring-chembl-and-opentargets/)
+- **[mainline](https://github.com/aws-samples/data-lake-as-code/tree/mainline)** - You are here. Allows you to use the Data Lake as Code architecture and constructs in your own enviornment. It excludes the RODA data sets and 'baseline' stack documented in the blog.
+- **[roda](https://github.com/aws-samples/data-lake-as-code/tree/roda)** - This branch tracks new AWS Registry of Open Data (RODA) data sets enrolled by the Data Lake as Code architecture. More on this coming soon...
+- **[blog](https://github.com/aws-samples/data-lake-as-code/tree/roda)** - This branch tracks the ['Data Lake as Code' blog post](https://aws.amazon.com/blogs/startups/a-data-lake-as-code-featuring-chembl-and-opentargets/)
 
 
 
@@ -61,7 +61,7 @@ cp lib/ExampleS3DataSet-stack.ts lib/SupplierDataSet-stack.ts
 Open up the new `SupplierDataSet-stack.ts` file.
 
 Update the `ExampleS3DataSet` and `exampledataset_v1` lines below with a more meaningful name to your data set. To keep the example from above going, I'm calling the class `SupplierDataSet` and setting the `dataSetName` to `supplier_data`.
-```
+```typescript
 ...
 export class ExampleS3DataSet extends DataSetStack{
 ...
@@ -80,7 +80,7 @@ You will also want to update the `sourceBucketDataPrefixes` property with paths 
 ### Optionally create a new AWS Glue script
 
 You will notice the following line in your `lib/SupplierDataSet-stack.ts` file
-```
+```typescript
 ...
 GlueScriptPath: "scripts/glue.s3import.fullcopy.s3.py",
 ...
@@ -91,11 +91,16 @@ The `scripts/glue.s3import.fullcopy.s3.py` file is a ~45 line Spark script that 
 In the event you want to change your source data before its enrolled into the data lake, for example to enrich, transform, feature engineer, drop tables or columns, etc, you will want to create your own Glue script.   Glue scripting is easier than you think, based on Spark, is serverless, and can scale large and small. Review the `scripts/glue.s3import.fullcopy.s3.py` and see how simple it really is. Fun fact, the RDS full copy equivalent `scripts/glue.s3import.fullcopy.rds.py` is identical to the S3 version even though they use fundamentally different access protocols!
 
 ### Instantiate the Data Set Stack
-We've now created your DataSetStack class, now we need to instantiate it to make it real.  Open the `bin/aws.ts` file.
-```typescript
-...
-const coreDataLake = new DataLakeStack(app, 'CoreDataLake', {...});
 
+We've now created your DataSetStack class, now we need to instantiate it to make it real.  Open the `bin/aws.ts` file. Add the `import` to your new stack into the top of the file and instantiate your new data set. 
+```typescript
+//Add import to the top of the file
+import { SupplierDataSet } from '../lib/SupplierDataSet-stack'; // Add this!
+...
+// Leave this alone
+const coreDataLake = new DataLakeStack(app, 'CoreDataLake', {...});
+...
+// Instantiate Data Set!
 const supplierDataSet= new SupplierDataSet(app, 'SupplierDataSet', {
      sourceBucket: s3.Bucket.fromBucketName(app, 'SupplierDataSetSourceBucket', '--- YOUR EXISTING BUCKET NAME GOES HERE ---'),
      sourceBucketDataPrefix: '/folder1/SupplierData/',
@@ -108,7 +113,96 @@ npm run build && cdk deploy SupplierDataSet
 ```
 The CDK will compile, deploy, and let you watch the CloudFormation templates getting deployed. It should only take a minute or two. While that's underway, I recommend opening the `/DeployOrUpdateDataLake.sh` file and adding a `cdk deploy SupplierDataSet --require-approval-never` line to the bottom. That way you can just run the `./DeployOrUpdateDataLake.sh` whenever you make changes to the code and ensure that everything is up to date. 
 
+Once the deployment finishes,  [kick off the enrollment workflow in glue](#Kick-off-the-Enrollment).
+
+## Enrolling an RDS Data Set
+
+### Create a new CDK stack for you RDS data set
+
+Create a new file by copying the `lib/ExamplePgRdsDataSet-stack.ts` file. Note we are using 'SalesData' just as a placeholder name, use something that describes your data set. 
+```
+cp lib/ExamplePgRdsDataSet-stack.ts lib/SalesDataSet-stack.ts
+```
+Open up the new `SalesDataSet-stack.ts` file.
+
+Update the `ExamplePgRdsDataSet ` and `example_rds` lines below with a more meaningful name for your data set. To keep the example from above going, I'm calling the class `SalesDataSet` and setting the `dataSetName` to `sales_data`.
+```typescript
+...
+export class ExamplePgRdsDataSet extends DataSetStack{
+...
+const dataSetName = "example_rds"; // NO CAPS!
+...
+```
+We also need to update the following two parameters with your database service name (or sid) and the JdbcTargetIncludePath. If you are using a postgres these values are usually the same. 
+
+```typescript
+	this.Enrollments.push(new RDSPostgresDataSetEnrollment(this, `${dataSetName}-enrollment`, {
+		...
+    	databaseSidOrServiceName: "database_sid",
+    	JdbcTargetIncludePaths: ["database_name/%"],
+		...
+```
+### Optionally create a new AWS Glue script
+
+You will notice the following line in your `lib/SalesDataSet-stack.ts` file
+```typescript
+	this.Enrollments.push(new RDSPostgresDataSetEnrollment(this, `${dataSetName}-enrollment`, {
+		...
+	   	GlueScriptPath: "scripts/glue.s3import.fullcopy.rds.py",
+	   	...
+
+```
+The `scripts/glue.s3import.fullcopy.rds.py` file is a ~45 line Spark script that will download all of the data from your source database that match the include path, and copy every table and every column, convert them to a parquet format, and write the resulting table data into your data lake bucket ready for crawling and querying. It is a 'full copy'. 
+
+In the event you want to change your source data before its enrolled into the data lake, for example to enrich, transform, feature engineer, drop tables or columns, etc, you will want to create your own Glue script.   Glue scripting is easier than you think, based on Spark, is serverless, and can scale large and small. Review the `scripts/glue.s3import.fullcopy.rds.py` and see how simple it really is. Fun fact, the RDS full copy equivalent `scripts/glue.s3import.fullcopy.s3.py` is identical to the S3 versioneven though they use fundamentally different access protocols!
+
+### Instantiate the Data Set Stack
+We've now created your DataSetStack class, now we need to instantiate it to make it real.  Open the `bin/aws.ts` file. Add the `import` to your new stack into the top of the file and instantiate your new data set. 
+
+You will also need to supply the following IDs/ARNs/Addresses to the constructor's parameters. 
+
+- `instanceEndpointAddress` - You can get this from the RDS console.
+- `instanceIdentifier` - You can get this from the RDS Console
+- `databaseSecret` - Create a AWS Secrets Manager secret for RDS where you supply the username and password. Use the ARN that secret here.
+- `accessSecurityGroup` - The ID of an existing security group that allows inbound access to the database.
+- `subnetId` and `availabilityZone` - The subnet Id and it's corresponding AZ id (ex us-west-2b) with routing in place to allow access to the source database and outbound to the internet (either through Internet or NAT Gateways).
+
+```typescript
+//Add import to the top of the file
+import { SalesDataSet } from '../lib/SalesDataSet-stack'; // Add this!
+...
+// Leave this alone
+const coreDataLake = new DataLakeStack(app, 'CoreDataLake', {...});
+...
+// Instantiate Data Set!
+const salesDataSet = new SalesDataSet (app, 'SalesDataSet', {
+    
+    database: rds.DatabaseInstance.fromDatabaseInstanceAttributes(coreDataLake, 'sourceDatabase', {
+        instanceEndpointAddress: '--- RDS INSTANCE ENDPOINT ADDRESS GOES HERE ---',
+        instanceIdentifier: '--- RDS INSTANCE IDENTIFIRE GOES HERE ---',
+        port: 5432,
+        securityGroups: []}) as rds.DatabaseInstance,
+    databaseSecret: rds.DatabaseSecret.fromSecretArn(coreDataLake, 'databaseSecret', 
+        '---SECRET ARN GOES HERE ---') as rds.DatabaseSecret,
+    accessSubnet: ec2.Subnet.fromSubnetAttributes(coreDataLake, 'accessSubnet', {
+        subnetId: '--- SUBNET ID THAT CAN ROUTE TO BOTH THE SOURCE DATABASE AND OUTBOUND TO INTERNET ---',
+        availabilityZone: '--- AVAILABILITY ZONE ASSOCIATED WITH THIS SUBNET ---'}) as ec2.Subnet,
+    accessSecurityGroup: ec2.SecurityGroup.fromSecurityGroupId(coreDataLake, 'accessSecurityGroup',
+        '---SECURITY GROUP ID THAT ALLOWS INBOUND ACCESS TO DATABASE GOES HERE ---') as ec2.SecurityGroup,
+    DataLake: coreDataLake    
+});
+```
+Now lets build the application and deploy the stack. Run the following from the root of the `data-lake-as-code` directory.
+```
+npm run build && cdk deploy SalesDataSet
+```
+The CDK will compile, deploy, and let you watch the CloudFormation templates getting deployed. It should only take a minute or two. While that's underway, I recommend opening the `/DeployOrUpdateDataLake.sh` file and adding a `cdk deploy SupplierDataSet --require-approval-never` line to the bottom. That way you can just run the `./DeployOrUpdateDataLake.sh` whenever you make changes to the code and ensure that everything is up to date. 
+
+Once the deployment finishes,  [kick off the enrollment workflow](#Kick-off-the-Enrollment).
+
+
 ## Kick off the Enrollment
+
 At this point, everything required to enroll your data set has been deployed. To  kick off the enrollment, log into the AWS Glue Console, and select the 'Workflows' section on the left side, and select the radio button next to the new enrollment workflow. 
 
 You can see below the 'crawler-job-crawler' pattern visualized in the Graph. We crawl the source first, then perform the transform via job, then crawl the transformed data to pick up any new schema changes. 
@@ -126,6 +220,7 @@ Here you can see the source crawler has just finished, it ran for a minute and f
 Once the source crawler is finished you can see the Job kicking off by visiting the  'Jobs' section in the glue console. Select the ETL job to see its history and real time metrics:
 
 ![enter image description here](http://devspacepaul.s3.us-west-2.amazonaws.com/dlac/Untitled2.png)
+
 
 ## Query an Conquer!
 
