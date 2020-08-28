@@ -1,4 +1,3 @@
-
 # Data Lake as Code 
 
 There are three primary branches for this repo. 
@@ -165,7 +164,7 @@ You will also need to supply the following IDs/ARNs/Addresses to the constructor
 - `instanceIdentifier` - You can get this from the RDS Console
 - `databaseSecret` - Create a AWS Secrets Manager secret for RDS where you supply the username and password. Use the ARN that secret here.
 - `accessSecurityGroup` - The ID of an existing security group that allows inbound access to the database.
-- `subnetId` and `availabilityZone` - The subnet Id and it's corresponding AZ id (ex us-west-2b) with routing in place to allow access to the source database and outbound to the internet (either through Internet or NAT Gateways).
+- `subnetId` and `availabilityZone` - The subnet id and it's corresponding AZ id (ex us-west-2b) where the Crawlers and Glue jobs will run. This subnet needs to be able to route to the source database as well as to a NAT gateway and/or an S3 endpoint. It will not work if you supply a public subnet (one that routes to an Internet Gateway) .
 
 ```typescript
 //Add import to the top of the file
