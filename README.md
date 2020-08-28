@@ -98,7 +98,7 @@ In the event you want to change your source data before its enrolled into the da
 
 ### Instantiate the Data Set Stack
 
-We've now created your DataSetStack class, now we need to instantiate it to make it real.  Open the `bin/aws.ts` file. Add the `import` to your new stack into the top of the file and instantiate your new data set. 
+We've now created your DataSetStack class, now we need to instantiate it to make it real.  Open the `bin/aws.ts` file. Add the `import` to your new stack into the top of the file and instantiate your new data set. In the example below, `sourceBucketDataPrefix` is set to /folder1/SupplierData/ as an example that would match S3 folder structure above. 
 ```typescript
 //Add import to the top of the file
 import { SupplierDataSet } from '../lib/SupplierDataSet-stack'; // Add this!
