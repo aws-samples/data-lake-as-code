@@ -8,7 +8,7 @@ There are three primary branches for this repo.
 - **[blog](https://github.com/aws-samples/data-lake-as-code/tree/roda)** - This branch tracks the ['Data Lake as Code' blog post](https://aws.amazon.com/blogs/startups/a-data-lake-as-code-featuring-chembl-and-opentargets/)
 
 ## What is this?
-Data Lake as Code is an extendable AWS CDK application that builds a data lake in your AWS, allows you to enroll your own data sets, and gives you the ability to precisely control access to your data. Because this is a CDK based architecture, your entire data lake will be implemented as infrastructure as code. This creates a self-documenting data lake that you check-in to your preferred code repository to maintain over time. That includes the grants/permissions you give to your data.
+Data Lake as Code is an extendable AWS CDK application that builds a data lake in your AWS account, allows you to enroll your own data sets, and gives you the ability to precisely control access to your data. Because this is a CDK based architecture, your entire data lake will be implemented as infrastructure as code. This creates a self-documenting data lake that you check-in to your preferred code repository to maintain over time. That includes the grants/permissions you give to your data.
 
 Here is a high-level diagram of what this CDK application creates for you. Check out the ['Data Lake as Code' blog post](https://aws.amazon.com/blogs/startups/a-data-lake-as-code-featuring-chembl-and-opentargets/) if any of these services are unfamiliar or if you want to learn more about the architectural concepts. 
 
