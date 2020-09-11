@@ -14,6 +14,7 @@ import { ExamplePgRdsDataSet } from '../lib/ExamplePgRdsDataSet-stack';
 const app = new cdk.App();
 
 const coreDataLake = new DataLakeStack(app, 'CoreDataLake', {
+    description: "AWS Data Lake as Code core data lake template. (ib-87ce095eDf)",
     starterLakeFormationAdminPrincipalArn: app.node.tryGetContext("starterLakeFormationAdmin")
 });
 
