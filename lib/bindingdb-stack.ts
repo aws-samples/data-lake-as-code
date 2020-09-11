@@ -28,6 +28,7 @@ export class BindingDBStack extends DataSetStack{
 	    	databaseSecret: props.databaseSecret,
 	    	database: props.database,
 	    	MaxDPUs: 5.0,
+	    	AccessSubnet: props.database.vpc.privateSubnets[0] as ec2.Subnet,
 	    	databaseSidOrServiceName: "orcl",
 	    	accessSecurityGroup: props.accessSecurityGroup,
 	    	dataLakeBucket: props.DataLake.DataLakeBucket,

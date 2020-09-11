@@ -23,6 +23,7 @@ const baseline = new BaselineStack(app, 'BaselineStack');
 //console.log("Setting up core data lake.");
 
 const coreDataLake = new DataLakeStack(app, 'CoreDataLake', {
+    description: "AWS Data Lake as Code core data lake template. (ib-87ce095eDf)",
     starterLakeFormationAdminPrincipalArn: app.node.tryGetContext("starterLakeFormationAdmin")
 });
 
@@ -76,12 +77,14 @@ const analyticsStack = new AnalyticsStack(app, 'AnalyticsStack', {
 
 
 const OpenTargetsRodaTemplate = new DataSetTemplateStack(app, 'OpenTargets1911RodaTemplate', {
+    description: "AWS Data Lake as Code Registry of Open Data Federated OpenTargets 19_11 template. (ib-035c3bf348)",
     DatabaseDescriptionPath: "../../RODA_templates/open_targets_1911_get_database.json",
     DescribeTablesPath: "../../RODA_templates/open_targets_1911_get_tables.json",
     DataSetName: openTargetsStack.Enrollments[0].DataSetName
 });
 
 const OpenTargets2006RodaTemplate = new DataSetTemplateStack(app, 'OpenTargets2006RodaTemplate', {
+    description: "AWS Data Lake as Code Registry of Open Data Federated OpenTargets 20_06 Template. (ib-af4fc1f54d)",
     DatabaseDescriptionPath: "../../RODA_templates/opentargets_20_06_get_database.json",
     DescribeTablesPath: "../../RODA_templates/opentargets_20_06_get_tables.json",
     DataSetName: openTargetsStack.Enrollments[1].DataSetName
@@ -89,12 +92,14 @@ const OpenTargets2006RodaTemplate = new DataSetTemplateStack(app, 'OpenTargets20
 
 
 const Chembl25RodaTemplate = new DataSetTemplateStack(app, 'Chembl25RodaTemplate', {
+    description: "AWS Data Lake as Code Registry of Open Data Federated Chembl 25 Template. (ib-c871fa7fd4)",
     DatabaseDescriptionPath: "../../RODA_templates/chembl_25_get_database.json",
     DescribeTablesPath: "../../RODA_templates/chembl_25_get_tables.json",
     DataSetName: chemblStack.Enrollments[0].DataSetName
 });
 
 const Chembl27RodaTemplate = new DataSetTemplateStack(app, 'Chembl27RodaTemplate', {
+    description: "AWS Data Lake as Code Registry of Open Data Federated Chembl 27 Template. (ib-bc6f662f64)",
     DatabaseDescriptionPath: "../../RODA_templates/chembl_27_get_database.json",
     DescribeTablesPath: "../../RODA_templates/chembl_27_get_tables.json",
     DataSetName: chemblStack.Enrollments[1].DataSetName
@@ -102,6 +107,7 @@ const Chembl27RodaTemplate = new DataSetTemplateStack(app, 'Chembl27RodaTemplate
 
 
 const BindinbDbRodaTemplate = new DataSetTemplateStack(app, 'BindingDbRodaTemplate', {
+    description: "AWS Data Lake as Code Registry of Open Data Federated BindingDB Template. (ib-233f489b10)",
     DatabaseDescriptionPath: "../../RODA_templates/binding_db_get_database.json",
     DescribeTablesPath: "../../RODA_templates/binding_db_get_tables.json",
     DataSetName: bindingDBStack.Enrollments[0].DataSetName
@@ -109,6 +115,7 @@ const BindinbDbRodaTemplate = new DataSetTemplateStack(app, 'BindingDbRodaTempla
 
 
 const GTExRodaTemplate8 = new CrawlerTemplateStack(app, 'GTExRodaTemplate8', {
+    description: "AWS Data Lake as Code Registry of Open Data Federated GTEx 8 Template. (ib-6dcf079647)",
     databaseDescriptionPath: "../../RODA_templates/gtex_8_get_database.json",
     crawlerDescriptionPath: "../../RODA_templates/gtex_8_get_crawler.json",
     DataSetName: gtexStack.Enrollments[0].DataSetName
