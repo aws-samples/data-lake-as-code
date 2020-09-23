@@ -73,3 +73,16 @@ Data sets in the AWS RODA HCLS Data Lake were created using the [Data Lake as Co
 [Deploy Open Targets 20.06](https://console.aws.amazon.com/cloudformation/home?#/stacks/quickcreate?templateUrl=https%3A%2F%2Faws-roda-hcls-datalake.s3.amazonaws.com%2FOpenTargets.19.11.RodaTemplate.json&stackName=OpenTargets-19-11-RODA)
 
 [Deploy Chembl 25](https://console.aws.amazon.com/cloudformation/home?#/stacks/quickcreate?templateUrl=https%3A%2F%2Faws-roda-hcls-datalake.s3.amazonaws.com%2FChembl.25.RodaTemplate.json&stackName=Chembl25-RODA)
+
+## Troubleshooting
+
+**Your query has the following error(s):**
+```
+HIVE_CURSOR_ERROR: Can not read value at 9 in block 0 in file s3://aws-roda-hcls-datalake/...snappy.parquet
+```
+
+There is a bug in how Athena's Presto engine handles Hive's decimal type. This is fixed in an upcoming release. In the event you see this error, create a new workgroup in Athena called exactly `AmazonAthenaPreviewFunctionality` and then use that workgroup for your queries. Athena will use the the next generation Presto version and you shouldnt see this error again. 
+
+
+
+
