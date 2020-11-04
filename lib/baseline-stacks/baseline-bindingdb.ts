@@ -14,6 +14,7 @@ import fs = require('fs');
 export interface BindingDBBaselineProps extends cdk.StackProps {
   TargetVPC: ec2.Vpc;
   ImportInstance: ec2.Instance;
+
 }
 
 
@@ -25,7 +26,7 @@ export class BindingDBBaseline extends cdk.Construct {
     	
 	constructor(scope: cdk.Construct, id: string, props: BindingDBBaselineProps) {
 		super(scope, id);
-    
+      
         const bindingDBSourceBucket = new s3.Bucket(this, 'BindingDbSourceBucket');
         
         this.DbAccessSg = new ec2.SecurityGroup(this, 'SecGroupChemblAccess', {
@@ -80,6 +81,8 @@ export class BindingDBBaseline extends cdk.Construct {
                 version: "1.0"
             }],
         });
+        
+
         
         const bindingDb = new rds.DatabaseInstance(this, 'bindingDb', {
             engine: rds.DatabaseInstanceEngine.ORACLE_SE2,
@@ -145,6 +148,8 @@ export class BindingDBBaseline extends cdk.Construct {
         
         
     }
+    
+ 
     
     
 }

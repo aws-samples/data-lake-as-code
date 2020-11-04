@@ -422,7 +422,6 @@ export class DataLakeEnrollment extends cdk.Construct {
 
 
 	private createLakeFormationPermission(resourceId: string, dataLakePrincipal: lakeformation.CfnPermissions.DataLakePrincipalProperty, resource: lakeformation.CfnPermissions.ResourceProperty, permissions: string[], grantablePremissions: string[] ){
-
         new lakeformation.CfnPermissions(this, resourceId, {
             dataLakePrincipal: dataLakePrincipal,
             resource: resource,

@@ -8,6 +8,7 @@ import { DataSetEnrollmentProps, DataSetEnrollment } from './data-set-enrollment
 import { DataLakeEnrollment } from './data-lake-enrollment';
 
 
+
 export interface S3dataSetEnrollmentProps extends DataLakeEnrollment.DataLakeEnrollmentProps {
     sourceBucket: s3.IBucket;
     sourceBucketDataPrefixes: string[];
@@ -42,7 +43,6 @@ export class S3dataSetEnrollment extends DataLakeEnrollment{
 		
 		let s3TargetPaths = new Array<glue.CfnCrawler.S3TargetProperty>();
 		let s3DataLakePaths = new Array<glue.CfnCrawler.S3TargetProperty>();
-		
 		
         const bucketListPolicy = new iam.PolicyStatement({
             actions: ["s3:ListBucket"],

@@ -3,6 +3,10 @@
 *.d.ts
 node_modules
 
+# Proejct
+RODA_templates/*.json
+
 # CDK asset staging directory
 .cdk.staging
 cdk.out
+cdk.json

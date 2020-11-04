@@ -19,8 +19,6 @@ export class OpenTargetsStack extends DataSetStack{
 	constructor(scope: cdk.Construct, id: string, props: OpenTargetsEnrollmentProps) {
 	    super(scope, id, props);
 	    
-
-
 	    this.Enrollments.push(new S3dataSetEnrollment(this, 'openTargets-1911-enrollment', {
 	        DataSetName: "opentargets_1911",
 	        sourceBucket: props.sourceBucket,
