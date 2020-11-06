@@ -17,7 +17,7 @@ export interface ClinvarSummaryVariantSetProps extends DataSetStackProps {
 }
 
 export class ClinvarSummaryVariantStack extends DataSetStack {
-  LakeFormationEnrollment: lakeformation.CfnResource;
+
   bucketRole: iam.Role;
 
   constructor(
@@ -35,21 +35,11 @@ export class ClinvarSummaryVariantStack extends DataSetStack {
 
     props.sourceBucket.grantReadWrite(this.bucketRole);
 
-    this.LakeFormationEnrollment = new lakeformation.CfnResource(
-      this,
-      "clinvarsummarydataLakeBucketLakeFormationResource",
-      {
-        resourceArn: props.sourceBucket.bucketArn,
-        roleArn: this.bucketRole.roleArn,
-        useServiceLinkedRole: true,
-      }
-    );
-   
-    // End Enroll private bucket into LakeFormation
-
+    const dataSetName = "clinvar-summary-variants"; // NO CAPS!!!!
+    
     this.Enrollments.push(
       new S3dataSetEnrollment(this, "clinvar-summary-variants-enrollment", {
-        DataSetName: "clinvar-summary-variants",
+        DataSetName: dataSetName,
         MaxDPUs: 2.0,
         sourceBucket: props.sourceBucket,
         // sourceBucket: props.DataLake.DataLakeBucket,
@@ -60,72 +50,15 @@ export class ClinvarSummaryVariantStack extends DataSetStack {
           "--job-language": "python",
           "--job-bookmark-option": "job-bookmark-disable",
           "--enable-metrics": "",
-          "--DL_BUCKET": props.DataLake.DataLakeBucket.bucketName, // not used in script but picked up by CDK for Lake Formation Permissions
           "--SRC_BUCKET": props.sourceBucket.bucketName,
           "--SRC_PREFIX": props.sourceBucketDataPrefix,
           "--SRC_REGION": cdk.Stack.of(this).region,
-          "--DL_PREFIX": props.sourceBucketDataPrefix,// not used in script but picked up by CDK for Lake Formation Permissions
-          "--DEST_BUCKET": props.DataLake.DataLakeBucket.bucketName,
-          "--timeStampPrefix": "2020/10/15", //Default get overwritten when lambda is invoked
-          "--DEST_KEY": "variant_summary/transform/parquet/",
-          "--info": "Triggered_directly_by_Lambda Function", // script doesn't use it just for IT info
+          "--DL_BUCKET": props.DataLake.DataLakeBucket.bucketName, 
+          "--DL_PREFIX": `/${dataSetName}/`
         },
       })
     );
 
-    // Ensure New Clinvar private bucket is enrolled in LakeFormation before applying LakeFormation Permissions
-    const PrivateS3BucketPermissions = this.Enrollments[0].node.children.find(
-      (c) => {
-        var elm = c as cdk.CfnResource;
-        //  console.log(elm.cfnResourceType)
-        if (elm.cfnResourceType === "AWS::LakeFormation::Permissions") {
-          elm.addDependsOn(this.LakeFormationEnrollment);
-        }
-      }
-    );
-
-    // Remove Glue Workflow not needed since Lambda will directly invoke Glue Job
-    // const PrivateS3BucketPermissionsDepend = this.Enrollments[0].node.children.find(
-    //   (c) => {
-    //     var elm = c as cdk.CfnResource;
-    //     if (elm.cfnResourceType === "AWS::Glue::Workflow") {
-    //       elm.addDependsOn(this.LakeFormationEnrollment);
-    //     }
-    //   }
-    // );
-    // Add Custom Tag to ETL Glue Job so ClinVar Import Lambda Function will invoke this specificjob
-    // Glue Tags only work onCreate not onUpdate
-    const customGlueJobTagging = this.Enrollments[0].DataEnrollment.node.children.find(
-      (c) => {
-        var elm = c as cdk.CfnResource;
-        if (elm.cfnResourceType === "AWS::Glue::Job") {
-          cdk.Tags.of(elm).add("ClinvarVariantSummaryLambdaImport", "TRUE");
-          var glueJob = elm as glue.CfnJob;
-          // Version 2.0 for faster start-time, default = 1.0
-          glueJob.glueVersion = "2.0";
-        } else if (elm.cfnResourceType === "AWS::Glue::Crawler") {
-          // Update src crawler to YEAR/MONTH/DAY Format manually
-          if (elm.node.path.split("/").pop() == "clinvar-summary-variants-src-crawler") {
-            var glueCrawlersrc = elm as glue.CfnCrawler;
-            let targetSourcesrc = `s3://${props.DataLake.DataLakeBucket.bucketName}${props.sourceBucketDataPrefix}`.replace(
-              "transform/parquet",
-              "source"
-            );
-            
-            // Overwrite dl crawler because default code doesnt pick up full path only last part of prefix
-            glueCrawlersrc.targets = {
-              s3Targets: [{ path: targetSourcesrc }],
-            };
-          } else if (elm.node.path.split("/").pop() == "clinvar-summary-variants-dl-crawler"){
-            let glueCrawlerdl = elm as glue.CfnCrawler;
-            let targetSourcedl = `s3://${props.DataLake.DataLakeBucket.bucketName}${props.sourceBucketDataPrefix}`
-            glueCrawlerdl.targets = {
-              s3Targets: [{ path: targetSourcedl }],
-            };
-          }
-        }
-      }
-    );
 
     // Grant Glue Job Permissions to write to source S3 Bucket
     props.sourceBucket.grantReadWrite(

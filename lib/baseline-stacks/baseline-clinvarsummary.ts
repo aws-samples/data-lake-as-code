@@ -73,7 +73,8 @@ export class ClinvarVariantSummaryBaseline extends cdk.Construct {
           exclude: ["**", "!lambda-import-clinvarvariantsummary.py"],
         }),
         role: lambdaRole,
-        timeout: cdk.Duration.seconds(60),
+        memorySize: 1024,
+        timeout: cdk.Duration.seconds(300),
         environment: {
           SRC_BUCKET: this.ClinvarVariantSummarySourceBucket.bucketName,
           DEST_BUCKET: props.coreDataLakeS3Bucket.bucketName,

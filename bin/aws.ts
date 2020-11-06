@@ -75,16 +75,13 @@ const gtexStack = new GTExStack(app, "GTExStack", {
 });
 
 // Clinvar Import Lambda Function uploads files to s3 bucket following /variant_summary/source/YEAR/MONTH/DAY pattern UTC
-let clinvarYear = "2020";
-let clinvarMonth = "10";
-let clinvarDay = "15";
 
 const clinvarSummaryVariantStack = new ClinvarSummaryVariantStack(
   app,
   "ClinvarSummaryVariantStack",
   {
     sourceBucket: baseline.ClinvarvariantSourceBucket,
-    sourceBucketDataPrefix: `/variant_summary/transform/parquet/${clinvarYear}/${clinvarMonth}/${clinvarDay}/clinvar_variant_summary`,
+    sourceBucketDataPrefix: `/variant_summary/source/2020/11/04/clinvar_variant_summary/`,
     DataLake: coreDataLake,
   }
 );
@@ -160,18 +157,19 @@ const GTExRodaTemplate8 = new CrawlerTemplateStack(app, "GTExRodaTemplate8", {
   DataSetName: gtexStack.Enrollments[0].DataSetName,
 });
 // }
-const ClinvarSummaryVariantTemplate = new DataSetTemplateStack(
-  app,
-  "ClinvarSummaryVariantTemplate",
-  {
-    description:
-      "AWS Data Lake as Code Registry of Open Data Federated Clinvar Variant Summary Template. (ib-xxxxxx)",
-    DatabaseDescriptionPath:
-      "../../RODA_templates/clinvar_variant_summary_get_database.json",
-    DescribeTablesPath: "../../RODA_templates/clinvar_variant_summary_get_tables.json",
-    DataSetName: clinvarSummaryVariantStack.Enrollments[0].DataSetName,
-  }
-);
+
+// const ClinvarSummaryVariantTemplate = new DataSetTemplateStack(
+//   app,
+//   "ClinvarSummaryVariantTemplate",
+//   {
+//     description:
+//       "AWS Data Lake as Code Registry of Open Data Federated Clinvar Variant Summary Template. (ib-xxxxxx)",
+//     DatabaseDescriptionPath:
+//       "../../RODA_templates/clinvar_variant_summary_get_database.json",
+//     DescribeTablesPath: "../../RODA_templates/clinvar_variant_summary_get_tables.json",
+//     DataSetName: clinvarSummaryVariantStack.Enrollments[0].DataSetName,
+//   }
+// );
 
 // const exampleUser = iam.User.fromUserName(coreDataLake, 'exampleGrantee', 'paul1' );
 

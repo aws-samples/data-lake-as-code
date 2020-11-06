@@ -6,6 +6,7 @@ import s3 = require('@aws-cdk/aws-s3');
 import s3assets = require('@aws-cdk/aws-s3-assets');
 import { DataSetEnrollmentProps, DataSetEnrollment } from './data-set-enrollment';
 import { DataLakeEnrollment } from './data-lake-enrollment';
+import lakeformation = require("@aws-cdk/aws-lakeformation");
 
 
 
@@ -18,20 +19,30 @@ export interface S3dataSetEnrollmentProps extends DataLakeEnrollment.DataLakeEnr
 
 
 export class S3dataSetEnrollment extends DataLakeEnrollment{
+    
+    private readonly sourceBucket: s3.IBucket;
 
+    setupGlueRoleLakeFormationPermissions(DataSetGlueRole: iam.Role, DataSetName: string, sourceDataBucket: s3.IBucket) {
 
+        const sourceLakeFormationLocation = new lakeformation.CfnResource(
+          this,
+          "sourceLakeFormationLocation",
+          {
+            resourceArn: sourceDataBucket.bucketArn,
+            roleArn: this.DataEnrollment.DataSetGlueRole.roleArn,
+            useServiceLinkedRole: true,
+          }
+        );
 
-    grantGlueRoleLakeFormationPermissions(DataSetGlueRole: iam.Role, DataSetName: string) {
+        super.grantGlueRoleLakeFormationPermissions(DataSetGlueRole, DataSetName);
 
         this.grantDataLocationPermissions(this.DataEnrollment.DataSetGlueRole, {
             Grantable: true,
-            GrantResourcePrefix: `${DataSetName}locationGrant`
-        });
-        this.grantDatabasePermission(this.DataEnrollment.DataSetGlueRole,  {		     
-		     DatabasePermissions: [DataLakeEnrollment.DatabasePermission.All],
-             GrantableDatabasePermissions: [DataLakeEnrollment.DatabasePermission.All],
-             GrantResourcePrefix: `${DataSetName}RoleGrant`
-		}, true);
+            GrantResourcePrefix: `${DataSetName}SourcelocationGrant`,
+            Location: sourceDataBucket.bucketName,
+            LocationPrefix: "/"
+        }, sourceLakeFormationLocation);
+
     }
 
 	constructor(scope: cdk.Construct, id: string, props: S3dataSetEnrollmentProps) {
@@ -94,12 +105,12 @@ export class S3dataSetEnrollment extends DataLakeEnrollment{
 	
        
         this.createCoarseIamPolicy();
-        this.grantGlueRoleLakeFormationPermissions(this.DataEnrollment.DataSetGlueRole, props.DataSetName); 
+        
+        
+        this.setupGlueRoleLakeFormationPermissions(this.DataEnrollment.DataSetGlueRole, props.DataSetName, props.sourceBucket); 
         
         this.grantCoarseIamRead(this.DataEnrollment.DataSetGlueRole);
         
         
-
-
 	}
 }

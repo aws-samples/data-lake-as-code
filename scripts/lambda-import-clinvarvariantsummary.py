@@ -1,11 +1,14 @@
 import logging
 import boto3
 import os
-import urllib3
+from urllib.request import urlopen
+import gzip
+from io import BytesIO
+
+
 from datetime import datetime
 
 # Setup Global Values
-http = urllib3.PoolManager()
 logger = logging.getLogger()
 # logger.setLevel(logging.DEBUG)
 UPLOADBUCKET = os.getenv('SRC_BUCKET', '')
@@ -17,33 +20,6 @@ GLUEJOBTAG = "ClinvarVariantSummaryLambdaImport"
 GLUEJOBKEY = "TRUE"
 
 glue = boto3.client('glue')
-
-def getGlueJobName():
-    try:
-        listJobs = glue.list_jobs(Tags={
-           GLUEJOBTAG : GLUEJOBKEY
-        })
-        lengthlistJobs = len(listJobs['JobNames'])
-        if lengthlistJobs == 1:
-            return listJobs['JobNames'][0]
-        elif lengthlistJobs > 1:
-            logger.warning("FOUND MUTIPLE JOBS UNDER TAG {} : {} SELECTING {}".format(GLUEJOBTAG,GLUEJOBKEY,listJobs['JobNames'][0]))
-            return listJobs['JobNames'][0] 
-        else:
-            logger.error("UNABLE TO FIND GLUEJOB BASED ON TAG {} : {}".format(GLUEJOBTAG,GLUEJOBKEY))
-            logger.error("OUTPUT OF GLUE: {}".format(str(listJobs)))
-            return ""
-        
-    except Exception as e:
-        logger.exception(e)
-        logger.error("UNABLE TO GET GLUE JOB DETAILS")
-
-def getMD5(url):
-    try:
-        return http.request('GET', FILEMD5URL)
-    except Exception as e:
-        logger.exception(e)
-        logger.error("FAILED TO GET url")
 
 
 def handler(event, context):
@@ -59,27 +35,25 @@ def handler(event, context):
     fileName = FILEURL.split("/")[-1]
     s3=boto3.client('s3')
     
-    s3.upload_fileobj(http.request('GET', FILEURL, preload_content=False), UPLOADBUCKET, prefix+fileName)
+    clinvarResponse = urlopen(FILEURL)
+    
+    unzippedSrcKey = fileName.replace(".gz","")
+    
+    s3.upload_fileobj(
+        Fileobj=gzip.GzipFile(
+            None,
+            'rb',
+            fileobj=BytesIO(clinvarResponse.read())
+        ),
+        Bucket=UPLOADBUCKET,
+        Key=prefix+unzippedSrcKey
+    )
+    
+    
     logger.info("COMPLETED UPLOAD TO S3")
-    glueJobName = os.getenv('GLUEJOBNAME',getGlueJobName())
-    logger.info("Attempt to RunJob Glue")
-    logger.info("Retrieved GlueJob {}".format(glueJobName))
-    glue.start_job_run(
-        JobName=glueJobName,
-        Timeout=10,
-        WorkerType='Standard',
-        NumberOfWorkers=1,
-        Arguments={
-            "--DEST_BUCKET": GLUEDESTBUCKET,
-            "--DEST_KEY": "variant_summary/transform/parquet/",
-            "--SRC_BUCKET": UPLOADBUCKET,
-            "--SRC_PREFIX": prefix+fileName,
-            "--timeStampPrefix": TIMESTAMP,
-            "--enable-continuous-cloudwatch-log" : "TRUE",
-            "--AWS_REGION": os.environ['AWS_REGION'],
-        },
-        )
-    return "UPLOADED s3://{}/{}".format(UPLOADBUCKET,prefix+fileName)
+
+
+    return "UPLOADED s3://{}/{}".format(UPLOADBUCKET,prefix+unzippedSrcKey)
  except Exception as e:
         logger.exception(e)
         logger.error('FAILED!')
