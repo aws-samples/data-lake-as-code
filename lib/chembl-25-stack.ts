@@ -39,7 +39,7 @@ export class ChemblStack extends DataSetStack{
 	    	GlueScriptPath: "scripts/glue.s3importchembl25.py",
 			GlueScriptArguments: {
 				"--job-language": "python", 
-				"--job-bookmark-option": "job-bookmark-disable",
+				"--job-bookmark-option": "job-bookmark-enable",
 				"--enable-metrics": "",
 				"--DL_BUCKET": props.DataLake.DataLakeBucket.bucketName,
 				"--DL_PREFIX": "/"+dataSetNameChembl25+"/",
@@ -63,7 +63,7 @@ export class ChemblStack extends DataSetStack{
 	    	GlueScriptPath: "scripts/glue.s3importchembl25.py",
 			GlueScriptArguments: {
 				"--job-language": "python", 
-				"--job-bookmark-option": "job-bookmark-disable",
+				"--job-bookmark-option": "job-bookmark-enable",
 				"--enable-metrics": "",
 				"--DL_BUCKET": props.DataLake.DataLakeBucket.bucketName,
 				"--DL_PREFIX": "/"+dataSetNameChembl27+"/",

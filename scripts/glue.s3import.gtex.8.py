@@ -45,11 +45,11 @@ while keepPullingTables:
 
 for table in tables:
     
-  datasource = glueContext.create_dynamic_frame.from_catalog(database = glue_database, table_name = table)   
-  dropnullfields = DropNullFields.apply(frame = datasource, transformation_ctx = "dropnullfields1")
+  datasource = glueContext.create_dynamic_frame.from_catalog(database = glue_database, table_name = table, transformation_ctx = "datasource")   
+  dropnullfields = DropNullFields.apply(frame = datasource, transformation_ctx = "dropnullfields")
   
   try:
-    datasink = glueContext.write_dynamic_frame.from_options(frame = dropnullfields, connection_type = "s3", connection_options = {"path": "s3://"+dataLakeBucket + dataLakePrefix + table}, format = target_format)
+    datasink = glueContext.write_dynamic_frame.from_options(frame = dropnullfields, connection_type = "s3", connection_options = {"path": "s3://"+dataLakeBucket + dataLakePrefix + table}, format = target_format, transformation_ctx = "datasink")
   except:
     print("Unable to write" + table)
     
