@@ -25,6 +25,7 @@ const coreDataLake = new DataLakeStack(app, 'CoreDataLake', {
 //     DataLake: coreDataLake
 // });
 
+// Clinvar Import Lambda Function uploads files to s3 bucket following /variant_summary/source/YEAR/MONTH/DAY pattern UTC
 
 // const examplePgRdsDataSet = new ExamplePgRdsDataSet(app, 'ExamplePgRdsDataSet', {
     
@@ -42,6 +43,7 @@ const coreDataLake = new DataLakeStack(app, 'CoreDataLake', {
 //         '---SECURITY GROUP ID THAT ALLOWS INBOUND ACCESS TO DATABASE GOES HERE ---') as ec2.SecurityGroup,
 //     DataLake: coreDataLake    
 // });
+
 
 
 // Grant permissions:

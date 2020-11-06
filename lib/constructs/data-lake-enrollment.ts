@@ -28,12 +28,15 @@ export class DataLakeEnrollment extends cdk.Construct {
 
     }
  
-    protected grantGlueRoleLakeFormationPermissions(DataSetGlueRole: iam.Role, DataSetName: string) {
+    grantGlueRoleLakeFormationPermissions(DataSetGlueRole: iam.Role, DataSetName: string) {
 
         this.grantDataLocationPermissions(this.DataEnrollment.DataSetGlueRole, {
             Grantable: true,
-            GrantResourcePrefix: `${DataSetName}locationGrant`
+            GrantResourcePrefix: `${DataSetName}locationGrant`,
+            Location: this.DataEnrollment.DataLakeBucketName,
+            LocationPrefix: this.DataEnrollment.DataLakePrefix
         });
+        
         this.grantDatabasePermission(this.DataEnrollment.DataSetGlueRole,  {		     
 		     DatabasePermissions: [DataLakeEnrollment.DatabasePermission.All],
              GrantableDatabasePermissions: [DataLakeEnrollment.DatabasePermission.All],
@@ -239,16 +242,21 @@ export class DataLakeEnrollment extends cdk.Construct {
 
     }
 
-    public grantDataLocationPermissions(principal: iam.IPrincipal, permissionGrant: DataLakeEnrollment.DataLocationGrant){
+    public grantDataLocationPermissions(principal: iam.IPrincipal, permissionGrant: DataLakeEnrollment.DataLocationGrant , sourceLakeFormationLocation?: lakeformation.CfnResource ){
+        
+        
         
         var grantIdPrefix = ""
         var dataLakePrincipal : lakeformation.CfnPermissions.DataLakePrincipalProperty = {
             dataLakePrincipalIdentifier: ""
         };
-
+        
+        
+        var s3Arn = `arn:aws:s3:::${permissionGrant.Location}${permissionGrant.LocationPrefix}` ;
+        
         var dataLocationProperty : lakeformation.CfnPermissions.ResourceProperty = {
             dataLocationResource: {
-                s3Resource: `arn:aws:s3:::${this.DataEnrollment.DataLakeBucketName}${this.DataEnrollment.DataLakePrefix}`            
+                s3Resource: s3Arn            
             }            
         };
         const resolvedPrincipalType = this.determinePrincipalType(principal);
@@ -270,10 +278,19 @@ export class DataLakeEnrollment extends cdk.Construct {
             dataLakePrincipal = { dataLakePrincipalIdentifier: resolvedPrincipal.userArn };
 		}
 
+
         if(permissionGrant.Grantable){
-            this.createLakeFormationPermission(`${grantIdPrefix}-locationGrant`,dataLakePrincipal , dataLocationProperty, ['DATA_LOCATION_ACCESS'], ['DATA_LOCATION_ACCESS']);
+            const locationPermission = this.createLakeFormationPermission(`${grantIdPrefix}-locationGrant`,dataLakePrincipal , dataLocationProperty, ['DATA_LOCATION_ACCESS'], ['DATA_LOCATION_ACCESS']);
+            
+            if (sourceLakeFormationLocation != null ) {
+                locationPermission.addDependsOn(sourceLakeFormationLocation);
+            }
+            
         }else {
-            this.createLakeFormationPermission(`${grantIdPrefix}-locationGrant`,dataLakePrincipal , dataLocationProperty, ['DATA_LOCATION_ACCESS'], ['']);
+            const locationPermission = this.createLakeFormationPermission(`${grantIdPrefix}-locationGrant`,dataLakePrincipal , dataLocationProperty, ['DATA_LOCATION_ACCESS'], ['']);
+            if (sourceLakeFormationLocation != null ) {
+                locationPermission.addDependsOn(sourceLakeFormationLocation);
+            }
         }                
 
 
@@ -422,8 +439,7 @@ export class DataLakeEnrollment extends cdk.Construct {
 
 
 	private createLakeFormationPermission(resourceId: string, dataLakePrincipal: lakeformation.CfnPermissions.DataLakePrincipalProperty, resource: lakeformation.CfnPermissions.ResourceProperty, permissions: string[], grantablePremissions: string[] ){
-
-        new lakeformation.CfnPermissions(this, resourceId, {
+        return new lakeformation.CfnPermissions(this, resourceId, {
             dataLakePrincipal: dataLakePrincipal,
             resource: resource,
             permissions: permissions,
@@ -537,6 +553,8 @@ export namespace DataLakeEnrollment
     export interface DataLocationGrant{
         Grantable: boolean;
         GrantResourcePrefix?: string;
+        Location: string;
+        LocationPrefix: string;
     }
 
     export interface TablePermissionGrant {

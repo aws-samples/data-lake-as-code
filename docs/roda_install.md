@@ -22,20 +22,21 @@ You only need to do this once.
 Click the links below for the data set you are interested in. Then click the "Create stack". Make sure you are in your preferred region. 
 
 
-### Latest Versions:
-
-[Chembl 27](https://console.aws.amazon.com/cloudformation/home?#/stacks/quickcreate?templateUrl=https%3A%2F%2Faws-roda-hcls-datalake.s3.amazonaws.com%2FChembl.27.RodaTemplate.json&stackName=Chembl27-RODA)
-
-[Open Targets 20.06](https://console.aws.amazon.com/cloudformation/home?#/stacks/quickcreate?templateUrl=https%3A%2F%2Faws-roda-hcls-datalake.s3.amazonaws.com%2FOpenTargets.20.06.RodaTemplate.json&stackName=OpenTargets-20-06-RODA)
-
-[BindingDB](https://console.aws.amazon.com/cloudformation/home?#/stacks/quickcreate?templateUrl=https%3A%2F%2Faws-roda-hcls-datalake.s3.amazonaws.com%2FBindingDbRodaTemplate.json&stackName=BindingDB-RODA)
-
-[Genome Tissue Expresssion Database](https://console.aws.amazon.com/cloudformation/home?#/stacks/quickcreate?templateUrl=https%3A%2F%2Faws-roda-hcls-datalake.s3.amazonaws.com%2FGTEx.8.RodaTemplate.json&stackName=GTEx-8-RODA)
+## Latest Versions:
 
 
-![](http://devspacepaul.s3.us-west-2.amazonaws.com/dlac/deploystack.png)
+
+### [Chembl 27 ![](https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png)](https://console.aws.amazon.com/cloudformation/home?#/stacks/quickcreate?templateUrl=https%3A%2F%2Faws-roda-hcls-datalake.s3.amazonaws.com%2FChembl.27.RodaTemplate.json&stackName=Chembl27-RODA) 
+
+### [Open Targets 20.06 ![](https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png)](https://console.aws.amazon.com/cloudformation/home?#/stacks/quickcreate?templateUrl=https%3A%2F%2Faws-roda-hcls-datalake.s3.amazonaws.com%2FOpenTargets.20.06.RodaTemplate.json&stackName=OpenTargets-20-06-RODA)
+
+### [BindingDB ![](https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png)](https://console.aws.amazon.com/cloudformation/home?#/stacks/quickcreate?templateUrl=https%3A%2F%2Faws-roda-hcls-datalake.s3.amazonaws.com%2FBindingDbRodaTemplate.json&stackName=BindingDB-RODA)
+
+### [Genome Tissue Expresssion Database ![](https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png)](https://console.aws.amazon.com/cloudformation/home?#/stacks/quickcreate?templateUrl=https%3A%2F%2Faws-roda-hcls-datalake.s3.amazonaws.com%2FGTEx.8.RodaTemplate.json&stackName=GTEx-8-RODA)
 
 It should take approximately 60 seconds for the stack to finish deploying.
+
+The GTEx data set requires one extra step after the deployment. The `exon_reads` table has > 17k columns. Expressing all of those columns in YAML would exceed the CloudFormation max template length! Once the GTEx template deploys, go the [AWS Glue Console](https://us-west-2.console.aws.amazon.com/glue/home?#catalog:tab=crawlers), check the box next to the `gtex_8_awsroda_crawler` and click 'Run crawler'. Once it finishes (1-2 minutes) you can query the GTEx data just like the other datasets. 
 
 ## Query the data!
 
@@ -74,3 +75,16 @@ Data sets in the AWS RODA HCLS Data Lake were created using the [Data Lake as Co
 [Deploy Open Targets 20.06](https://console.aws.amazon.com/cloudformation/home?#/stacks/quickcreate?templateUrl=https%3A%2F%2Faws-roda-hcls-datalake.s3.amazonaws.com%2FOpenTargets.19.11.RodaTemplate.json&stackName=OpenTargets-19-11-RODA)
 
 [Deploy Chembl 25](https://console.aws.amazon.com/cloudformation/home?#/stacks/quickcreate?templateUrl=https%3A%2F%2Faws-roda-hcls-datalake.s3.amazonaws.com%2FChembl.25.RodaTemplate.json&stackName=Chembl25-RODA)
+
+## Troubleshooting
+
+**Your query has the following error(s):**
+```
+HIVE_CURSOR_ERROR: Can not read value at 9 in block 0 in file s3://aws-roda-hcls-datalake/...snappy.parquet
+```
+
+There is a bug in how Athena's Presto engine handles Hive's decimal type. This is fixed in an upcoming release. In the event you see this error, create a new workgroup in Athena called exactly `AmazonAthenaPreviewFunctionality` and then use that workgroup for your queries. Athena will use the the next generation Presto version and you shouldnt see this error again. 
+
+
+
+
