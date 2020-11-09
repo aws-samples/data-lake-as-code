@@ -19,27 +19,31 @@ const coreDataLake = new DataLakeStack(app, 'CoreDataLake', {
 });
 
 
+const exisitingResourceImportStack = new cdk.Stack(app, 'resourceImportStack', {
+    description: "Used to import existing resources created outside of this CDK application",
+});
+
+
 // const exampleS3DataSet = new ExampleS3DataSet(app, 'ExampleS3DataSet', {
-//     sourceBucket: s3.Bucket.fromBucketName(app, 'exampleS3DataSetSourceBucket', '--- YOUR EXISTING BUCKET NAME GOES HERE ---'),
-//     sourceBucketDataPrefix: '/prefixToParentFolderofTableFolders/',
+//     sourceBucket: s3.Bucket.fromBucketName(exisitingResourceImportStack, 'exampleS3DataSetSourceBucket', 'dlacregressiontest0'),
+//     sourceBucketDataPrefix: '/',
 //     DataLake: coreDataLake
 // });
 
-// Clinvar Import Lambda Function uploads files to s3 bucket following /variant_summary/source/YEAR/MONTH/DAY pattern UTC
 
 // const examplePgRdsDataSet = new ExamplePgRdsDataSet(app, 'ExamplePgRdsDataSet', {
     
-//     database: rds.DatabaseInstance.fromDatabaseInstanceAttributes(coreDataLake, 'sourceDatabase', {
+//     database: rds.DatabaseInstance.fromDatabaseInstanceAttributes(exisitingResourceImportStack, 'sourceDatabase', {
 //         instanceEndpointAddress: '--- RDS INSTANCE ENDPOINT ADDRESS GOES HERE ---',
 //         instanceIdentifier: '--- RDS INSTANCE IDENTIFIRE GOES HERE ---',
 //         port: 5432,
 //         securityGroups: []}) as rds.DatabaseInstance,
-//     databaseSecret: rds.DatabaseSecret.fromSecretArn(coreDataLake, 'databaseSecret', 
+//     databaseSecret: rds.DatabaseSecret.fromSecretArn(exisitingResourceImportStack, 'databaseSecret', 
 //         '---SECRET ARN GOES HERE ---') as rds.DatabaseSecret,
-//     accessSubnet: ec2.Subnet.fromSubnetAttributes(coreDataLake, 'accessSubnet', {
+//     accessSubnet: ec2.Subnet.fromSubnetAttributes(exisitingResourceImportStack, 'accessSubnet', {
 //         subnetId: '--- PRIVATE SUBNET ID THAT CAN ROUTE TO SOURCE DATABASE - SUBNET MUST HAVE ROUTE TO NAT GATEWAY S3 ENDPOINT  ---',
 //         availabilityZone: '--- AVAILABILITY ZONE ASSOCIATED WITH THIS SUBNET ---'}) as ec2.Subnet,
-//     accessSecurityGroup: ec2.SecurityGroup.fromSecurityGroupId(coreDataLake, 'accessSecurityGroup',
+//     accessSecurityGroup: ec2.SecurityGroup.fromSecurityGroupId(exisitingResourceImportStack, 'accessSecurityGroup',
 //         '---SECURITY GROUP ID THAT ALLOWS INBOUND ACCESS TO DATABASE GOES HERE ---') as ec2.SecurityGroup,
 //     DataLake: coreDataLake    
 // });
@@ -48,8 +52,8 @@ const coreDataLake = new DataLakeStack(app, 'CoreDataLake', {
 
 // Grant permissions:
 
-// const exampleExistingIamUser = iam.User.fromUserName(coreDataLake, 'exampleUserGrantee', '--- EXISTING IAM USERNAME GOES HERE --' );
-// const exampleExistingIamRole = iam.Role.fromRoleArn(coreDataLake, 'exampleRoleGrantee', '--- EXISTING IAM ROLE ARN GOES HERE --' );
+// const exampleExistingIamUser = iam.User.fromUserName(exisitingResourceImportStack, 'exampleUserGrantee', '--- EXISTING IAM USERNAME GOES HERE --' );
+// const exampleExistingIamRole = iam.Role.fromRoleArn(exisitingResourceImportStack, 'exampleRoleGrantee', '--- EXISTING IAM ROLE ARN GOES HERE --' );
 
 // exampleS3DataSet.grantIamRead(exampleExistingIamUser);
 // exampleS3DataSet.grantIamRead(exampleExistingIamRole);
