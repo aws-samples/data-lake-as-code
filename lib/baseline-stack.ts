@@ -26,10 +26,11 @@ export class BaselineStack extends cdk.Stack {
   public readonly ChemblDBSecret: rds.DatabaseSecret;
   public readonly OpenTargetsSourceBucket: s3.Bucket;
   public readonly Vpc: ec2.Vpc;
-  public readonly BindingDBSourceBucket: s3.Bucket;
-  public readonly BindingDb: rds.DatabaseInstance;
-  public readonly BindingDBAccessSg: ec2.SecurityGroup;
-  public readonly BindingDBSecret: rds.DatabaseSecret;
+  public readonly Baseline_BindingDB: BindingDBBaseline; 
+  // public readonly BindingDBSourceBucket: s3.Bucket;
+  // public readonly BindingDb: rds.DatabaseInstance;
+  // public readonly BindingDBAccessSg: ec2.SecurityGroup;
+  // public readonly BindingDBSecret: rds.DatabaseSecret;
   public readonly GTExSourceBucket: s3.Bucket;
   public readonly ClinvarvariantSourceBucket: s3.Bucket;
 
@@ -161,17 +162,17 @@ export class BaselineStack extends cdk.Stack {
       this,
       "clinVarVariantSummaryBaseline",
       {
-        coreDataLakeS3Bucket: props.coreDataLakeProps.DataLakeBucket,
+        ImportInstance: importInstance
       }
     );
     this.ClinvarvariantSourceBucket =
       clinvarvariantBaseline.ClinvarVariantSummarySourceBucket;
 
-    //// Start Binding DB  ////
-    // Comment since it launches OracleDB
+    // Start Binding DB  ////
+    //Comment since it launches OracleDB
     if (process.env.BINDINGDB !== "FALSE") {
-      console.log("GENERATING baseline");
-      const bindingDbBaseline = new BindingDBBaseline(
+      
+      this.Baseline_BindingDB = new BindingDBBaseline(
         this,
         "bindingDbBaseline",
         {
@@ -179,9 +180,6 @@ export class BaselineStack extends cdk.Stack {
           TargetVPC: baselineVpc,
         }
       );
-      this.BindingDb = bindingDbBaseline.BindingDBDatabaseInstance;
-      this.BindingDBAccessSg = bindingDbBaseline.DbAccessSg;
-      this.BindingDBSecret = bindingDbBaseline.DbSecret;
     }
 
     //// End Binding DB  ////
