@@ -23,6 +23,10 @@ export class BindingDBStack extends DataSetStack{
 	
 	
 		const dataSetName = "binding_db";
+		
+		const clientOjdbcJar = new s3assets.Asset(this, `ojdbcClient`, {
+			path: "baseline_binaries/ojdbc8.jar"
+		});
 
 		this.Enrollments.push(new RDSOracleDataSetEnrollment(this, 'binding-db-enrollment', {
 	    	databaseSecret: props.databaseSecret,
@@ -39,14 +43,19 @@ export class BindingDBStack extends DataSetStack{
 				"--job-language": "python", 
 				"--job-bookmark-option": "job-bookmark-disable",
 				"--enable-metrics": "",
+				"--extra-jars": clientOjdbcJar.s3ObjectUrl,
+				"--user-jars-first": true,
 				"--DL_BUCKET": props.DataLake.DataLakeBucket.bucketName,
 				"--DL_PREFIX": "/"+dataSetName+"/",
 				"--DL_REGION": cdk.Stack.of(this).region,
-				"--GLUE_SRC_DATABASE": "binding_db_src"
+				"--GLUE_SRC_DATABASE": "binding_db_src",
+				"--SRC_SECRET_ARN": props.databaseSecret.secretArn,
+				"--SRC_DB_HOSTNAME": props.database.dbInstanceEndpointAddress
 			}	    	
 		}));
 		
-		
+		clientOjdbcJar.grantRead(this.Enrollments[0].DataEnrollment.DataSetGlueRole);
+		props.databaseSecret.grantRead(this.Enrollments[0].DataEnrollment.DataSetGlueRole);
 	}
 }
 

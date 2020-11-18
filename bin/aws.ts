@@ -56,15 +56,14 @@ const openTargetsStack = new OpenTargetsStack(app, "OpenTargetsStack", {
 
 // console.log("Setting up BindingDB enrollment stack.");
 
-// Set to False for Oracle DB Launch
-if (process.env.BINDINGDB !== "FALSE") {
-  const bindingDBStack = new BindingDBStack(app, "BindingDbStack", {
-    database: baseline.BindingDb,
-    accessSecurityGroup: baseline.BindingDBAccessSg,
-    databaseSecret: baseline.BindingDBSecret,
-    DataLake: coreDataLake,
-  });
-}
+
+const bindingDBStack = new BindingDBStack(app, "BindingDbStack", {
+  database: baseline.Baseline_BindingDB.BindingDBDatabaseInstance,
+  accessSecurityGroup: baseline.Baseline_BindingDB.DbAccessSg,
+  databaseSecret: baseline.Baseline_BindingDB.DbSecret,
+  DataLake: coreDataLake
+});
+
 
 // console.log("Setting up GTEx enrollment stack.");
 
@@ -81,7 +80,7 @@ const clinvarSummaryVariantStack = new ClinvarSummaryVariantStack(
   "ClinvarSummaryVariantStack",
   {
     sourceBucket: baseline.ClinvarvariantSourceBucket,
-    sourceBucketDataPrefix: `/variant_summary/source/2020/11/04/clinvar_variant_summary/`,
+    sourceBucketDataPrefix: `/clinvar/sourceExports/latest/output/`,
     DataLake: coreDataLake,
   }
 );
@@ -146,9 +145,21 @@ const Chembl27RodaTemplate = new DataSetTemplateStack(
   }
 );
 
-// CommentOut due OracleDB Launch
 
-// if (process.env.BINDINGDB === 'FALSE'){
+const BindingDbRodaTemplate = new DataSetTemplateStack(
+  app,
+  "BindingDbRodaTemplate",
+  {
+    description:
+      "AWS Data Lake as Code Registry of Open Data Federated BindingDB Template. (ib-19f1x8v1ra)",
+    DatabaseDescriptionPath: "../../RODA_templates/binding_db_get_database.json",
+    DescribeTablesPath: "../../RODA_templates/binding_db_get_tables.json",
+    DataSetName: bindingDBStack.Enrollments[0].DataSetName,
+  }
+);
+
+
+
 const GTExRodaTemplate8 = new CrawlerTemplateStack(app, "GTExRodaTemplate8", {
   description:
     "AWS Data Lake as Code Registry of Open Data Federated GTEx 8 Template. (ib-6dcf079647)",
@@ -156,7 +167,7 @@ const GTExRodaTemplate8 = new CrawlerTemplateStack(app, "GTExRodaTemplate8", {
   crawlerDescriptionPath: "../../RODA_templates/gtex_8_get_crawler.json",
   DataSetName: gtexStack.Enrollments[0].DataSetName,
 });
-// }
+
 
 // const ClinvarSummaryVariantTemplate = new DataSetTemplateStack(
 //   app,

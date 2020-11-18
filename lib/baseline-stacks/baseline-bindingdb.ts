@@ -65,7 +65,7 @@ export class BindingDBBaseline extends cdk.Construct {
         
         
         const cfnSecret = this.DbSecret.node.defaultChild as sm.CfnSecret;
-        cfnSecret.addPropertyOverride('GenerateSecretString.ExcludeCharacters', '\'"@!/\\;');
+        cfnSecret.addPropertyOverride('GenerateSecretString.ExcludeCharacters', '\'"@-&!/\\;');
         
         this.DbSecret.grantRead(props.ImportInstance.role);
         
@@ -73,23 +73,29 @@ export class BindingDBBaseline extends cdk.Construct {
         
         const bindingDbOptionGroup = new rds.OptionGroup(this, 'bindingDbRdsOptionGroup',{
             engine: rds.DatabaseInstanceEngine.oracleSe2({
-                version: rds.OracleEngineVersion.VER_19, // different version class for each engine type
+                version: rds.OracleEngineVersion.VER_19_0_0_0_2020_04_R1, 
             }),
             description: "Binding DB Option Group",
             configurations: [{
                 name: "S3_INTEGRATION",
-                version: "1.0"
+                version: "1.0",
             }],
         });
         
-
+        const parameterGroup = new rds.ParameterGroup(this, 'bindingDbRdsParamGroup', {
+          engine: rds.DatabaseInstanceEngine.oracleSe2({ version: rds.OracleEngineVersion.VER_19_0_0_0_2020_04_R1 }),
+          parameters: {
+            max_string_size : 'EXTENDED',
+          },
+        });
         
         const bindingDb = new rds.DatabaseInstance(this, 'bindingDb', {
-            engine: rds.DatabaseInstanceEngine.ORACLE_SE2,
+            engine: rds.DatabaseInstanceEngine.oracleSe2({ version: rds.OracleEngineVersion.VER_19_0_0_0_2020_04_R1 }),
             masterUsername: 'master',
             licenseModel: rds.LicenseModel.BRING_YOUR_OWN_LICENSE,
             vpc: props.TargetVPC,
             vpcPlacement: appSubnetSelection, 
+            parameterGroup: parameterGroup,
             optionGroup: bindingDbOptionGroup,
             instanceType: ec2.InstanceType.of(ec2.InstanceClass.BURSTABLE3, ec2.InstanceSize.SMALL),
             instanceIdentifier: 'binding-db',
@@ -143,7 +149,7 @@ export class BindingDBBaseline extends cdk.Construct {
             databaseDmpS3Location: [bindingDBSourceBucket.bucketName],
             instantClientBasicS3Path: [instantClientBasic.s3ObjectUrl],
             instantClientSqlPlusS3Path: [instantClientSqlPlus.s3ObjectUrl],
-            executionTimeout: ['7200']
+            executionTimeout: ['7201']
         });
         
         

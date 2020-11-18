@@ -72,7 +72,7 @@
                 "grant create session, resource, dba, DATAPUMP_IMP_FULL_DATABASE to BIND_2000_05;",
                 "alter user BIND_2000_05 quota 20000M on users;",
                 "SELECT rdsadmin.rdsadmin_s3_tasks.download_from_s3(p_s3_prefix => 'BindingDB_All_Oracle.dmp', p_bucket_name =>  '{{databaseDmpS3Location}}', p_directory_name =>  'DATA_PUMP_DIR') AS TASK_ID FROM DUAL; ",
-                "DECLARE ",
+                "DECLARE",
                 "hdnl NUMBER;",
                 "BEGIN",
                 "dbms_lock.sleep(240);",
