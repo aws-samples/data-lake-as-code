@@ -1,0 +1,79 @@
+{
+   "schemaVersion":"2.2",
+   "description":"Downloads latest ClinVar source files and moves them to S3",
+   "parameters":{
+        "openTargetsSourceFileTargetBucketLocation": {
+          "type": "String",
+          "description": "Bucket to store files in."
+        }
+    },
+    "mainSteps":[
+      {
+        "action":"aws:runShellScript",
+        "name":"DownloadAndImportClinVarLatestIntoS3",
+        "inputs":{
+            "runCommand": [
+              "rm -rf clinvar/sourceExports/tab_delimited/",
+              
+              "tableName='allele_gene'",
+              "wget https://ftp.ncbi.nlm.nih.gov/pub/clinvar/tab_delimited/$tableName.txt.gz -P clinvar/sourceExports/tab_delimited/latest/output/$tableName/",
+              "gzip -d clinvar/sourceExports/tab_delimited/latest/output/$tableName/$tableName.txt.gz", 
+              "sed -i '1s/^.//' clinvar/sourceExports/tab_delimited/latest/output/$tableName/$tableName.txt",
+              
+              "tableName='cross_references'",
+              "wget https://ftp.ncbi.nlm.nih.gov/pub/clinvar/tab_delimited/$tableName.txt -P clinvar/sourceExports/tab_delimited/latest/output/$tableName/",
+              "sed -i '1s/^.//' clinvar/sourceExports/tab_delimited/latest/output/$tableName/$tableName.txt",
+              
+              
+              "tableName='gene_specific_summary'",
+              "wget https://ftp.ncbi.nlm.nih.gov/pub/clinvar/tab_delimited/$tableName.txt -P clinvar/sourceExports/tab_delimited/latest/output/$tableName/",
+              "sed -i 1,1d clinvar/sourceExports/tab_delimited/latest/output/$tableName/$tableName.txt",
+              "sed -i '1s/^.//' clinvar/sourceExports/tab_delimited/latest/output/$tableName/$tableName.txt",
+              
+              "tableName='hgvs4variation'",
+              "wget https://ftp.ncbi.nlm.nih.gov/pub/clinvar/tab_delimited/$tableName.txt.gz -P clinvar/sourceExports/tab_delimited/latest/output/$tableName/",
+              "gzip -d clinvar/sourceExports/tab_delimited/latest/output/$tableName/$tableName.txt.gz", 
+              "sed -i 1,15d clinvar/sourceExports/tab_delimited/latest/output/$tableName/$tableName.txt",
+              "sed -i '1s/^.//' clinvar/sourceExports/tab_delimited/latest/output/$tableName/$tableName.txt",
+              
+              
+              "tableName='organization_summary'",
+              "wget https://ftp.ncbi.nlm.nih.gov/pub/clinvar/tab_delimited/$tableName.txt -P clinvar/sourceExports/tab_delimited/latest/output/$tableName/",
+              "sed -i '1s/^.//' clinvar/sourceExports/tab_delimited/latest/output/$tableName/$tableName.txt",
+              
+              
+              "tableName='submission_summary'",
+              "wget https://ftp.ncbi.nlm.nih.gov/pub/clinvar/tab_delimited/$tableName.txt.gz -P clinvar/sourceExports/tab_delimited/latest/output/$tableName/",
+              "gzip -d clinvar/sourceExports/tab_delimited/latest/output/$tableName/$tableName.txt.gz", 
+              "sed -i 1,15d clinvar/sourceExports/tab_delimited/latest/output/$tableName/$tableName.txt",
+              "sed -i '1s/^.//' clinvar/sourceExports/tab_delimited/latest/output/$tableName/$tableName.txt",
+              
+              
+              "tableName='summary_of_conflicting_interpretations'",
+              "wget https://ftp.ncbi.nlm.nih.gov/pub/clinvar/tab_delimited/$tableName.txt -P clinvar/sourceExports/tab_delimited/latest/output/$tableName/",
+              "sed -i '1s/^.//' clinvar/sourceExports/tab_delimited/latest/output/$tableName/$tableName.txt",
+              
+              "tableName='var_citations'",
+              "wget https://ftp.ncbi.nlm.nih.gov/pub/clinvar/tab_delimited/$tableName.txt -P clinvar/sourceExports/tab_delimited/latest/output/$tableName/",
+              "sed -i '1s/^.//' clinvar/sourceExports/tab_delimited/latest/output/$tableName/$tableName.txt",
+              
+              "tableName='variant_summary'",
+              "wget https://ftp.ncbi.nlm.nih.gov/pub/clinvar/tab_delimited/$tableName.txt.gz -P clinvar/sourceExports/tab_delimited/latest/output/$tableName/",
+              "gzip -d clinvar/sourceExports/tab_delimited/latest/output/$tableName/$tableName.txt.gz", 
+              "sed -i '1s/^.//' clinvar/sourceExports/tab_delimited/latest/output/$tableName/$tableName.txt",
+              
+              
+              "tableName='variation_allele'",
+              "wget https://ftp.ncbi.nlm.nih.gov/pub/clinvar/tab_delimited/$tableName.txt.gz -P clinvar/sourceExports/tab_delimited/latest/output/$tableName/",
+              "gzip -d clinvar/sourceExports/tab_delimited/latest/output/$tableName/$tableName.txt.gz", 
+              "sed -i 1,7d clinvar/sourceExports/tab_delimited/latest/output/$tableName/$tableName.txt",
+              "sed -i '1s/^.//' clinvar/sourceExports/tab_delimited/latest/output/$tableName/$tableName.txt",
+              
+              "aws s3 sync clinvar/sourceExports/* s3://{{openTargetsSourceFileTargetBucketLocation}}/clinvar/sourceExports/"
+            ]
+         }
+      }
+   ]
+}
+
+

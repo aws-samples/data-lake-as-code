@@ -35,31 +35,35 @@ export class ClinvarSummaryVariantStack extends DataSetStack {
 
     props.sourceBucket.grantReadWrite(this.bucketRole);
 
-    const dataSetName = "clinvar-summary-variants"; // NO CAPS!!!!
+    const dataSetName = "clinvar_summary_variants"; // NO CAPS!!!!
     
-    this.Enrollments.push(
-      new S3dataSetEnrollment(this, "clinvar-summary-variants-enrollment", {
-        DataSetName: dataSetName,
-        MaxDPUs: 2.0,
-        sourceBucket: props.sourceBucket,
-        // sourceBucket: props.DataLake.DataLakeBucket,
-        sourceBucketDataPrefixes: [`${props.sourceBucketDataPrefix}`],
-        dataLakeBucket: props.DataLake.DataLakeBucket,
-        GlueScriptPath: "scripts/glue.s3import.clinvar.variant.summary.py",
-        GlueScriptArguments: {
-          "--job-language": "python",
-          "--job-bookmark-option": "job-bookmark-disable",
-          "--enable-metrics": "",
-          "--SRC_BUCKET": props.sourceBucket.bucketName,
-          "--SRC_PREFIX": props.sourceBucketDataPrefix,
-          "--SRC_REGION": cdk.Stack.of(this).region,
-          "--DL_BUCKET": props.DataLake.DataLakeBucket.bucketName, 
-          "--DL_PREFIX": `/${dataSetName}/`
-        },
-      })
-    );
-
-
+    
+    const lastestSummaryEnrollment = new S3dataSetEnrollment(this, "clinvar-summary-variants-enrollment", {
+      DataSetName: dataSetName,
+      MaxDPUs: 4.0,
+      sourceBucket: props.sourceBucket,
+      // sourceBucket: props.DataLake.DataLakeBucket,
+      sourceBucketDataPrefixes: [
+        `${props.sourceBucketDataPrefix}`
+      ],
+      dataLakeBucket: props.DataLake.DataLakeBucket,
+      WorkflowCronScheduleExpression: "cron(16 01 ? * SUN *)",
+      GlueScriptPath: "scripts/glue.s3import.clinvar.variant.summary.py",
+      GlueScriptArguments: {
+        "--job-language": "python",
+        "--job-bookmark-option": "job-bookmark-disable",
+        "--enable-metrics": "",
+        "--GLUE_SRC_DATABASE": `${dataSetName}_src`,
+        "--DL_REGION": cdk.Stack.of(this).region,
+        "--DL_BUCKET": props.DataLake.DataLakeBucket.bucketName, 
+        "--DL_PREFIX": `/${dataSetName}/`
+      },
+    });
+    
+    
+    this.Enrollments.push(lastestSummaryEnrollment);
+    
+    
     // Grant Glue Job Permissions to write to source S3 Bucket
     props.sourceBucket.grantReadWrite(
       this.Enrollments[0].DataEnrollment.DataSetGlueRole

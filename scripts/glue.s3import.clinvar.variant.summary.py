@@ -1,49 +1,61 @@
-
 import sys
-from awsglue.job import Job
 from awsglue.transforms import *
+from awsglue.utils import getResolvedOptions
 from pyspark.context import SparkContext
 from awsglue.context import GlueContext
-from awsglue.utils import getResolvedOptions
-from io import BytesIO
-import boto3,gzip,time
+from awsglue.job import Job
+import boto3
+
 ## @params: [JOB_NAME]
-args = getResolvedOptions(sys.argv, ['JOB_NAME','SRC_BUCKET', 'SRC_PREFIX','SRC_REGION', 'DL_BUCKET','DL_PREFIX'])
+args = getResolvedOptions(sys.argv, ['JOB_NAME','DL_BUCKET', 'DL_PREFIX','DL_REGION', 'GLUE_SRC_DATABASE'])
 
-srcBucket = args["SRC_BUCKET"];
-srcPrefix = args["SRC_PREFIX"];
-aws_region = args["SRC_REGION"];
-dataLakeBucket = args["DL_BUCKET"];
-dataLakePrefix = args["DL_PREFIX"];
-
-
-
-glueContext = GlueContext(SparkContext.getOrCreate())
-
+sc = SparkContext()
+glueContext = GlueContext(sc)
+spark = glueContext.spark_session
 job = Job(glueContext)
 job.init(args['JOB_NAME'], args)
 
+dataLakeBucket = args["DL_BUCKET"];
+dataLakePrefix = args["DL_PREFIX"];
+aws_region = args["DL_REGION"];
+glue_database = args["GLUE_SRC_DATABASE"];
 
-s3SrcPath = "s3://{}/{}/variant_summary.txt".format(srcBucket,srcPrefix)
-connection_options = {"paths": [s3SrcPath]}
-format_options={"withHeader": True,"separator": "\t"}
-print("Creating DataFrame from {} {}\n".format(srcBucket,srcPrefix))
+target_format = "parquet"
 
-df =glueContext.create_dynamic_frame_from_options(connection_type="s3",connection_options=connection_options,format="csv",format_options=format_options)
-renamedDF = df.toDF().withColumnRenamed("#AlleleID","AlleleID")
-df = df.fromDF(renamedDF,glueContext, "df")
-
-s3DestPath = "s3://{}/{}/clinvar_variant_summary/".format(dataLakeBucket,dataLakePrefix)
-print("Setting Dest path to {}".format(s3DestPath))
+client = boto3.client(service_name='glue', region_name=aws_region)
 
 
-glueContext.write_dynamic_frame_from_options(
-       frame = df,
-       connection_type = "s3",
-       connection_options = {"path": s3DestPath},
-       format = "parquet")
-       
+tables = []
+keepPullingTables = True
+nextToken = ''
+
+while keepPullingTables:
+  responseGetTables = client.get_tables(DatabaseName=glue_database, NextToken=nextToken)
+  tableList = responseGetTables['TableList']
+  for tableDict in tableList:
+    tables.append(tableDict['Name'])
+  
+  if 'NextToken' in responseGetTables:
+    nextToken = responseGetTables['NextToken']
+  else:
+    nextToken = ''
+    
+  keepPullingTables = True if nextToken != '' else False
+  
+
+for table in tables:
+    
+  glueContext.purge_s3_path("s3://"+dataLakeBucket + dataLakePrefix + table + "/", {"retentionPeriod": 0}, transformation_ctx="purge")    
+    
+  datasource = glueContext.create_dynamic_frame.from_catalog(database = glue_database, table_name = table, transformation_ctx = "datasource")   
+  dropnullfields = DropNullFields.apply(frame = datasource, transformation_ctx = "dropnullfields")
+  
+  try:
+    datasink = glueContext.write_dynamic_frame.from_options(frame = dropnullfields, connection_type = "s3", connection_options = {"path": "s3://"+dataLakeBucket + dataLakePrefix + table}, format = target_format, transformation_ctx = "datasink")
+  except:
+    print("Unable to write" + table)
+    
 job.commit()
 
 
-print("END OF Script")
+

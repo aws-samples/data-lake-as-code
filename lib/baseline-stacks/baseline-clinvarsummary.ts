@@ -9,14 +9,12 @@ import s3assets = require("@aws-cdk/aws-s3-assets");
 import fs = require("fs");
 
 export interface ClinvarVariantSummaryBaselineProps extends cdk.StackProps {
-  coreDataLakeS3Bucket: s3.Bucket;
+  ImportInstance: ec2.Instance;
 }
 
 export class ClinvarVariantSummaryBaseline extends cdk.Construct {
   public readonly ClinvarVariantSummarySourceBucket: s3.Bucket;
-  public readonly ClinvarVariantSummaryLambdaImport: lambda.Function;
-  private readonly ClinvarVariantSummaryGZURL: string;
-  private readonly ClinvarVarianySummaryGZURLMD5: string;
+
 
   constructor(
     scope: cdk.Construct,
@@ -25,63 +23,37 @@ export class ClinvarVariantSummaryBaseline extends cdk.Construct {
   ) {
     super(scope, id);
 
-    this.ClinvarVariantSummaryGZURL =
-      "https://ftp.ncbi.nlm.nih.gov/pub/clinvar/tab_delimited/variant_summary.txt.gz";
-    this.ClinvarVarianySummaryGZURLMD5 =
-      "https://ftp.ncbi.nlm.nih.gov/pub/clinvar/tab_delimited/variant_summary.txt.gz.md5";
+    
+        
+        const clinvarSourceBucket = new s3.Bucket(this, 'clinvarBucket');
+        this.ClinvarVariantSummarySourceBucket = clinvarSourceBucket;
+        
+        this.ClinvarVariantSummarySourceBucket.grantReadWrite(props.ImportInstance.role);
+        
+        this.createAndApplyImportCommand("scripts/ssmdoc.import.clinvar.latest.json", props.ImportInstance, clinvarSourceBucket, "");
+        
+        
+    }
+    
+    createAndApplyImportCommand(commandDoc: string, instance: ec2.Instance, bucket: s3.Bucket, resourceSuffix: string) {
+        
+        const loadOpenTargetsDoc = new ssm.CfnDocument(this, 'loadOpenTargetsDoc'+ resourceSuffix, {
+            content: JSON.parse(fs.readFileSync(commandDoc, { encoding: 'utf-8' })),
+            documentType: "Command"
+        });
+        
+        const loadOpenTargetsAssociation = new ssm.CfnAssociation(this, 'loadOpenTargetsAssociation' + resourceSuffix,{
+            name: loadOpenTargetsDoc.ref,
+            targets: [
+                { key: "InstanceIds", values: [instance.instanceId] }
+            ]
+        });
 
-    this.ClinvarVariantSummarySourceBucket = new s3.Bucket(
-      this,
-      "ClinvarVariantSummaryBucket"
-    );
+        loadOpenTargetsAssociation.addPropertyOverride('Parameters',{
+            openTargetsSourceFileTargetBucketLocation: [bucket.bucketName]
+        });
 
-    const lambdaRole = new iam.Role(this, "Role", {
-      assumedBy: new iam.ServicePrincipal("lambda.amazonaws.com"), // required
-    });
-
-    lambdaRole.addToPolicy(
-      new iam.PolicyStatement({
-        effect: iam.Effect.ALLOW,
-        resources: [
-          this.ClinvarVariantSummarySourceBucket.bucketArn,
-          this.ClinvarVariantSummarySourceBucket.arnForObjects("*"),
-        ],
-        actions: ["s3:GetObject", "s3:PutObject", "s3:CreateMultipartUpload"],
-      })
-    );
-
-    lambdaRole.addToPolicy(
-      new iam.PolicyStatement({
-        effect: iam.Effect.ALLOW,
-        resources: ["*"],
-        actions: ["glue:ListJobs", "glue:StartJobRun"],
-      })
-    );
-    lambdaRole.addManagedPolicy(
-      iam.ManagedPolicy.fromAwsManagedPolicyName(
-        "service-role/AWSLambdaBasicExecutionRole"
-      )
-    );
-
-    this.ClinvarVariantSummaryLambdaImport = new lambda.Function(
-      this,
-      "importclinVariantSummaryLambda",
-      {
-        runtime: lambda.Runtime.PYTHON_3_8,
-        handler: "lambda-import-clinvarvariantsummary.handler",
-        code: lambda.Code.fromAsset("scripts/", {
-          exclude: ["**", "!lambda-import-clinvarvariantsummary.py"],
-        }),
-        role: lambdaRole,
-        memorySize: 1024,
-        timeout: cdk.Duration.seconds(300),
-        environment: {
-          SRC_BUCKET: this.ClinvarVariantSummarySourceBucket.bucketName,
-          DEST_BUCKET: props.coreDataLakeS3Bucket.bucketName,
-          ImportGZ: this.ClinvarVariantSummaryGZURL,
-          ImportGZMD5: this.ClinvarVarianySummaryGZURLMD5,
-        },
-      }
-    );
-  }
+        
+    }
+    
 }
