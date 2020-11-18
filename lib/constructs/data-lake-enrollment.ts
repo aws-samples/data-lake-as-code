@@ -18,6 +18,8 @@ export class DataLakeEnrollment extends cdk.Construct {
     public CoarseAthenaAccessPolicy: iam.ManagedPolicy;
     private CoarseResourceAccessPolicy: iam.ManagedPolicy;
     private CoarseIamPolciesApplied: boolean;
+    private WorkflowCronScheduleExpression?: string;
+    
 
     constructor(scope: cdk.Construct, id: string, props: DataLakeEnrollment.DataLakeEnrollmentProps) {
         super(scope, id);
@@ -25,6 +27,7 @@ export class DataLakeEnrollment extends cdk.Construct {
 
         this.DataSetName = props.DataSetName;
         this.CoarseIamPolciesApplied = false;
+        this.WorkflowCronScheduleExpression = props.WorkflowCronScheduleExpression;
 
     }
  
@@ -542,6 +545,7 @@ export namespace DataLakeEnrollment
     	GlueScriptPath: string;
     	GlueScriptArguments: any;
     	DataSetName: string;
+    	WorkflowCronScheduleExpression?: string;
     }
 
     export interface DatabasePermissionGrant {

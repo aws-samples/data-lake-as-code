@@ -154,6 +154,7 @@ export interface DataSetEnrollmentProps extends cdk.StackProps {
 		GlueScriptArguments: any;
 		SourceAccessPolicy?: iam.Policy;
 		MaxDPUs: number;
+		WorkflowCronScheduleExpression?: string;
 }
 
 
@@ -258,7 +259,7 @@ export class DataSetEnrollment extends cdk.Construct {
 			}, 
 			name: `${props.dataSetName}_src_to_dl_etl`, 
 			timeout: 2880, 
-			glueVersion: "1.0", 
+			glueVersion: "2.0", 
 			maxCapacity: props.MaxDPUs,
 			command: {
 				scriptLocation: `s3://${glueScript.s3BucketName}/${glueScript.s3ObjectKey}`, 
@@ -292,12 +293,13 @@ export class DataSetEnrollment extends cdk.Construct {
 			workfowName: `${props.dataSetName}_DataLakeEnrollmentWorkflow`,
 			srcCrawler: sourceCrawler,
 			etlJob: etl_job,
-			datalakeCrawler: datalake_crawler
-			
+			datalakeCrawler: datalake_crawler,
+			WorkflowCronScheduleExpression: props.WorkflowCronScheduleExpression
 		});
 		
-	}
+	} 
 	
+
 	
 }
 
@@ -307,14 +309,16 @@ export interface DataLakeEnrollmentWorkflowProps {
 	srcCrawler: glue.CfnCrawler,
 	etlJob: glue.CfnJob,
 	datalakeCrawler: glue.CfnCrawler
+	WorkflowCronScheduleExpression?: string;
 }
 
 export class DataLakeEnrollmentWorkflow extends cdk.Construct {
 
-	public readonly StartTrigger: glue.CfnTrigger;
+	public StartTrigger: glue.CfnTrigger;
     public readonly SrcCrawlerCompleteTrigger: glue.CfnTrigger;
     public readonly ETLCompleteTrigger: glue.CfnTrigger; 
     public readonly Workflow: glue.CfnWorkflow; 
+    private readonly sourceCrawler: glue.CfnCrawler;
 
 	constructor(scope: cdk.Construct, id: string, props: DataLakeEnrollmentWorkflowProps) {
 		super(scope, id);
@@ -322,17 +326,38 @@ export class DataLakeEnrollmentWorkflow extends cdk.Construct {
 		this.Workflow = new glue.CfnWorkflow(this, "etlWorkflow", {
 			name: props.workfowName
 		});
+
+		this.sourceCrawler = props.srcCrawler;
 		
-		this.StartTrigger = new glue.CfnTrigger(this,"startTrigger",{
-            actions: [
-                {
-                    crawlerName: props.srcCrawler.name
-                }
-            ], 
-            type: "ON_DEMAND", 
-            name: `startWorkflow-${this.Workflow.name}`, 
-            workflowName: this.Workflow.name
-        });
+		if(props.WorkflowCronScheduleExpression == null){
+			this.StartTrigger = new glue.CfnTrigger(this,"startTrigger",{
+	            actions: [
+	                {
+	                    crawlerName: props.srcCrawler.name
+	                }
+	            ], 
+	            type: "ON_DEMAND", 
+	            name: `startWorkflow-${this.Workflow.name}`, 
+	            workflowName: this.Workflow.name
+	        });
+			
+		}else{
+			
+			this.StartTrigger = new glue.CfnTrigger(this,"startTrigger",{
+	            actions: [
+	                {
+	                    crawlerName: this.sourceCrawler.name
+	                }
+	            ], 
+	            type: "SCHEDULED", 
+	            schedule: props.WorkflowCronScheduleExpression,
+	            name: `startWorkflow-${this.Workflow.name}`, 
+	            workflowName: this.Workflow.name
+	        });
+		}
+		
+		
+
         
 		this.SrcCrawlerCompleteTrigger = new glue.CfnTrigger(this,"srcCrawlerCompleteTrigger",{
 	        predicate: {

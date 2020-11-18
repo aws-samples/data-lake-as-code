@@ -81,13 +81,21 @@ export class S3dataSetEnrollment extends DataLakeEnrollment{
             var tableFolderName = prefixFolders[prefixFolders.length-2]
             var tableFolderName = tableFolderName.toLowerCase().replace(/\./g,"_").replace(/-/g,"_");
             
-            s3DataLakePaths.push({
-                path: `s3://${props.dataLakeBucket.bucketName}/${dataSetName}/${tableFolderName}/`
-            });
+            if(props.sourceBucketDataPrefixes.length > 1){
+                s3DataLakePaths.push({
+                    path: `s3://${props.dataLakeBucket.bucketName}/${dataSetName}/${tableFolderName}/`
+                });                
+            }else{
+                s3DataLakePaths.push({
+                    path: `s3://${props.dataLakeBucket.bucketName}/${dataSetName}/`
+                });
+            }
+            
+
         }
+
         
-        
-		
+
 		this.DataEnrollment = new DataSetEnrollment(this, `${props.DataSetName}-s3Enrollment`, {
 		    dataLakeBucket: props.dataLakeBucket,
 			dataSetName: dataSetName,
@@ -100,7 +108,8 @@ export class S3dataSetEnrollment extends DataLakeEnrollment{
 			DataLakeTargets: {
 			    s3Targets: s3DataLakePaths
 			},
-			GlueScriptArguments: props.GlueScriptArguments
+			GlueScriptArguments: props.GlueScriptArguments,
+			WorkflowCronScheduleExpression: props.WorkflowCronScheduleExpression
 		});
 	
        
