@@ -50,6 +50,7 @@ const exisitingResourceImportStack = new cdk.Stack(app, 'resourceImportStack', {
 
 
 
+
 // Grant permissions:
 
 // const exampleExistingIamUser = iam.User.fromUserName(exisitingResourceImportStack, 'exampleUserGrantee', '--- EXISTING IAM USERNAME GOES HERE --' );
@@ -57,6 +58,14 @@ const exisitingResourceImportStack = new cdk.Stack(app, 'resourceImportStack', {
 
 // exampleS3DataSet.grantIamRead(exampleExistingIamUser);
 // exampleS3DataSet.grantIamRead(exampleExistingIamRole);
+
+
+// chemblStack.grantIamRead(analyticsStack.NotebookRole);
+// openTargetsStack.grantIamRead(analyticsStack.NotebookRole);
+// bindingDBStack.grantIamRead(analyticsStack.NotebookRole);
+
+
+// const exampleUser = iam.User.fromUserName(coreDataLake, 'exampleGrantee', 'paul1' );
 
 
 // var exampleGrant: DataLakeEnrollment.TablePermissionGrant = {
