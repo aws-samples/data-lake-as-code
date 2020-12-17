@@ -169,18 +169,18 @@ const GTExRodaTemplate8 = new CrawlerTemplateStack(app, "GTExRodaTemplate8", {
 });
 
 
-// const ClinvarSummaryVariantTemplate = new DataSetTemplateStack(
-//   app,
-//   "ClinvarSummaryVariantTemplate",
-//   {
-//     description:
-//       "AWS Data Lake as Code Registry of Open Data Federated Clinvar Variant Summary Template. (ib-xxxxxx)",
-//     DatabaseDescriptionPath:
-//       "../../RODA_templates/clinvar_variant_summary_get_database.json",
-//     DescribeTablesPath: "../../RODA_templates/clinvar_variant_summary_get_tables.json",
-//     DataSetName: clinvarSummaryVariantStack.Enrollments[0].DataSetName,
-//   }
-// );
+const ClinvarSummaryVariantTemplate = new DataSetTemplateStack(
+  app,
+  "ClinvarSummaryVariantTemplate",
+  {
+    description:
+      "AWS Data Lake as Code Registry of Open Data Federated Clinvar Variant Summary Template. (ib-lwjzae1vuw)",
+    DatabaseDescriptionPath:
+      "../../RODA_templates/clinvar_variant_summary_get_database.json",
+    DescribeTablesPath: "../../RODA_templates/clinvar_variant_summary_get_tables.json",
+    DataSetName: clinvarSummaryVariantStack.Enrollments[0].DataSetName,
+  }
+);
 
 // const exampleUser = iam.User.fromUserName(coreDataLake, 'exampleGrantee', 'paul1' );
 

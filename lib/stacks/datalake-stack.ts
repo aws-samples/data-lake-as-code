@@ -66,9 +66,9 @@ export class DataLakeStack extends cdk.Stack {
     // const dataLakeBucketProperties = {bucketName: "aws-ro"}
 
     this.DataLakeBucket = new s3.Bucket(this, "dataLakeBucket", {
-      // bucketName: "aws-roda-hcls-datalake"
-      bucketName:
-        process.env.STACK_ENVIRONMENT === "DEV" ? "" : "aws-roda-hcls-datalake",
+         bucketName: "aws-roda-hcls-datalake"
+    //   bucketName:
+    //     process.env.STACK_ENVIRONMENT === "DEV" ? "" : "aws-roda-hcls-datalake",
     });
     this.AthenaResultsBucket = new s3.Bucket(this, "athenaResultsBucket");
 

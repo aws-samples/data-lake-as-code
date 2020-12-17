@@ -45,13 +45,19 @@ while keepPullingTables:
 
 for table in tables:
     
-  glueContext.purge_s3_path("s3://"+dataLakeBucket + dataLakePrefix + table + "/", {"retentionPeriod": 0}, transformation_ctx="purge")    
-    
   datasource = glueContext.create_dynamic_frame.from_catalog(database = glue_database, table_name = table, transformation_ctx = "datasource")   
-  dropnullfields = DropNullFields.apply(frame = datasource, transformation_ctx = "dropnullfields")
+  sourceData = DropNullFields.apply(frame = datasource, transformation_ctx = "dropnullfields")
+  
+
+  if table == "variant_summary":
+    sourceData = RenameField.apply(frame = sourceData, old_name = "rs# (dbsnp)", new_name = "rsid_dbsnp", transformation_ctx = "rename_rsid")
+    sourceData = RenameField.apply(frame = sourceData, old_name = "nsv/esv (dbvar)", new_name = "nsv_esv_dbvar", transformation_ctx = "rename_nsvesv")
+    
+    
+  glueContext.purge_s3_path("s3://"+dataLakeBucket + dataLakePrefix + table + "/", {"retentionPeriod": 0}, transformation_ctx="purge")    
   
   try:
-    datasink = glueContext.write_dynamic_frame.from_options(frame = dropnullfields, connection_type = "s3", connection_options = {"path": "s3://"+dataLakeBucket + dataLakePrefix + table}, format = target_format, transformation_ctx = "datasink")
+    datasink = glueContext.write_dynamic_frame.from_options(frame = sourceData, connection_type = "s3", connection_options = {"path": "s3://"+dataLakeBucket + dataLakePrefix + table}, format = target_format, transformation_ctx = "datasink")
   except:
     print("Unable to write" + table)
     
