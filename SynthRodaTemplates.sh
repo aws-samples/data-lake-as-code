@@ -1,23 +1,24 @@
-aws glue get-tables --database-name opentargets_1911_dl > RODA_templates/open_targets_1911_get_tables.json
-aws glue get-database --name opentargets_1911_dl > RODA_templates/open_targets_1911_get_database.json
+aws glue get-tables --database-name opentargets_1911_dl-awsroda > RODA_templates/open_targets_1911_get_tables.json
+aws glue get-database --name opentargets_1911_dl-awsroda > RODA_templates/open_targets_1911_get_database.json
 
-aws glue get-tables --database-name opentargets_20_06_dl > RODA_templates/opentargets_20_06_get_tables.json
-aws glue get-database --name opentargets_20_06_dl > RODA_templates/opentargets_20_06_get_database.json
+aws glue get-tables --database-name opentargets_20_06_dl-awsroda > RODA_templates/opentargets_20_06_get_tables.json
+aws glue get-database --name opentargets_20_06_dl-awsroda > RODA_templates/opentargets_20_06_get_database.json
 
-aws glue get-tables --database-name chembl_25_dl > RODA_templates/chembl_25_get_tables.json
-aws glue get-database --name chembl_25_dl > RODA_templates/chembl_25_get_database.json
+aws glue get-tables --database-name chembl_25_dl-awsroda > RODA_templates/chembl_25_get_tables.json
+aws glue get-database --name chembl_25_dl-awsroda > RODA_templates/chembl_25_get_database.json
 
-aws glue get-tables --database-name chembl_27_dl > RODA_templates/chembl_27_get_tables.json
-aws glue get-database --name chembl_27_dl > RODA_templates/chembl_27_get_database.json
+aws glue get-tables --database-name chembl_27_dl-awsroda > RODA_templates/chembl_27_get_tables.json
+aws glue get-database --name chembl_27_dl-awsroda > RODA_templates/chembl_27_get_database.json
 
-aws glue get-tables --database-name binding_db_dl > RODA_templates/binding_db_get_tables.json
-aws glue get-database --name binding_db_dl > RODA_templates/binding_db_get_database.json
+aws glue get-tables --database-name binding_db_dl-awsroda > RODA_templates/binding_db_get_tables.json
+aws glue get-database --name binding_db_dl-awsroda > RODA_templates/binding_db_get_database.json
 
-aws glue get-crawler --name gtex_8_dl_crawler > RODA_templates/gtex_8_get_crawler.json
-aws glue get-database --name gtex_8_dl > RODA_templates/gtex_8_get_database.json
+aws glue get-crawler --name gtex_8_awsroda_crawler > RODA_templates/gtex_8_get_crawler.json
+aws glue get-database --name gtex_8_dl-awsroda > RODA_templates/gtex_8_get_database.json
 
-aws glue get-tables --database-name clinvar-summary-variants_dl > RODA_templates/clinvar_variant_summary_get_tables.json
-aws glue get-database --name clinvar-summary-variants_dl > RODA_templates/clinvar_variant_summary_get_database.json
+aws glue get-tables --database-name clinvar_summary_variants_dl-awsroda > RODA_templates/clinvar_variant_summary_get_tables.json
+aws glue get-database --name clinvar_summary_variants_dl-awsroda > RODA_templates/clinvar_variant_summary_get_database.json
+
 
 
 npm run build
