@@ -85,12 +85,11 @@ export class BaselineStack extends cdk.Stack {
         
         const chemblDb = new rds.DatabaseInstance(this, 'chembl25', {
             engine: rds.DatabaseInstanceEngine.POSTGRES,
-            masterUsername: 'master',
+            credentials: rds.Credentials.fromPassword('master',chemblDBSecret.secretValueFromJson('password')),
             vpc: baselineVpc,
             vpcPlacement: appSubnetSelection, 
             instanceType: ec2.InstanceType.of(ec2.InstanceClass.BURSTABLE2, ec2.InstanceSize.SMALL),
             instanceIdentifier: 'chembl-25-00',
-            masterUserPassword: chemblDBSecret.secretValueFromJson('password'),
             securityGroups: [chemblDbSG],
             deletionProtection: false
         });
@@ -223,14 +222,13 @@ export class BaselineStack extends cdk.Stack {
         
         const bindingDb = new rds.DatabaseInstance(this, 'bindingDb', {
             engine: rds.DatabaseInstanceEngine.ORACLE_SE2,
-            masterUsername: 'master',
+            credentials: rds.Credentials.fromPassword('master',chemblDBSecret.secretValueFromJson('password')),
             licenseModel: rds.LicenseModel.BRING_YOUR_OWN_LICENSE,
             vpc: baselineVpc,
             vpcPlacement: appSubnetSelection, 
             optionGroup: bindingDbOptionGroup,
             instanceType: ec2.InstanceType.of(ec2.InstanceClass.BURSTABLE3, ec2.InstanceSize.SMALL),
             instanceIdentifier: 'binding-db',
-            masterUserPassword: bindingDBSecret.secretValueFromJson('password'),
             securityGroups: [bindingDbSg, bindingDbAccessSg],
             deletionProtection: false,
         });
