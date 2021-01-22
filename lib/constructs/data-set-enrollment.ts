@@ -431,6 +431,14 @@ export class DataLakeEnrollmentWorkflow extends cdk.Construct {
 	            memorySize: 1024
         });
 		 
+		if(props.WorkflowCronScheduleExpression != null){		 
+		    const CronTrigger_triggerActivation = new cfn.CustomResource(this, 'CronTrigger-triggerActivation',  {
+	        	provider: cfn.CustomResourceProvider.lambda(activateTriggerFunction),
+	        	properties: {
+	        		triggerId: this.StartTrigger.name
+	        	}
+		    });			
+		}
 		
 	    const srcCrawlerCompleteTrigger_triggerActivation = new cfn.CustomResource(this, 'srcCrawlerCompleteTrigger-triggerActivation',  {
         	provider: cfn.CustomResourceProvider.lambda(activateTriggerFunction),
