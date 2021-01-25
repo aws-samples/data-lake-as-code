@@ -1798,3 +1798,88 @@ genomic data privacy protection procedures.
 http://www.ott.nih.gov/sites/default/files/documents/pdfs/70fr18413.pdf.
 71. NIH Grants Policy Statement. 8.2.3, Sharing Research Resources. See
 https://grants.nih.gov/grants/policy/nihgps_2012/nihgps_ch8.htm#_Toc271264950.
+
+------
+
+** ClinVar - NCIB - NIH; version 1.0 -- https://www.ncbi.nlm.nih.gov/clinvar/
+NLM Copyright Information
+Attribution and Rights for Government Works: Works produced by the U.S.
+government are not subject to copyright protection in the United States. Any
+such works found on National Library of Medicine (NLM) Web sites may be freely
+used or reproduced without permission in the U.S. Please acknowledge NLM as the
+source of the information by including the phrase “Courtesy of the U.S.
+National Library of Medicine” or “Source: U.S. National Library of Medicine.”
+
+Copyright Protections for Non-Government Works: When using NLM Web sites, you
+may encounter documents, illustrations, photographs, or other content
+contributed by or licensed from private individuals, companies, or
+organizations that may be protected by U.S. and international copyright laws.
+You can sometimes tell if content is copyrighted if it has the copyright
+symbol, the name of the copyright holder, or the statement "All rights
+reserved." However, a copyright notice is not required by law and therefore not
+all copyrighted content is necessarily marked in this way.
+
+Transmission or reproduction of copyrighted items (beyond that allowed by fair
+use as defined in the U.S. copyright laws) requires the written permission of
+the copyright holders.
+
+NLM Resources with Further Guidance: Some NLM resources also have additional
+copyright and licensing policies and information, including:
+
+Copyright Information & Downloading National Library of Medicine Data
+Historical Collections Copyright Information and History of Medicine Division
+Patron Guide to Copyright and Historical Materials
+MedlinePlus Copyright Information
+National Center for Biotechnology Information (NCBI) Website and Data Usage
+Policies and Disclaimers
+PubMed Central (PMC) Copyright Notice
+User Responsibility: It is your responsibility to determine and satisfy
+copyright or other use restrictions when using materials that are not in the
+public domain. NLM cannot guarantee the copyright status for any item.
+
+Disclaimers
+Liability: For documents and software available from NLM, the U.S. Government
+does not warrant or assume any legal liability or responsibility for the
+accuracy, completeness, or usefulness of any information, apparatus, product,
+or process disclosed.
+
+Endorsement: NLM does not endorse or recommend any commercial products,
+processes, or services. The views and opinions of authors expressed on NLM Web
+sites do not necessarily state or reflect those of the U.S. Government, and
+they may not be used for advertising or product endorsement purposes.
+
+Pop-Up Advertisements: When visiting our Web site, your Web browser may produce
+pop-up advertisements. These advertisements were most likely produced by other
+Web sites you visited or by third-party software installed on your computer.
+The National Library of Medicine does not endorse or recommend products or
+services for which you may view a pop-up advertisement on your computer screen
+while visiting our site.
+
+Links to External Web Sites: Some NLM Web pages may provide links to other
+Internet sites only for the convenience of World Wide Web users. NLM is not
+responsible for the availability or content of these external sites, nor does
+NLM endorse, warrant or guarantee the products, services or information
+described or offered at these other Internet sites. It is the responsibility of
+the user to examine the copyright and licensing restrictions of external Web
+sites and to secure all necessary permission. Users cannot assume that the
+external sites will abide by the same privacy provisions as those outlined in
+the NLM Privacy Policy.
+
+Medical Information: It is not the intention of NLM to provide specific medical
+advice, but rather to provide users with information to better understand
+health and disease. Specific medical advice will not be provided, and NLM urges
+you to consult with a qualified health professional for diagnosis and for
+answers to your personal medical questions.
+
+Contact the NLM
+If you have concerns relating to copyright, such as improper attribution or NLM
+using your work without permission, please contact us.
+If you have concerns relating to History of Medicine content, please see the
+Historical Collections Copyright Information page.
+
+Works produced by the U.S. government are not subject to copyright protection
+in the United States. Any such works found on National Library of Medicine
+(NLM) Web sites may be freely used or reproduced without permission in the U.S.
+Please acknowledge NLM as the source of the information by including the phrase
+“Courtesy of the U.S. National Library of Medicine” or “Source: U.S. National
+Library of Medicine.”
