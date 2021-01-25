@@ -44,6 +44,7 @@ export class ClinvarVariantSummaryBaseline extends cdk.Construct {
         
         const loadOpenTargetsAssociation = new ssm.CfnAssociation(this, 'loadOpenTargetsAssociation' + resourceSuffix,{
             name: loadOpenTargetsDoc.ref,
+            scheduleExpression: "cron(01 00 ? * SUN *)",
             targets: [
                 { key: "InstanceIds", values: [instance.instanceId] }
             ]
