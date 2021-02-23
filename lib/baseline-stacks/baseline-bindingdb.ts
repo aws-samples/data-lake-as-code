@@ -91,7 +91,7 @@ export class BindingDBBaseline extends cdk.Construct {
         
         const bindingDb = new rds.DatabaseInstance(this, 'bindingDb', {
             engine: rds.DatabaseInstanceEngine.oracleSe2({ version: rds.OracleEngineVersion.VER_19_0_0_0_2020_04_R1 }),
-            masterUsername: 'master',
+            credentials: rds.Credentials.fromPassword('master', this.DbSecret.secretValueFromJson('password')),
             licenseModel: rds.LicenseModel.BRING_YOUR_OWN_LICENSE,
             vpc: props.TargetVPC,
             vpcPlacement: appSubnetSelection, 
@@ -99,7 +99,6 @@ export class BindingDBBaseline extends cdk.Construct {
             optionGroup: bindingDbOptionGroup,
             instanceType: ec2.InstanceType.of(ec2.InstanceClass.BURSTABLE3, ec2.InstanceSize.SMALL),
             instanceIdentifier: 'binding-db',
-            masterUserPassword: this.DbSecret.secretValueFromJson('password'),
             securityGroups: [this.DbAccessSg, DbSG],
             deletionProtection: false,
         });

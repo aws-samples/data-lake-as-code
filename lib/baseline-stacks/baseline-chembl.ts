@@ -64,12 +64,11 @@ export class ChemblBaseline extends cdk.Construct {
         
         this.Chembl25DatabaseInstance = new rds.DatabaseInstance(this, 'chembl25', {
             engine: rds.DatabaseInstanceEngine.POSTGRES,
-            masterUsername: 'master',
+            credentials: rds.Credentials.fromPassword('master', this.DbSecret.secretValueFromJson('password')),
             vpc: props.TargetVPC,
             vpcPlacement: appSubnetSelection, 
             instanceType: ec2.InstanceType.of(ec2.InstanceClass.BURSTABLE2, ec2.InstanceSize.SMALL),
             instanceIdentifier: 'chembl-25',
-            masterUserPassword: chemblDBSecret.secretValueFromJson('password'),
             securityGroups: [chemblDbSG],
             deletionProtection: false
         });
@@ -77,12 +76,11 @@ export class ChemblBaseline extends cdk.Construct {
         
         this.Chembl27DatabaseInstance = new rds.DatabaseInstance(this, 'chembl27', {
             engine: rds.DatabaseInstanceEngine.POSTGRES,
-            masterUsername: 'master',
+            credentials: rds.Credentials.fromPassword('master', this.DbSecret.secretValueFromJson('password')),
             vpc: props.TargetVPC,
             vpcPlacement: appSubnetSelection, 
             instanceType: ec2.InstanceType.of(ec2.InstanceClass.BURSTABLE2, ec2.InstanceSize.SMALL),
             instanceIdentifier: 'chembl-27',
-            masterUserPassword: chemblDBSecret.secretValueFromJson('password'),
             securityGroups: [chemblDbSG],
             deletionProtection: false
         });
