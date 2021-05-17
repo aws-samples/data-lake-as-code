@@ -1,17 +1,15 @@
 #!/usr/bin/env node
 import 'source-map-support/register';
-import * as cdk from '@aws-cdk/core';
+
+import { Construct } from 'constructs';
+import { App, Stack } from 'aws-cdk-lib';
 import { DataLakeStack } from '../lib/stacks/datalake-stack';
-import iam = require('@aws-cdk/aws-iam');
-import s3 = require('@aws-cdk/aws-s3');
-import ec2 = require('@aws-cdk/aws-ec2');
-import rds = require('@aws-cdk/aws-rds');
 import { DataLakeEnrollment } from '../lib/constructs/data-lake-enrollment';
 import { DataSetTemplateStack, CrawlerTemplateStack } from '../lib/stacks/dataset-stack';
 import { ExampleS3DataSet } from '../lib/ExampleS3DataSet-stack';
 import { ExamplePgRdsDataSet } from '../lib/ExamplePgRdsDataSet-stack';
 
-const app = new cdk.App();
+const app = new App();
 
 const coreDataLake = new DataLakeStack(app, 'CoreDataLake', {
     description: "AWS Data Lake as Code core data lake template. (ib-87ce095eDf)",
@@ -19,7 +17,7 @@ const coreDataLake = new DataLakeStack(app, 'CoreDataLake', {
 });
 
 
-const exisitingResourceImportStack = new cdk.Stack(app, 'resourceImportStack', {
+const exisitingResourceImportStack = new Stack(app, 'resourceImportStack', {
     description: "Used to import existing resources created outside of this CDK application",
 });
 

@@ -1,17 +1,18 @@
-import * as cdk from '@aws-cdk/core';
-import ec2 = require('@aws-cdk/aws-ec2');
-import iam = require('@aws-cdk/aws-iam');
-import rds = require('@aws-cdk/aws-rds');
-import glue = require('@aws-cdk/aws-glue');
-import s3 = require('@aws-cdk/aws-s3');
-import lakeformation = require('@aws-cdk/aws-lakeformation');
-import s3assets = require('@aws-cdk/aws-s3-assets');
+import { Construct  } from 'constructs';
+import { App, Stack, StackProps, Resource} from 'aws-cdk-lib';
+
+import * as ec2 from 'aws-cdk-lib/aws-ec2';
+import * as iam from 'aws-cdk-lib/aws-iam';
+import * as glue from 'aws-cdk-lib/aws-glue';
+import * as s3 from 'aws-cdk-lib/aws-s3';
+import * as lakeformation from 'aws-cdk-lib/aws-lakeformation';
+
 import { DataSetEnrollmentProps, DataSetEnrollment } from './data-set-enrollment';
 
 
 
 
-export class DataLakeEnrollment extends cdk.Construct {
+export class DataLakeEnrollment extends Construct {
 
     public DataEnrollment: DataSetEnrollment;
     public DataSetName: string;
@@ -21,7 +22,7 @@ export class DataLakeEnrollment extends cdk.Construct {
     private WorkflowCronScheduleExpression?: string;
     
 
-    constructor(scope: cdk.Construct, id: string, props: DataLakeEnrollment.DataLakeEnrollmentProps) {
+    constructor(scope: Construct, id: string, props: DataLakeEnrollment.DataLakeEnrollmentProps) {
         super(scope, id);
 
 
@@ -72,10 +73,10 @@ export class DataLakeEnrollment extends cdk.Construct {
                 "glue:GetTable",
             ],
             "Resource": [
-                `arn:aws:glue:${cdk.Stack.of(this).region}:${cdk.Stack.of(this).account}:catalog`,
-                `arn:aws:glue:${cdk.Stack.of(this).region}:${cdk.Stack.of(this).account}:database/default`,
-                this.DataEnrollment.Dataset_Datalake.databaseArn,
-                `arn:aws:glue:${cdk.Stack.of(this).region}:${cdk.Stack.of(this).account}:table/${this.DataEnrollment.Dataset_Datalake.databaseName}/*`
+                `arn:aws:glue:${Stack.of(this).region}:${Stack.of(this).account}:catalog`,
+                `arn:aws:glue:${Stack.of(this).region}:${Stack.of(this).account}:database/default`,
+                this.DataEnrollment.Dataset_Datalake.ref,
+                `arn:aws:glue:${Stack.of(this).region}:${Stack.of(this).account}:table/${this.DataEnrollment.Dataset_Datalake.getAtt('DatabaseInput.Name').toString()}/*`
             ],
             "Effect": "Allow"
 		};
@@ -94,7 +95,7 @@ export class DataLakeEnrollment extends cdk.Construct {
                 "athena:StartQueryExecution"
             ],
             "Resource": [
-                `arn:aws:athena:${cdk.Stack.of(this).region}:${cdk.Stack.of(this).account}:*`
+                `arn:aws:athena:${Stack.of(this).region}:${Stack.of(this).account}:*`
             ],
             "Effect": "Allow"
         };
@@ -307,16 +308,19 @@ export class DataLakeEnrollment extends cdk.Construct {
             excludedColumnNames: permissionGrant.columns
         };
 
+
+        const databaseName = this.DataEnrollment.Dataset_Datalake.getAtt('DatabaseInput.Name').toString();
+
         var  tableWithColumnsProperty : lakeformation.CfnPermissions.TableWithColumnsResourceProperty = {
             columnNames: permissionGrant.columns,
-            databaseName: this.DataEnrollment.Dataset_Datalake.databaseName,
+            databaseName: databaseName,
             name: permissionGrant.table
         };
 
         if(permissionGrant.wildCardFilter === null){
             tableWithColumnsProperty = {
                 columnNames: permissionGrant.columns,
-                databaseName: this.DataEnrollment.Dataset_Datalake.databaseName,
+                databaseName: databaseName,
                 name: permissionGrant.table
             };
         }else{
@@ -324,14 +328,14 @@ export class DataLakeEnrollment extends cdk.Construct {
             if(permissionGrant.wildCardFilter == DataLakeEnrollment.TableWithColumnFilter.Include){
                 tableWithColumnsProperty = {
                     columnNames: permissionGrant.columns,
-                    databaseName: this.DataEnrollment.Dataset_Datalake.databaseName,
+                    databaseName: databaseName,
                     name: permissionGrant.table
                 };
             }
 
             if(permissionGrant.wildCardFilter == DataLakeEnrollment.TableWithColumnFilter.Exclude){
                 tableWithColumnsProperty = {
-                    databaseName: this.DataEnrollment.Dataset_Datalake.databaseName,
+                    databaseName: databaseName,
                     name: permissionGrant.table,
                     columnWildcard: {
                         excludedColumnNames: permissionGrant.columns
@@ -352,13 +356,13 @@ export class DataLakeEnrollment extends cdk.Construct {
 
     public grantDatabasePermission(principal: iam.IPrincipal, permissionGrant: DataLakeEnrollment.DatabasePermissionGrant, includeSourceDb: boolean = false){
 
-
+        const databaseName = this.DataEnrollment.Dataset_Datalake.getAtt('DatabaseInput.Name').toString();
         var grantIdPrefix = ""
         var dataLakePrincipal : lakeformation.CfnPermissions.DataLakePrincipalProperty = {
             dataLakePrincipalIdentifier: ""
         };
         var databaseResourceProperty : lakeformation.CfnPermissions.ResourceProperty = {            
-            databaseResource: {name: this.DataEnrollment.Dataset_Datalake.databaseName}
+            databaseResource: {name: databaseName}
         };
 
         const resolvedPrincipalType = this.determinePrincipalType(principal);
@@ -386,7 +390,7 @@ export class DataLakeEnrollment extends cdk.Construct {
 
             databaseResourceProperty = {
                 //dataLocationResource: {resourceArn: this.DataEnrollment.DataLakeBucketName},
-                databaseResource: {name: this.DataEnrollment.Dataset_Source.databaseName}
+                databaseResource: {name: databaseName}
             };
 
             this.createLakeFormationPermission(`${grantIdPrefix}-databaseSrcGrant`,dataLakePrincipal , databaseResourceProperty, permissionGrant.DatabasePermissions, permissionGrant.GrantableDatabasePermissions)
@@ -400,12 +404,12 @@ export class DataLakeEnrollment extends cdk.Construct {
     public grantTablePermissions(principal: iam.IPrincipal, permissionGrant: DataLakeEnrollment.TablePermissionGrant){
         
         const coreGrant = this.setupIamAndLakeFormationDatabasePermissionForPrincipal(principal, permissionGrant.DatabasePermissions, permissionGrant.GrantableDatabasePermissions);
-
+        const databaseName = this.DataEnrollment.Dataset_Datalake.getAtt('DatabaseInput.Name').toString();
         permissionGrant.tables.forEach(table => {
             var tableResourceProperty : lakeformation.CfnPermissions.ResourceProperty = {
                 tableResource:{
                     name: table,
-                    databaseName: this.DataEnrollment.Dataset_Datalake.databaseName
+                    databaseName: databaseName
                 }
             };
             this.createLakeFormationPermission(`${coreGrant.grantIdPrefix}-${table}-databaseTableGrant`,coreGrant.dataLakePrincipal , tableResourceProperty, permissionGrant.TablePermissions, permissionGrant.GrantableTablePermissions)
@@ -461,7 +465,7 @@ export class DataLakeEnrollment extends cdk.Construct {
             return iam.User;
 		}
 
-		if(principal instanceof cdk.Resource){
+		if(principal instanceof Resource){
 
 	        try{
                 const user = principal as iam.User;
@@ -483,14 +487,15 @@ export class DataLakeEnrollment extends cdk.Construct {
 	private setupIamAndLakeFormationDatabasePermissionForPrincipal(principal: iam.IPrincipal, databasePermissions: Array<DataLakeEnrollment.DatabasePermission>, grantableDatabasePermissions: Array<DataLakeEnrollment.DatabasePermission> ){
 
         this.grantCoarseIamRead(principal);
-
+        const databaseName = this.DataEnrollment.Dataset_Datalake.getAtt('DatabaseInput.Name').toString();
+        
         var grantIdPrefix = ""
         var dataLakePrincipal : lakeformation.CfnPermissions.DataLakePrincipalProperty = {
             dataLakePrincipalIdentifier: ""
         };
         var databaseResourceProperty : lakeformation.CfnPermissions.ResourceProperty = {
             //dataLocationResource: {resourceArn: this.DataEnrollment.DataLakeBucketName},
-            databaseResource: {name: this.DataEnrollment.Dataset_Datalake.databaseName}
+            databaseResource: {name: databaseName}
         };
 
         const resolvedPrincipalType = this.determinePrincipalType(principal);
@@ -540,7 +545,7 @@ export namespace DataLakeEnrollment
         Exclude = "Exclude"
     }
 
-    export interface DataLakeEnrollmentProps extends cdk.StackProps {
+    export interface DataLakeEnrollmentProps extends StackProps {
     	dataLakeBucket: s3.Bucket;
     	GlueScriptPath: string;
     	GlueScriptArguments: any;

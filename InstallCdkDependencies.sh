@@ -4,3 +4,4 @@ npm update
 sudo apt install jq -y
 sudo yum install jq -y
 npm install
+cdk bootstrap

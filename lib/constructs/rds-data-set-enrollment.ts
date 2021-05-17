@@ -1,10 +1,13 @@
-import * as cdk from '@aws-cdk/core';
-import ec2 = require('@aws-cdk/aws-ec2');
-import iam = require('@aws-cdk/aws-iam');
-import glue = require('@aws-cdk/aws-glue');
-import s3 = require('@aws-cdk/aws-s3');
-import s3assets = require('@aws-cdk/aws-s3-assets')
-import rds = require('@aws-cdk/aws-rds');
+import { Construct } from 'constructs';
+import { App, Stack} from 'aws-cdk-lib';
+
+import * as ec2 from 'aws-cdk-lib/aws-ec2';
+import * as iam from 'aws-cdk-lib/aws-iam';
+import * as glue from 'aws-cdk-lib/aws-glue';
+import * as s3 from 'aws-cdk-lib/aws-s3';
+import * as s3assets from 'aws-cdk-lib/aws-s3-assets';
+import * as rds from 'aws-cdk-lib/aws-rds';
+
 import { DataSetEnrollmentProps, DataSetEnrollment } from './data-set-enrollment';
 import { DataLakeEnrollment } from './data-lake-enrollment'
 
@@ -27,7 +30,7 @@ export class RDSDataSetEnrollment extends DataLakeEnrollment {
 	jdbcConnStringPrefix: string; 
 	jdbcConnStringPort: string;
 	
-	constructor(scope: cdk.Construct, id: string, props: RDSdataSetSetEnrollmentProps) {
+	constructor(scope: Construct, id: string, props: RDSdataSetSetEnrollmentProps) {
 		super(scope, id, props);
 	
 		const dataSetName = props.DataSetName;
@@ -92,7 +95,7 @@ export class RDSPostgresDataSetEnrollment extends RDSDataSetEnrollment{
         return "5432";
     }
 
-	constructor(scope: cdk.Construct, id: string, props: RDSdataSetSetEnrollmentProps) {
+	constructor(scope: Construct, id: string, props: RDSdataSetSetEnrollmentProps) {
 		super(scope, id, props);
 	}
 }
@@ -105,7 +108,7 @@ export class RDSOracleDataSetEnrollment extends RDSDataSetEnrollment{
         return "1521";
     }
 
-	constructor(scope: cdk.Construct, id: string, props: RDSdataSetSetEnrollmentProps) {
+	constructor(scope: Construct, id: string, props: RDSdataSetSetEnrollmentProps) {
 		super(scope, id, props);
 	}
 }

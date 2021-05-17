@@ -1,6 +1,5 @@
 #!/bin/sh
 npm run build
-cdk bootstrap
 currentPrincipalArn=$(aws sts get-caller-identity --query Arn --output text)
 #Just in case you are using an IAM role, we will switch the identity from your STS arn to the underlying role ARN.
 currentPrincipalArn=$(sed 's/\(sts\)\(.*\)\(assumed-role\)\(.*\)\(\/.*\)/iam\2role\4/' <<< $currentPrincipalArn)

@@ -1,11 +1,12 @@
-import * as cdk from '@aws-cdk/core';
-import ec2 = require('@aws-cdk/aws-ec2');
-import iam = require('@aws-cdk/aws-iam');
-import rds = require('@aws-cdk/aws-rds');
-import glue = require('@aws-cdk/aws-glue');
-import s3 = require('@aws-cdk/aws-s3');
-import sm = require('@aws-cdk/aws-secretsmanager');
-import s3assets = require('@aws-cdk/aws-s3-assets');
+import { Construct } from 'constructs';
+import { Stack } from 'aws-cdk-lib';
+
+import * as ec2 from 'aws-cdk-lib/aws-ec2';
+import * as iam from 'aws-cdk-lib/aws-iam';
+import * as rds from 'aws-cdk-lib/aws-rds';
+import * as glue from 'aws-cdk-lib/aws-glue';
+import * as s3 from 'aws-cdk-lib/aws-s3';
+
 import { RDSdataSetSetEnrollmentProps, RDSPostgresDataSetEnrollment } from './constructs/rds-data-set-enrollment';
 import { DataSetStack, DataSetStackProps} from './stacks/dataset-stack';
 
@@ -18,7 +19,7 @@ export interface ExamplePgRdsDataSetParams extends DataSetStackProps {
 }
 
 export class ExamplePgRdsDataSet extends DataSetStack{
-	constructor(scope: cdk.Construct, id: string, props: ExamplePgRdsDataSetParams) {
+	constructor(scope: Construct, id: string, props: ExamplePgRdsDataSetParams) {
 		super(scope, id, props);
 	
 	
@@ -41,7 +42,7 @@ export class ExamplePgRdsDataSet extends DataSetStack{
 				"--enable-metrics": "",
 				"--DL_BUCKET": props.DataLake.DataLakeBucket.bucketName,
 				"--DL_PREFIX": "/"+dataSetName+"/",
-				"--DL_REGION": cdk.Stack.of(this).region,
+				"--DL_REGION": Stack.of(this).region,
 				"--GLUE_SRC_DATABASE": `${dataSetName}_src`
 			}	    	
 		}));
