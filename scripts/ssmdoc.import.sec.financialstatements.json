@@ -1,0 +1,30 @@
+{
+   "schemaVersion":"2.2",
+   "description":"Downloads SEC Financial Statment and Notes Source files and moves them to S3",
+   "parameters":{
+        "SourceFileTargetBucketLocation": {
+          "type": "String",
+          "description": "Bucket to store the open targets files in."
+        }
+    },
+    "mainSteps":[
+      {
+        "action":"aws:runShellScript",
+        "name":"DownloadAndImportSECfinancialStatementsAndNotesintoS3",
+        "inputs":{
+            "runCommand": [
+              "rm -rf SEC/sourceExports/financial-statement-and-notes/",
+              "wget https://www.sec.gov/files/dera/data/financial-statement-and-notes-data-sets/2021_04_notes.zip -P SEC/sourceExports/financial-statement-and-notes/2021_04/",
+              "wget https://www.sec.gov/files/dera/data/financial-statement-and-notes-data-sets/2021_03_notes.zip -P SEC/sourceExports/financial-statement-and-notes/2021_03/",
+              "wget https://www.sec.gov/files/dera/data/financial-statement-and-notes-data-sets/2021_02_notes.zip -P SEC/sourceExports/financial-statement-and-notes/2021_02/",
+              "wget https://www.sec.gov/files/dera/data/financial-statement-and-notes-data-sets/2021_01_notes.zip -P SEC/sourceExports/financial-statement-and-notes/2021_01/",
+              "wget https://www.sec.gov/files/dera/data/financial-statement-and-notes-data-sets/2020_12_notes.zip -P SEC/sourceExports/financial-statement-and-notes/2020_12/",
+              "wget https://www.sec.gov/files/dera/data/financial-statement-and-notes-data-sets/2020_11_notes.zip -P SEC/sourceExports/financial-statement-and-notes/2020_11/",
+              "wget https://www.sec.gov/files/dera/data/financial-statement-and-notes-data-sets/2020_10_notes.zip -P SEC/sourceExports/financial-statement-and-notes/2020_10/",
+              "find SEC/sourceExports/financial-statement-and-notes/ -depth -name '*.zip' -execdir /usr/bin/unzip -n {} \\; -delete",
+              "aws s3 sync SEC/sourceExports/* s3://{{SourceFileTargetBucketLocation}}/SEC/sourceExports/"
+            ]
+         }
+      }
+   ]
+}

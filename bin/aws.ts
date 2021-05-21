@@ -6,8 +6,10 @@ import { App, Stack } from 'aws-cdk-lib';
 import { DataLakeStack } from '../lib/stacks/datalake-stack';
 import { DataLakeEnrollment } from '../lib/constructs/data-lake-enrollment';
 import { DataSetTemplateStack, CrawlerTemplateStack } from '../lib/stacks/dataset-stack';
-import { ExampleS3DataSet } from '../lib/ExampleS3DataSet-stack';
+import { SECfinancialStatmentDataSet } from '../lib/SEC-financialstatments-DataSet-stack';
 import { ExamplePgRdsDataSet } from '../lib/ExamplePgRdsDataSet-stack';
+import { BaselineStack } from '../lib/Baseline-stack';
+    
 
 const app = new App();
 
@@ -22,10 +24,26 @@ const exisitingResourceImportStack = new Stack(app, 'resourceImportStack', {
 });
 
 
-// const exampleS3DataSet = new ExampleS3DataSet(app, 'ExampleS3DataSet', {
-//     sourceBucket: s3.Bucket.fromBucketName(exisitingResourceImportStack, 'exampleS3DataSetSourceBucket', 'dlacregressiontest0'),
-//     sourceBucketDataPrefix: '/',
-//     DataLake: coreDataLake
+const baseline = new BaselineStack(app, "BaselineStack", {
+  coreDataLakeProps: coreDataLake,
+});
+
+
+const SECfinancialStatementAndNotes = new SECfinancialStatmentDataSet(app, 'SECfinancialStatementAndNotes', {
+    sourceBucket: baseline.SecFinancialStatementBucket,
+    sourceBucketDataPrefix: '/',
+    DataLake: coreDataLake
+});
+
+
+// console.log("Setting up ChEMBL enrollment stack.");
+
+// const chemblStack = new ChemblStack(app, "ChemblStack", {
+//   ChemblDb25: baseline.ChemblDb25,
+//   ChemblDb27: baseline.ChemblDb27,
+//   accessSecurityGroup: baseline.ChemblDBChemblDbAccessSg,
+//   databaseSecret: baseline.ChemblDBSecret,
+//   DataLake: coreDataLake,
 // });
 
 
