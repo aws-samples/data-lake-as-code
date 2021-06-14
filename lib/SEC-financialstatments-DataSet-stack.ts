@@ -27,7 +27,7 @@ export class SECfinancialStatmentDataSet extends DataSetStack{
 	        sourceBucket: props.sourceBucket,
 	        MaxDPUs: 3.0,
             sourceBucketDataPrefixes: [
-                `${props.sourceBucketDataPrefix}SEC/` ,
+                `${props.sourceBucketDataPrefix}SEC/groupedExports/` ,
             ],
 	        dataLakeBucket: props.DataLake.DataLakeBucket,
 	        GlueScriptPath: "scripts/glue.s3import.fullcopy.s3.py",
