@@ -14,8 +14,7 @@ import { BaselineStack } from '../lib/Baseline-stack';
 const app = new App();
 
 const coreDataLake = new DataLakeStack(app, 'CoreDataLake', {
-    description: "AWS Data Lake as Code core data lake template. (ib-87ce095eDf)",
-    starterLakeFormationAdminPrincipalArn: app.node.tryGetContext("starterLakeFormationAdmin")
+    description: "AWS Data Lake as Code core data lake template. (ib-87ce095eDf)"
 });
 
 

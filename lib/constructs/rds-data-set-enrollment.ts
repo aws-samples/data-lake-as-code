@@ -80,7 +80,7 @@ export class RDSDataSetEnrollment extends DataLakeEnrollment {
 						
 
 		this.createCoarseIamPolicy();
-		this.grantGlueRoleLakeFormationPermissions(this.DataEnrollment.DataSetGlueRole, props.DataSetName); 
+		this.grantGlueRoleLakeFormationPermissions(this.DataEnrollment.DataSetGlueRole, props.DataSetName, 'src'); 
 		this.grantCoarseIamRead(this.DataEnrollment.DataSetGlueRole);
 	}
 }

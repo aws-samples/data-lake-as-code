@@ -1,5 +1,5 @@
 import { Construct } from 'constructs';
-import { App, Stack, Resource, StackProps, CustomResource,  Duration } from 'aws-cdk-lib';
+import { App, Stack, Resource, StackProps, CustomResource,  Duration, DefaultStackSynthesizer, Fn } from 'aws-cdk-lib';
 
 import * as ec2 from 'aws-cdk-lib/aws-ec2';
 import * as iam from 'aws-cdk-lib/aws-iam';
@@ -19,7 +19,7 @@ import {
 } from "../constructs/data-set-enrollment";
 
 export interface DataLakeStackProps extends StackProps {
-  starterLakeFormationAdminPrincipalArn: string;
+
 }
 
 export class DataLakeStack extends Stack {
@@ -29,7 +29,6 @@ export class DataLakeStack extends Stack {
   public readonly LakeFormationResource: lakeformation.CfnResource;
   public readonly PrimaryAthenaWorkgroup: athena.CfnWorkGroup;
   private readonly bucketRole: iam.Role;
-  private readonly starterAdminArn: string;
 
   public grantAthenaResultsBucketPermission(principal: iam.IPrincipal) {
     if (principal instanceof iam.Role) {
@@ -63,15 +62,17 @@ export class DataLakeStack extends Stack {
   constructor(scope: Construct, id: string, props: DataLakeStackProps) {
     super(scope, id, props);
 
+
     this.DataLakeBucket = new s3.Bucket(this, 'dataLakeBucket',{
+      bucketName: 'aws-roda-fintech-datalake'
     });
     this.AthenaResultsBucket = new s3.Bucket(this, "athenaResultsBucket");
 
-    new lakeformation.CfnDataLakeSettings(this, "starterAdminPermission", {
+
+    new lakeformation.CfnDataLakeSettings(this, "cdkCfnExecRoleAdminPermission", {
       admins: [
         {
-          dataLakePrincipalIdentifier:
-            props.starterLakeFormationAdminPrincipalArn,
+          dataLakePrincipalIdentifier: Fn.sub((this.synthesizer as DefaultStackSynthesizer).cloudFormationExecutionRoleArn)
         },
       ],
     });
@@ -94,9 +95,7 @@ export class DataLakeStack extends Stack {
       coarseAthenaResultBucketAccess
     );
 
-    this.AthenaResultsBucketAccessPolicy = new iam.ManagedPolicy(
-      this,
-      `athenaResultBucketAccessPolicy`,
+    this.AthenaResultsBucketAccessPolicy = new iam.ManagedPolicy(this, `athenaResultBucketAccessPolicy`,
       {
         document: coarseAthenaResultBucketAccessPolicyDoc,
         description: `AthenaResultBucketAccessPolicy`,
@@ -111,9 +110,7 @@ export class DataLakeStack extends Stack {
 
     this.DataLakeBucket.grantReadWrite(this.bucketRole);
 
-    this.LakeFormationResource = new lakeformation.CfnResource(
-      this,
-      "dataLakeBucketLakeFormationResource",
+    this.LakeFormationResource = new lakeformation.CfnResource(this,"dataLakeBucketLakeFormationResource",
       {
         resourceArn: this.DataLakeBucket.bucketArn,
         roleArn: this.bucketRole.roleArn,
@@ -121,9 +118,7 @@ export class DataLakeStack extends Stack {
       }
     );
 
-    const workGroupConfigCustResourceRole = new iam.Role(
-      this,
-      "workGroupConfigCustResourceRole",
+    const workGroupConfigCustResourceRole = new iam.Role(this,"workGroupConfigCustResourceRole",
       {
         assumedBy: new iam.ServicePrincipal("lambda.amazonaws.com"),
       }

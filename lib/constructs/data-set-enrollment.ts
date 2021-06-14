@@ -1,5 +1,5 @@
 import { Construct,  } from 'constructs';
-import { Aws, App, Stack, Resource, StackProps, CustomResource,  Duration } from 'aws-cdk-lib';
+import { Aws, App, Stack, Resource, StackProps, CustomResource,  Duration, Fn, Token } from 'aws-cdk-lib';
 
 import * as ec2 from 'aws-cdk-lib/aws-ec2';
 import * as iam from 'aws-cdk-lib/aws-iam';
@@ -186,20 +186,24 @@ export class DataSetEnrollment extends Construct {
     public readonly Dataset_Source: glue.CfnDatabase;
     public readonly Dataset_Datalake: glue.CfnDatabase;
     
+	public readonly Dataset_SourceDatabaseName: string;
+    public readonly Dataset_DatalakeDatabaseName: string;
+    
     public readonly DataLakeBucketName: string;
     public readonly DataLakePrefix: string;
 	public readonly DataLakeTargets: glue.CfnCrawler.TargetsProperty;
 
 
-	private setupCrawler(targetGlueDatabase: glue.CfnDatabase, targets: glue.CfnCrawler.TargetsProperty, isSourceCrawler: boolean){
+	private setupCrawler(targetGlueDatabase: glue.CfnDatabase, targets: glue.CfnCrawler.TargetsProperty, isSourceCrawler: boolean, databaseName: string){
 		
 		var sourceCrawler = isSourceCrawler ? "src" : "dl";
+		
 		
 		return new glue.CfnCrawler(this,  `${this.DataSetName}-${sourceCrawler}-crawler`,{
 			name: `${this.DataSetName}_${sourceCrawler}_crawler`, 
 			targets: targets, 
 			role: this.DataSetGlueRole.roleName,
-			databaseName: targetGlueDatabase.getAtt('DatabaseInput.Name').toString(), 
+			databaseName: databaseName,
 			schemaChangePolicy: {
 				deleteBehavior: "DEPRECATE_IN_DATABASE", 
 				updateBehavior: "UPDATE_IN_DATABASE",
@@ -219,17 +223,20 @@ export class DataSetEnrollment extends Construct {
 		
 		this.DataSetName = props.dataSetName;
 		
+		this.Dataset_SourceDatabaseName = `${props.dataSetName}_src`;
+		this.Dataset_DatalakeDatabaseName = `${props.dataSetName}_dl`;
+		
 		this.Dataset_Source = new glue.CfnDatabase(this, `${props.dataSetName}_src`, {
 			catalogId: Aws.ACCOUNT_ID,
 			databaseInput: {
-				name: `${props.dataSetName}_src`,
+				name: this.Dataset_SourceDatabaseName,
 				locationUri: `s3://${props.dataLakeBucket.bucketName}/${props.dataSetName}/`
 			}
 		});
 		this.Dataset_Datalake = new glue.CfnDatabase(this, `${props.dataSetName}_dl`, {
 			catalogId: Aws.ACCOUNT_ID,
 			databaseInput: {
-				name:  `${props.dataSetName}_dl`,
+				name:  this.Dataset_DatalakeDatabaseName,
 				locationUri: `s3://${props.dataLakeBucket.bucketName}/${props.dataSetName}/`
 			}
 		});
@@ -261,9 +268,8 @@ export class DataSetEnrollment extends Construct {
 		if(typeof props.SourceAccessPolicy !== 'undefined'){
 			props.SourceAccessPolicy.attachToRole(this.DataSetGlueRole);	
 		}
-		 
-		 
-		const sourceCrawler = this.setupCrawler(this.Dataset_Source, props.SourceTargets, true);
+
+		const sourceCrawler = this.setupCrawler(this.Dataset_Source, props.SourceTargets, true, this.Dataset_SourceDatabaseName);
 		
 		
 		
@@ -300,16 +306,7 @@ export class DataSetEnrollment extends Construct {
 		const etl_job = new glue.CfnJob(this, `${props.dataSetName}-EtlJob`, jobParams );
 		
 		
-		const datalake_crawler = this.setupCrawler(this.Dataset_Datalake, this.DataLakeTargets, false);
-		
-		// const datalake_crawler = this.setupCrawler(this.Dataset_Datalake, {
-		// 		s3Targets: [
-		// 			{
-		// 				path: `s3://${props.dataLakeBucket.bucketName}/${props.dataSetName}/`
-		// 			}
-		// 		]
-		// }, false);
-
+		const datalake_crawler = this.setupCrawler(this.Dataset_Datalake, this.DataLakeTargets, false, this.Dataset_DatalakeDatabaseName);
 		
 		const datalakeEnrollmentWorkflow = new DataLakeEnrollmentWorkflow(this,`${props.dataSetName}DataLakeWorkflow`,{
 			workfowName: `${props.dataSetName}_DataLakeEnrollmentWorkflow`,

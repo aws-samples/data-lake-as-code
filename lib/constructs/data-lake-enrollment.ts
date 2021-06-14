@@ -20,7 +20,8 @@ export class DataLakeEnrollment extends Construct {
     private CoarseResourceAccessPolicy: iam.ManagedPolicy;
     private CoarseIamPolciesApplied: boolean;
     private WorkflowCronScheduleExpression?: string;
-    
+    public SourceCfnResource?: lakeformation.CfnResource;
+    public DatalakeCfnResource?: lakeformation.CfnResource;
 
     constructor(scope: Construct, id: string, props: DataLakeEnrollment.DataLakeEnrollmentProps) {
         super(scope, id);
@@ -32,19 +33,19 @@ export class DataLakeEnrollment extends Construct {
 
     }
  
-    grantGlueRoleLakeFormationPermissions(DataSetGlueRole: iam.Role, DataSetName: string) {
+    grantGlueRoleLakeFormationPermissions(DataSetGlueRole: iam.Role, DataSetName: string, description: string, resource?: lakeformation.CfnResource) {
 
         this.grantDataLocationPermissions(this.DataEnrollment.DataSetGlueRole, {
             Grantable: true,
-            GrantResourcePrefix: `${DataSetName}locationGrant`,
+            GrantResourcePrefix: `${DataSetName}${description}locationGrant`,
             Location: this.DataEnrollment.DataLakeBucketName,
             LocationPrefix: this.DataEnrollment.DataLakePrefix
-        });
+        }, resource);
         
         this.grantDatabasePermission(this.DataEnrollment.DataSetGlueRole,  {		     
 		     DatabasePermissions: [DataLakeEnrollment.DatabasePermission.All],
              GrantableDatabasePermissions: [DataLakeEnrollment.DatabasePermission.All],
-             GrantResourcePrefix: `${DataSetName}RoleGrant`
+             GrantResourcePrefix: `${DataSetName}${description}RoleGrant`
 		}, true);
     }
 
@@ -75,8 +76,8 @@ export class DataLakeEnrollment extends Construct {
             "Resource": [
                 `arn:aws:glue:${Stack.of(this).region}:${Stack.of(this).account}:catalog`,
                 `arn:aws:glue:${Stack.of(this).region}:${Stack.of(this).account}:database/default`,
-                this.DataEnrollment.Dataset_Datalake.ref,
-                `arn:aws:glue:${Stack.of(this).region}:${Stack.of(this).account}:table/${this.DataEnrollment.Dataset_Datalake.getAtt('DatabaseInput.Name').toString()}/*`
+                `arn:aws:glue:${Stack.of(this).region}:${Stack.of(this).account}:database/${this.DataEnrollment.Dataset_DatalakeDatabaseName}`,
+                `arn:aws:glue:${Stack.of(this).region}:${Stack.of(this).account}:table/${this.DataEnrollment.Dataset_DatalakeDatabaseName}/*`
             ],
             "Effect": "Allow"
 		};
@@ -121,7 +122,12 @@ export class DataLakeEnrollment extends Construct {
 
     	const policyParams = {
     	  policyName: `${this.DataSetName}-coarseIamDataLakeAccessPolicy`,
-    	  statements: [s3PolicyStatement,gluePolicyStatement, athenaPolicyStatement, coarseLakeFormationPolicy]
+    	  statements: [
+    	      s3PolicyStatement,
+    	      gluePolicyStatement, 
+    	      athenaPolicyStatement, 
+    	      coarseLakeFormationPolicy
+    	      ]
         }
 
 	    this.CoarseResourceAccessPolicy = new iam.ManagedPolicy(this, `${this.DataSetName}-coarseIamDataLakeAccessPolicy`, policyParams );
@@ -356,7 +362,7 @@ export class DataLakeEnrollment extends Construct {
 
     public grantDatabasePermission(principal: iam.IPrincipal, permissionGrant: DataLakeEnrollment.DatabasePermissionGrant, includeSourceDb: boolean = false){
 
-        const databaseName = this.DataEnrollment.Dataset_Datalake.getAtt('DatabaseInput.Name').toString();
+        const databaseName = this.DataEnrollment.Dataset_DatalakeDatabaseName;
         var grantIdPrefix = ""
         var dataLakePrincipal : lakeformation.CfnPermissions.DataLakePrincipalProperty = {
             dataLakePrincipalIdentifier: ""
@@ -404,7 +410,7 @@ export class DataLakeEnrollment extends Construct {
     public grantTablePermissions(principal: iam.IPrincipal, permissionGrant: DataLakeEnrollment.TablePermissionGrant){
         
         const coreGrant = this.setupIamAndLakeFormationDatabasePermissionForPrincipal(principal, permissionGrant.DatabasePermissions, permissionGrant.GrantableDatabasePermissions);
-        const databaseName = this.DataEnrollment.Dataset_Datalake.getAtt('DatabaseInput.Name').toString();
+        const databaseName = this.DataEnrollment.Dataset_DatalakeDatabaseName;   
         permissionGrant.tables.forEach(table => {
             var tableResourceProperty : lakeformation.CfnPermissions.ResourceProperty = {
                 tableResource:{
@@ -487,7 +493,7 @@ export class DataLakeEnrollment extends Construct {
 	private setupIamAndLakeFormationDatabasePermissionForPrincipal(principal: iam.IPrincipal, databasePermissions: Array<DataLakeEnrollment.DatabasePermission>, grantableDatabasePermissions: Array<DataLakeEnrollment.DatabasePermission> ){
 
         this.grantCoarseIamRead(principal);
-        const databaseName = this.DataEnrollment.Dataset_Datalake.getAtt('DatabaseInput.Name').toString();
+        const databaseName = this.DataEnrollment.Dataset_DatalakeDatabaseName;
         
         var grantIdPrefix = ""
         var dataLakePrincipal : lakeformation.CfnPermissions.DataLakePrincipalProperty = {

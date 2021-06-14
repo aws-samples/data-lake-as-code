@@ -23,9 +23,9 @@ export class S3dataSetEnrollment extends DataLakeEnrollment{
     
     private readonly sourceBucket: s3.IBucket;
 
-    setupGlueRoleLakeFormationPermissions(DataSetGlueRole: iam.Role, DataSetName: string, sourceDataBucket: s3.IBucket) {
+    setupGlueRoleLakeFormationPermissions(DataSetGlueRole: iam.Role, DataSetName: string, sourceDataBucket: s3.IBucket, locationDescription: string) {
 
-        const sourceLakeFormationLocation = new lakeformation.CfnResource(  this, "sourceLakeFormationLocation",
+        const sourceLakeFormationLocation = new lakeformation.CfnResource(  this, `sourceLakeFormationLocation-${sourceDataBucket}`,
           {
             resourceArn: sourceDataBucket.bucketArn,
             roleArn: this.DataEnrollment.DataSetGlueRole.roleArn,
@@ -33,14 +33,14 @@ export class S3dataSetEnrollment extends DataLakeEnrollment{
           }
         );
 
-        super.grantGlueRoleLakeFormationPermissions(DataSetGlueRole, DataSetName);
-
         this.grantDataLocationPermissions(this.DataEnrollment.DataSetGlueRole, {
             Grantable: true,
-            GrantResourcePrefix: `${DataSetName}SourcelocationGrant`,
+            GrantResourcePrefix: `${DataSetName}-${locationDescription}-locationGrant`,
             Location: sourceDataBucket.bucketName,
             LocationPrefix: "/"
         }, sourceLakeFormationLocation);
+        
+        return sourceLakeFormationLocation;
 
     }
 
@@ -114,8 +114,11 @@ export class S3dataSetEnrollment extends DataLakeEnrollment{
        
         this.createCoarseIamPolicy();
         
+        this.SourceCfnResource = this.setupGlueRoleLakeFormationPermissions(this.DataEnrollment.DataSetGlueRole, props.DataSetName, props.sourceBucket, "src"); 
+        this.DatalakeCfnResource = this.setupGlueRoleLakeFormationPermissions(this.DataEnrollment.DataSetGlueRole, props.DataSetName, props.dataLakeBucket, "dl"); 
         
-        this.setupGlueRoleLakeFormationPermissions(this.DataEnrollment.DataSetGlueRole, props.DataSetName, props.sourceBucket); 
+        super.grantGlueRoleLakeFormationPermissions(this.DataEnrollment.DataSetGlueRole, props.DataSetName, 'src', this.SourceCfnResource);
+        super.grantGlueRoleLakeFormationPermissions(this.DataEnrollment.DataSetGlueRole, props.DataSetName, 'dl', this.DatalakeCfnResource);
         
         this.grantCoarseIamRead(this.DataEnrollment.DataSetGlueRole);
         
