@@ -6,7 +6,6 @@ import { App, Stack } from 'aws-cdk-lib';
 import { DataLakeStack } from '../lib/stacks/datalake-stack';
 import { DataLakeEnrollment } from '../lib/constructs/data-lake-enrollment';
 import { DataSetTemplateStack, CrawlerTemplateStack } from '../lib/stacks/dataset-stack';
-import { SECfinancialStatmentDataSet } from '../lib/SEC-financialstatments-DataSet-stack';
 import { ExamplePgRdsDataSet } from '../lib/ExamplePgRdsDataSet-stack';
 import { BaselineStack } from '../lib/Baseline-stack';
     
