@@ -23,29 +23,11 @@ const exisitingResourceImportStack = new Stack(app, 'resourceImportStack', {
 });
 
 
-
-const baseline = new BaselineStack(app, "BaselineStack", {
-  coreDataLakeProps: coreDataLake,
-});
-
-
-const SECfinancialStatementAndNotes = new SECfinancialStatmentDataSet(app, 'SECfinancialStatementAndNotes', {
-    sourceBucket: baseline.SecFinancialStatementBucket,
-    sourceBucketDataPrefix: '/',
-    DataLake: coreDataLake
-});
-
-
-SECfinancialStatementAndNotes.grantIamRead(new iam.ArnPrincipal('arn:aws:iam::XXXXXXXXXX:role/service-role/AmazonSageMakerServiceCatalogProductsUseRole'));
-
-const secFinancialStatement = new DataSetTemplateStack( app, "SECFinancialStatementsAndNotesTemplate",
-  {
-    description: "AWS Data Lake as Code Registry of Open Data Federated SEC Financial Statments and notes template. (ib-5d84vk7d1d)",
-    DatabaseDescriptionPath:"../../RODA_templates/sec_financial_statements_get_database.json",
-    DescribeTablesPath: "../../RODA_templates/sec_financial_statements_get_tables.json",
-    DataSetName: SECfinancialStatementAndNotes.Enrollments[0].DataSetName,
-  }
-);
+// const exampleS3DataSet = new ExampleS3DataSet(app, 'ExampleS3DataSet', {
+//     sourceBucket: s3.Bucket.fromBucketName(exisitingResourceImportStack, 'exampleS3DataSetSourceBucket', 'dlacregressiontest0'),
+//     sourceBucketDataPrefix: '/',
+//     DataLake: coreDataLake
+// });
 
 // console.log("Setting up ChEMBL enrollment stack.");
 
@@ -80,8 +62,8 @@ const secFinancialStatement = new DataSetTemplateStack( app, "SECFinancialStatem
 
 // Grant permissions:
 
-// const exampleExistingIamUser = iam.User.fromUserName(exisitingResourceImportStack, 'exampleUserGrantee', '--- EXISTING IAM USERNAME GOES HERE --' );
-// const exampleExistingIamRole = iam.Role.fromRoleArn(exisitingResourceImportStack, 'exampleRoleGrantee', '--- EXISTING IAM ROLE ARN GOES HERE --' );
+// const exampleExistingIamUser = new iam.ArnPrincipal('arn:aws:iam::XXXXXXXXXX:user/XXXXXX')
+// const exampleExistingIamRole = new iam.ArnPrincipal('arn:aws:iam::XXXXXXXXXX:role/XXXXXXX')
 
 // exampleS3DataSet.grantIamRead(exampleExistingIamUser);
 // exampleS3DataSet.grantIamRead(exampleExistingIamRole);
