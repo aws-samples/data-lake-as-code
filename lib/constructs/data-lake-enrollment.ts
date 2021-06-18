@@ -269,9 +269,8 @@ export class DataLakeEnrollment extends Construct {
                 s3Resource: s3Arn            
             }            
         };
-        const resolvedPrincipalType = this.determinePrincipalType(principal);
 
-        if(resolvedPrincipalType === iam.Role) {
+        if(principal instanceof iam.Role) {
             const resolvedPrincipal = principal as  iam.Role;
 
             if(permissionGrant.GrantResourcePrefix){
@@ -282,11 +281,32 @@ export class DataLakeEnrollment extends Construct {
             dataLakePrincipal = { dataLakePrincipalIdentifier: resolvedPrincipal.roleArn };
 		}
 
-	    if(resolvedPrincipalType === iam.User){
+	    if(principal instanceof iam.User){
             const resolvedPrincipal = principal as  iam.User;
             grantIdPrefix = `${resolvedPrincipal.userName}-${this.DataSetName}`
             dataLakePrincipal = { dataLakePrincipalIdentifier: resolvedPrincipal.userArn };
 		}
+
+        if (principal instanceof iam.ArnPrincipal) {
+          
+            if(principal.arn.includes(":role/")){
+                const resolvedPrincipal = iam.Role.fromRoleArn(this,'importedRoleLFLocationGrant',principal.arn);
+
+                if(permissionGrant.GrantResourcePrefix){
+                    grantIdPrefix = `${permissionGrant.GrantResourcePrefix}-${this.DataSetName}`
+                }else{
+                    grantIdPrefix = `${resolvedPrincipal.roleName}-${this.DataSetName}`
+                }            
+                dataLakePrincipal = { dataLakePrincipalIdentifier: resolvedPrincipal.roleArn };
+                
+ 
+            }
+            if(principal.arn.includes(":user/")){
+                const resolvedPrincipal = iam.User.fromUserArn(this,'importedUserLFLocationGrant',principal.arn);
+                grantIdPrefix = `${resolvedPrincipal.userName}-${this.DataSetName}`
+                dataLakePrincipal = { dataLakePrincipalIdentifier: resolvedPrincipal.userArn };                
+            }
+        }
 
 
         if(permissionGrant.Grantable){
@@ -371,9 +391,9 @@ export class DataLakeEnrollment extends Construct {
             databaseResource: {name: databaseName}
         };
 
-        const resolvedPrincipalType = this.determinePrincipalType(principal);
+        
 
-        if(resolvedPrincipalType === iam.Role) {
+        if(principal instanceof iam.Role) {
             const resolvedPrincipal = principal as  iam.Role;
 
             if(permissionGrant.GrantResourcePrefix){
@@ -384,11 +404,36 @@ export class DataLakeEnrollment extends Construct {
             dataLakePrincipal = { dataLakePrincipalIdentifier: resolvedPrincipal.roleArn };
 		}
 
-	    if(resolvedPrincipalType === iam.User){
+	    if(principal instanceof iam.User){
             const resolvedPrincipal = principal as  iam.User;
             grantIdPrefix = `${resolvedPrincipal.userName}-${this.DataSetName}`
             dataLakePrincipal = { dataLakePrincipalIdentifier: resolvedPrincipal.userArn };
 		}
+		
+        if (principal instanceof iam.ArnPrincipal) {
+          
+            if(principal.arn.includes(":role/")){
+                const resolvedPrincipal = iam.Role.fromRoleArn(this,'importedRoleTableWithColumnGrant',principal.arn);
+
+                if(permissionGrant.GrantResourcePrefix){
+                    grantIdPrefix = `${permissionGrant.GrantResourcePrefix}-${this.DataSetName}`
+                }else{
+                    grantIdPrefix = `${resolvedPrincipal.roleName}-${this.DataSetName}`
+                }            
+                dataLakePrincipal = { dataLakePrincipalIdentifier: resolvedPrincipal.roleArn };
+                
+            }
+            
+            if(principal.arn.includes(":user/")){
+                const resolvedPrincipal = iam.User.fromUserArn(this,'importedUserTableWithColumnGrant',principal.arn);
+                grantIdPrefix = `${resolvedPrincipal.userName}-${this.DataSetName}`
+                dataLakePrincipal = { dataLakePrincipalIdentifier: resolvedPrincipal.userArn };
+            }
+          
+      
+        }		
+		
+		
 
         this.createLakeFormationPermission(`${grantIdPrefix}-databaseGrant`,dataLakePrincipal , databaseResourceProperty, permissionGrant.DatabasePermissions, permissionGrant.GrantableDatabasePermissions)
 
@@ -427,25 +472,41 @@ export class DataLakeEnrollment extends Construct {
 	public grantCoarseIamRead(principal: iam.IPrincipal){
 
 
-        const resolvedPrincipalType = this.determinePrincipalType(principal);
         
         
-        
-		if(resolvedPrincipalType === iam.Role){
+		if(principal instanceof iam.Role){
 		    this.CoarseAthenaAccessPolicy.attachToRole(principal as iam.Role);
 		    this.CoarseResourceAccessPolicy.attachToRole(principal as iam.Role);
 		    this.CoarseIamPolciesApplied = true;
 		    return;
 		}
 
-	    if(resolvedPrincipalType === iam.User){
+	    if(principal instanceof iam.User){
 		    this.CoarseAthenaAccessPolicy.attachToUser(principal as iam.User);
 		    this.CoarseResourceAccessPolicy.attachToUser(principal as iam.User);
 		    this.CoarseIamPolciesApplied = true;
 		    return;
 		}
-
-
+		
+	    if (principal instanceof iam.ArnPrincipal) {
+          
+          if(principal.arn.includes(":role/")){
+            this.CoarseAthenaAccessPolicy.attachToRole(iam.Role.fromRoleArn(this,'importedRoleCoarseIamReadAthena',principal.arn));
+		    this.CoarseResourceAccessPolicy.attachToRole(iam.Role.fromRoleArn(this,'importedRoleCoarseIamReadLfResource',principal.arn));
+		    this.CoarseIamPolciesApplied = true;  
+		    return;
+          }
+    
+          if(principal.arn.includes(":user/")){
+              
+		    this.CoarseAthenaAccessPolicy.attachToUser(iam.User.fromUserArn(this,'importedUserCoarseIamReadAthena',principal.arn));
+		    this.CoarseResourceAccessPolicy.attachToUser(iam.User.fromUserArn(this,'importedUserCoarseIamReadLfResource',principal.arn));
+		    this.CoarseIamPolciesApplied = true;
+		    return;              
+          }
+          
+      
+        }
 
 	}
 
@@ -459,37 +520,7 @@ export class DataLakeEnrollment extends Construct {
             permissionsWithGrantOption: grantablePremissions
         });
     }
-	private determinePrincipalType(principal: iam.IPrincipal){
 
-        if(principal instanceof iam.Role){
-            //return principal as iam.Role;
-            return iam.Role;
-		}
-
-	    if(principal instanceof iam.User){
-            //return principal as iam.User;
-            return iam.User;
-		}
-
-		if(principal instanceof Resource){
-
-	        try{
-                const user = principal as iam.User;
-                return iam.User;
-	        } catch(exception) {
-	            console.log(exception);
-	        }
-	        try{
-                const role = principal as iam.Role;
-                return iam.Role;
-	        } catch(exception) {
-	            console.log(exception);
-	        }
-        }
-
-        throw("Unable to deterimine principal type...");
-
-    }
 	private setupIamAndLakeFormationDatabasePermissionForPrincipal(principal: iam.IPrincipal, databasePermissions: Array<DataLakeEnrollment.DatabasePermission>, grantableDatabasePermissions: Array<DataLakeEnrollment.DatabasePermission> ){
 
         this.grantCoarseIamRead(principal);
@@ -504,19 +535,35 @@ export class DataLakeEnrollment extends Construct {
             databaseResource: {name: databaseName}
         };
 
-        const resolvedPrincipalType = this.determinePrincipalType(principal);
 
-        if(resolvedPrincipalType === iam.Role) {
+        if(principal instanceof iam.Role) {
             const resolvedPrincipal = principal as  iam.Role;
             grantIdPrefix = `${resolvedPrincipal.roleArn}-${this.DataSetName}`
             dataLakePrincipal = { dataLakePrincipalIdentifier: resolvedPrincipal.roleArn };
 		}
 
-	    if(resolvedPrincipalType === iam.User){
+	    if(principal instanceof iam.User){
             const resolvedPrincipal = principal as  iam.User;
             grantIdPrefix = `${resolvedPrincipal.userName}-${this.DataSetName}`
             dataLakePrincipal = { dataLakePrincipalIdentifier: resolvedPrincipal.userArn };
 		}
+		
+        if (principal instanceof iam.ArnPrincipal) {
+          
+            if(principal.arn.includes(":role/")){
+                const resolvedPrincipal = iam.Role.fromRoleArn(this,'importedRoleLFDatabase',principal.arn);
+                grantIdPrefix = `${resolvedPrincipal.roleArn}-${this.DataSetName}`
+                dataLakePrincipal = { dataLakePrincipalIdentifier: resolvedPrincipal.roleArn };
+            }
+            
+            if(principal.arn.includes(":user/")){
+                const resolvedPrincipal = iam.User.fromUserArn(this,'importedUserLFDatabase',principal.arn);
+                grantIdPrefix = `${resolvedPrincipal.userName}-${this.DataSetName}`
+                dataLakePrincipal = { dataLakePrincipalIdentifier: resolvedPrincipal.userArn };
+            }
+        }		
+		
+		
 
 	    this.grantDatabasePermission(principal, { DatabasePermissions: databasePermissions, GrantableDatabasePermissions: grantableDatabasePermissions  });
 

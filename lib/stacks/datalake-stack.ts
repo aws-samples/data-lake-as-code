@@ -31,6 +31,7 @@ export class DataLakeStack extends Stack {
   private readonly bucketRole: iam.Role;
 
   public grantAthenaResultsBucketPermission(principal: iam.IPrincipal) {
+    
     if (principal instanceof iam.Role) {
       this.AthenaResultsBucketAccessPolicy.attachToRole(principal);
       return;
@@ -41,21 +42,17 @@ export class DataLakeStack extends Stack {
       return;
     }
 
-    if (principal instanceof Resource) {
-      try {
-        const user = principal as iam.User;
-        this.AthenaResultsBucketAccessPolicy.attachToUser(user);
-        return;
-      } catch (exception) {
-        console.log(exception);
+    if (principal instanceof iam.ArnPrincipal) {
+      
+      if(principal.arn.includes(":role/")){
+        this.AthenaResultsBucketAccessPolicy.attachToRole(iam.Role.fromRoleArn(this,'importedRole',principal.arn));
       }
-      try {
-        const role = principal as iam.Role;
-        this.AthenaResultsBucketAccessPolicy.attachToRole(role);
-        return;
-      } catch (exception) {
-        console.log(exception);
+
+      if(principal.arn.includes(":user/")){
+        this.AthenaResultsBucketAccessPolicy.attachToUser(iam.User.fromUserArn(this,'importedUser',principal.arn));
       }
+      
+  
     }
   }
 

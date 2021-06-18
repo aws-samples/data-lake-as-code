@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import 'source-map-support/register';
-
+import * as iam from 'aws-cdk-lib/aws-iam';
 import { Construct } from 'constructs';
 import { App, Stack } from 'aws-cdk-lib';
 import { DataLakeStack } from '../lib/stacks/datalake-stack';
@@ -23,6 +23,7 @@ const exisitingResourceImportStack = new Stack(app, 'resourceImportStack', {
 });
 
 
+
 const baseline = new BaselineStack(app, "BaselineStack", {
   coreDataLakeProps: coreDataLake,
 });
@@ -34,6 +35,17 @@ const SECfinancialStatementAndNotes = new SECfinancialStatmentDataSet(app, 'SECf
     DataLake: coreDataLake
 });
 
+
+SECfinancialStatementAndNotes.grantIamRead(new iam.ArnPrincipal('arn:aws:iam::XXXXXXXXXX:role/service-role/AmazonSageMakerServiceCatalogProductsUseRole'));
+
+const secFinancialStatement = new DataSetTemplateStack( app, "SECFinancialStatementsAndNotesTemplate",
+  {
+    description: "AWS Data Lake as Code Registry of Open Data Federated SEC Financial Statments and notes template. (ib-5d84vk7d1d)",
+    DatabaseDescriptionPath:"../../RODA_templates/sec_financial_statements_get_database.json",
+    DescribeTablesPath: "../../RODA_templates/sec_financial_statements_get_tables.json",
+    DataSetName: SECfinancialStatementAndNotes.Enrollments[0].DataSetName,
+  }
+);
 
 // console.log("Setting up ChEMBL enrollment stack.");
 

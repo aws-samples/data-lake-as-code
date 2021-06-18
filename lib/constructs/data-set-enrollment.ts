@@ -132,7 +132,7 @@ export class FederatedDataSetTemplate extends Construct{
 				});
 			}
 			
-			new glue.CfnTable(this, table["Name"], {
+			const freshTable = new glue.CfnTable(this, table["Name"], {
 				catalogId: Aws.ACCOUNT_ID,
 				databaseName: databaseName,
 				tableInput: {
@@ -152,6 +152,7 @@ export class FederatedDataSetTemplate extends Construct{
 					
 				}
 			})
+			freshTable.addDependsOn(this.glueDatabase);
 			
 			
 		}
