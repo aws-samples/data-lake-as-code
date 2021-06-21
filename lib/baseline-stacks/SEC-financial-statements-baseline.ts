@@ -9,9 +9,6 @@ import * as s3 from 'aws-cdk-lib/aws-s3';
 import * as s3assets from 'aws-cdk-lib/aws-s3-assets';
 import fs = require('fs');
 
-
-
-
 export interface SECFinancialsBaselineProps extends StackProps {
   ImportInstance: ec2.Instance;
 }

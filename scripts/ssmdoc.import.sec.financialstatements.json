@@ -4,7 +4,7 @@
    "parameters":{
         "SourceFileTargetBucketLocation": {
           "type": "String",
-          "description": "Bucket to store the open targets files in."
+          "description": "Bucket to store the SEC target files in."
         }
     },
     "mainSteps":[
