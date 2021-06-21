@@ -30,17 +30,6 @@ const exampleS3DataSet = new ExampleS3DataSet(app, 'ExampleS3DataSet', {
     DataLake: coreDataLake
 });
 
-// console.log("Setting up ChEMBL enrollment stack.");
-
-// const chemblStack = new ChemblStack(app, "ChemblStack", {
-//   ChemblDb25: baseline.ChemblDb25,
-//   ChemblDb27: baseline.ChemblDb27,
-//   accessSecurityGroup: baseline.ChemblDBChemblDbAccessSg,
-//   databaseSecret: baseline.ChemblDBSecret,
-//   DataLake: coreDataLake,
-// });
-
-
 // const examplePgRdsDataSet = new ExamplePgRdsDataSet(app, 'ExamplePgRdsDataSet', {
     
 //     database: rds.DatabaseInstance.fromDatabaseInstanceAttributes(exisitingResourceImportStack, 'sourceDatabase', {
