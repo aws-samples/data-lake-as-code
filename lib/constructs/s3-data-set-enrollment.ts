@@ -115,7 +115,6 @@ export class S3dataSetEnrollment extends DataLakeEnrollment{
         this.createCoarseIamPolicy();
         
         this.SourceCfnResource = this.setupGlueRoleLakeFormationPermissions(this.DataEnrollment.DataSetGlueRole, props.DataSetName, props.sourceBucket, "src"); 
-        this.DatalakeCfnResource = this.setupGlueRoleLakeFormationPermissions(this.DataEnrollment.DataSetGlueRole, props.DataSetName, props.dataLakeBucket, "dl"); 
         
         super.grantGlueRoleLakeFormationPermissions(this.DataEnrollment.DataSetGlueRole, props.DataSetName, 'src', this.SourceCfnResource);
         super.grantGlueRoleLakeFormationPermissions(this.DataEnrollment.DataSetGlueRole, props.DataSetName, 'dl', this.DatalakeCfnResource);
