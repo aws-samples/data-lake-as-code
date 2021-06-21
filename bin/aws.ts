@@ -3,9 +3,11 @@ import 'source-map-support/register';
 import * as iam from 'aws-cdk-lib/aws-iam';
 import { Construct } from 'constructs';
 import { App, Stack } from 'aws-cdk-lib';
+import * as s3 from 'aws-cdk-lib/aws-s3';
 import { DataLakeStack } from '../lib/stacks/datalake-stack';
 import { DataLakeEnrollment } from '../lib/constructs/data-lake-enrollment';
 import { DataSetTemplateStack, CrawlerTemplateStack } from '../lib/stacks/dataset-stack';
+import { ExampleS3DataSet } from '../lib/ExampleS3DataSet-stack';
 import { ExamplePgRdsDataSet } from '../lib/ExamplePgRdsDataSet-stack';
 import { BaselineStack } from '../lib/Baseline-stack';
     
@@ -22,11 +24,11 @@ const exisitingResourceImportStack = new Stack(app, 'resourceImportStack', {
 });
 
 
-// const exampleS3DataSet = new ExampleS3DataSet(app, 'ExampleS3DataSet', {
-//     sourceBucket: s3.Bucket.fromBucketName(exisitingResourceImportStack, 'exampleS3DataSetSourceBucket', 'dlacregressiontest0'),
-//     sourceBucketDataPrefix: '/',
-//     DataLake: coreDataLake
-// });
+const exampleS3DataSet = new ExampleS3DataSet(app, 'ExampleS3DataSet', {
+    sourceBucket: s3.Bucket.fromBucketName(exisitingResourceImportStack, 'exampleS3DataSetSourceBucket', 'dlacregression4test'),
+    sourceBucketDataPrefix: 'voc/',
+    DataLake: coreDataLake
+});
 
 // console.log("Setting up ChEMBL enrollment stack.");
 
