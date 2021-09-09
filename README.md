@@ -1,150 +1,84 @@
-# Data Lake as Code; Featuring ChEMBL and Open Targets
+# Lake House Ready Chemical and Genomics Databases from the Registry of Open Data on AWS
 
-Companion code for the AWS ['Data Lake as Code' blog post](https://aws.amazon.com/blogs/startups/a-data-lake-as-code-featuring-chembl-and-opentargets/).
+The AWS Registry of Open Data (RODA) hosts the following datasets in compressed/parquet/orc formats in a public S3 bucket which you are free to copy into your own bucket.
 
-![](https://quip-amazon.com/blob/HPG9AAwumxR/D5akZWKUWmfWEhA8u4loEA?a=U93UPcmkUsuoToxZr2QpWU5nosB1RwimIsIW5TtaJvEa)
+You can also query these datasets 'in place' using services like Athena, Redshift, Quicksight, and EMR to join with your own datasets.
 
-## To install this in your own AWS account:
+The AWS CloudFormation templates below will create the neccesary AWS Glue database, tables, and schemas in your account's AWS Glue Data Catalog **in seconds**. This allows you to start querying the data with Athena directly out of the public S3 buckets, with zero servers or networking to setup. 
 
-Your local machine needs to have the AWS CLI installed on your machine along with IAM permissions setup (through IAM role or .aws/credentials file). I like to use Cloud9 as my IDE as it comes with both of those already setup for me.  
+![](http://devspacepaul.s3.us-west-2.amazonaws.com/dlac/howitworks.png)
 
-Run the following commands  
+Once deployed, you can use standard JDBC/ODBC to query these databases with your own notebooks, business inteligence tools, plotting software, HPC enviornment, or even your local development machine. 
 
-```shell
-git clone https://github.com/aws-samples/data-lake-as-code  
-cd data-lake-as-code 
-./InstallCdkDependencies.sh  
-./DeployChemblOpenTargetsEnv.sh
-```
+## One time prerequisite 
 
-Wait for Chembl and OpenTargets to be ‘staged’ into the baseline stack.  
+If you have never used Amazon Athena in your account before, you need to [setup a default query location](https://docs.aws.amazon.com/athena/latest/ug/querying.html#query-results-specify-location-console). This should only take 2-3 minutes to do.
 
-The ‘baseline stack’ in the CDK application spins up a VPC with an S3 bucket (for OpenTargets) and an RDS Postgres instance (for ChEMBL). It also spins up a little helper EC2 instance that stages those assets in their ‘raw’ form after downloading them from [OpenTargets.org](http://OpenTargets.org) and EMBL-EBI.  
+You only need to do this once. 
 
-Go to Systems Manager in the AWS console, and then the ‘Run Command’ section. You will see the currently running command documents.   
+## Deploy this into my account
 
-![](https://quip-amazon.com/blob/HPG9AAwumxR/x4lfduQeC3Ww-DyK8loIAg?a=6aMBuWAgnWaZ5pQaJndaM06ob734VpmiCI5xfguyPaca)
-
-It takes about an hour for Chembl to build. If you get impatient and want to see the progress in real time, go to ‘Session Manager’ in the Systems Manager console, click the ‘Start session’ button, choose the ‘ChembDbImportInstance’ radio button, and click the ‘Start Session’ button.  
-
-![](https://quip-amazon.com/blob/HPG9AAwumxR/Fj7sA3VuIuvdPOHl017Xcg?a=EYFlHaKY8weEGFezDR4ld3sEhBMWl88afFdDjJQ15H8a)
-
-That will open a SSM session window. Run the following command to tail the log output.  
-
-```tail -f /home/ssm-user/progressLog```
-
-![](https://quip-amazon.com/blob/HPG9AAwumxR/rMcRhjzUcIGQVYeBFxup4Q?a=2NRscRrktD9kLK7rDqqD9bO3aXtTYttCeaEWLwDXVgIa)
-
-## Enroll Chembl and OpenTargets into the data lake
-
-Once the database has finished importing, go to Glue in the AWS console, and then the “Workflows” section  
-
-![](https://quip-amazon.com/blob/HPG9AAwumxR/K0liqaLzOGNHdODU_fN_MA?a=GQQahtSxVQNvaU6AkEjATwCE0WJglr630LH3bZcngB0a)
-
-Select the openTargetsDataLakeEnrollment workflow, and click ‘Actions’, then 'Run'  
-
-![](https://quip-amazon.com/blob/HPG9AAwumxR/UV0-ZlwmK_KF9L9MfaUgfA?a=97k7vof4qlurzy3zSsmPVhomgCpRUJfREq8UCNZSzt4a)
-
-Do the same for the chemblDataLakeEnrollmentWorkflow. Wait for the workflows to finish.  
-
-Both workflows will run in parallel, but it will take the openTargetsDataLakeEnrollmentWorkflow ~170 minutes to complete while the ChEMBL enrollment will finish in about 30 minutes.   
-
-## Query an Conquer!
-
-Go to Athena in the AWS Console.  
-
-If you haven't used Athena in your account before, you will need to define a storage location for your query results. Click on the ‘Settings’ tab in the top right and specify a bucket name where you would like Athena results stored and click save.  
-
-![](https://quip-amazon.com/blob/HPG9AAwumxR/d9imQFzWnNdhWYDAo9Bt1A?a=8Q4UOXPqvG1fk3knDX9x2wr9Jeu9g8V2tPRYsnE3Vlga)
-
-Now, click the ‘Databases’ dropdown:  
-
-You will see 4 databases listed, you only want to use 2 of them:  
-
-_**Use:**_
-
-**chembl-25-dl**- This is the ‘dl’ or ‘data lake’ Chembl database. Always use tables in this database when running Chembl queries. Part of the chemblDataLakeEnrollment workflow converts the ‘source’ Chembl Postgres formats into a ‘data lake’ friendly parquet format optimized for Athena.   
-
-**opentargets-1911-dl**- This is the ‘dl’ or ‘data lake’ OpenTargets database. Always use this table when running OpenTarget queries. Part of the chemblDataLakeEnrollment workflow converts the ‘source’ OpenTargets json and csv formats into a ‘data lake’ parquet format optimized for Athena.   
-
-_**Dont use:**_
-
-**chembl-25-src** - **This represents the ‘src’ or ‘source’ Chembl postgres database. By design, the source database is not directly queryable from Athena, so you will not use this database.   
-
-**opentargets-1911-src** - This is the ‘src’ or ‘source’ table. When you query this table, you are directly querying the original chembl json and csv filesfrom OpenTargets. The performance may be slow as those formats are not optimized for querying with Athena.
-
-  
-## Permissions & Lake Formation
-
-There are  [﻿two methods of security﻿](https://docs.aws.amazon.com/lake-formation/latest/dg/access-control-overview.html)  you can apply to your data lake. The default account configuration, which is likely what you are using at the moment, is essentially “open” Lake Formation permissions and “fine-grained” IAM polices. The DataSetStack construct implements a number of CDK-style grant*() methonds. The grantIamRead() method of the code grants a “fine-grained” IAM policy that gives users read access to just the tables in the data set you preform the grant on.
+Click the links below for the data set you are interested in. Then click the "Create stack". Make sure you are in your preferred region. 
 
 
+## Latest Versions:
 
-For example, in the bin/aws.ts file you can see an example of granting that “fine-grained” IAM read permission. Pretty easy! Here we are passing the role from the notebook, but you can import an existing IAM user, role, or group using the CDK.
-```typescript
-chemblStack.grantIamRead(analyticsStack.NotebookRole);  
-openTargetsStack.grantIamRead(analyticsStack.NotebookRole);
-```
-The other method of security gives you more control. Specifically, the ability to control permissions at the database, table, and column level. This requires “fine-grained” Lake Formation permissions and “coarse” IAM permissions. The `grantDatabasePermissions()`, `grantTablePermissions()`, and `grantTableWithColumnPermissions()` setup both the fine-grained LakeFormation and coarse IAM permissions for you.
+### [Thousand Genomes DRAGEN ![](https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png)](https://console.aws.amazon.com/cloudformation/home?#/stacks/quickcreate?templateUrl=https%3A%2F%2Faws-roda-hcls-datalake.s3.amazonaws.com%2FThousandGenomesDragenTemplate.template.json&stackName=Thousand-Genomes-DRAGEN) 
 
-  
+### [gnomAD ![](https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png)](https://console.aws.amazon.com/cloudformation/home?#/stacks/quickcreate?templateUrl=https%3A%2F%2Faws-roda-hcls-datalake.s3.amazonaws.com%2FGNOMAD.template.json&stackName=gnomAD) 
 
-Again, another example in the `bin/aws.ts` file:
+### [Chembl 27 ![](https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png)](https://console.aws.amazon.com/cloudformation/home?#/stacks/quickcreate?templateUrl=https%3A%2F%2Faws-roda-hcls-datalake.s3.amazonaws.com%2FChembl.27.RodaTemplate.json&stackName=Chembl27-RODA) 
 
-```typescript
-const exampleUser = iam.User.fromUserName(coreDataLake,  'exampleGrantee',  'paulUnderwood'  );  
+### [Chembl 27 ![](https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png)](https://console.aws.amazon.com/cloudformation/home?#/stacks/quickcreate?templateUrl=https%3A%2F%2Faws-roda-hcls-datalake.s3.amazonaws.com%2FChembl.27.RodaTemplate.json&stackName=Chembl27-RODA) 
 
-var exampleTableWithColumnsGrant:  DataLakeEnrollment.TableWithColumnPermissionGrant  =  {  
-table:  "chembl_25_public_compound_structures",  
-// Note that we are NOT including 'canonical_smiles'. That effectivley prevents this user from querying that column.  
-columns:  ['molregno',  'molfile',  'standard_inchi',  'standard_inchi_key'],  
-DatabasePermissions:  [],  
-GrantableDatabasePermissions:  [],  
-TableColumnPermissions:  [DataLakeEnrollment.TablePermission.Select],  
-GrantableTableColumnPermissions:  []  
-};  
+### [Open Targets 20.06 ![](https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png)](https://console.aws.amazon.com/cloudformation/home?#/stacks/quickcreate?templateUrl=https%3A%2F%2Faws-roda-hcls-datalake.s3.amazonaws.com%2FOpenTargets.20.06.RodaTemplate.json&stackName=OpenTargets-20-06-RODA)
 
-chemblStack.grantTableWithColumnPermissions(exampleUser, exampleTableWithColumnsGrant);
-````
-  
+### [BindingDB ![](https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png)](https://console.aws.amazon.com/cloudformation/home?#/stacks/quickcreate?templateUrl=https%3A%2F%2Faws-roda-hcls-datalake.s3.amazonaws.com%2FBindingDbRodaTemplate.json&stackName=BindingDB-RODA)
 
-The `GrantableDatabasePermissions`, `GrantableTableColumnPermissions`, and `GrantableTableColumnPermissions` give the supplied IAM principal permissions to grant permissions others. If you have a data-set steward, or someone who should have the authority to grant permissions to others, you cant "grant the permission to grant" using those properties.
+### [Genome Tissue Expresssion Database ![](https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png)](https://console.aws.amazon.com/cloudformation/home?#/stacks/quickcreate?templateUrl=https%3A%2F%2Faws-roda-hcls-datalake.s3.amazonaws.com%2FGTEx.8.RodaTemplate.json&stackName=GTEx-8-RODA)
 
-  
+### [ClinVar ![](https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png)](https://console.aws.amazon.com/cloudformation/home?#/stacks/quickcreate?templateUrl=https%3A%2F%2Faws-roda-hcls-datalake.s3.amazonaws.com%2FClinvarSummaryVariantTemplate.template.json&stackName=ClinVar-RODA)
 
-To illustrate the the relationship between the fine-grained and coarse permissions, think of it as two doors. An IAM principal needs to have permission to walk through both doors to query the data lake. The DataLakeEnrollment construct handles granting both the fine and coarse permissions for you.
+It should take approximately 60 seconds for the stack to finish deploying.
 
-![](https://docs.aws.amazon.com/lake-formation/latest/dg/images/permissions_doors.png)
+The GTEx data set requires one extra step after the deployment. The `exon_reads` table has > 17k columns. Expressing all of those columns in YAML would exceed the CloudFormation max template length! Once the GTEx template deploys, go the [AWS Glue Console](https://us-west-2.console.aws.amazon.com/glue/home?#catalog:tab=crawlers), check the box next to the `gtex_8_awsroda_crawler` and click 'Run crawler'. Once it finishes (1-2 minutes) you can query the GTEx data just like the other datasets. 
 
-  
+## Query the data!
 
-If you decide that you want the additional flexibility of Lake Formation permissions, you need to perform two manual actions before Lake Formation permissions will begin protecting your resources. Until you perform these two steps, you are only protecting your resources with the coarse IAM permission and the Lake Formation permissions wont apply.
+Go to the [Amazon Athena](https://console.aws.amazon.com/athena/home?force#query) console.
 
-  
+Select the database you just deployed in the "Database" drop down.
 
-1) Change the default permissions for newly created databases and tables
+You should see the tables listed below. Expand the table to see the columns/schema for each table. You can also click on the vertical dots next to a table name and select 'Preview table' to get a quick feel for whats inside.
 
-  
+![](http://devspacepaul.s3.us-west-2.amazonaws.com/dlac/runquery.png)
 
-Visit the Lake Formation service page in the AWS console, and go to the “Settings” section on the left.
 
- 
-You need to  **UNCHECK** the two boxes and hit “Save”
+## Want to know more?
 
-![](https://devspacepaul.s3.us-west-2.amazonaws.com/DataCatalogSettings.png)
+### How this works
+Take the time to visit the AWS Glue console. There, you will see the databases, tables, table definitions, etc. You will notice the locations for the tables are s3://aws-roda-hcls-datalake/database/etc. 
 
-2) You need to revoke all of the Lake Formation permissions that have been granted to `IAM_ALLOWED_PRINCIPALS`. If you have used Glue in the past or the ChEMBL or OpenTarget workflows have already completed you can see a bunch of them in the “Data Permissions” section in the Lake Formation console. By unchecking the boxes before, we are now stopping the default behavior where Lake Formation adds a `IAM_ALLOWED_PRINCIPALS` grant to any Glue Tables/Resources created.
+### More about the datasets:
 
-  
+These datasets were downloaded directly in thier original forms from the following locations. You should refer to the source documentation for the datasets below for more information about the data itself. We have not modified any datasets beyond converting them from thier orignal database dumps/json/csv/etc formats into a parquet representation for performance and cost efficency. 
 
-Now that we have stopped that default-add `IAM_ALLOWED_PRINCIPALS` behavior, we need to back out any existing grants to `IAM_ALLOWED_PRINCIPALS`. As long as they remain, any IAM principal with coarse IAM permissions to the resource will still be able to query columns or tables they shouldn't have access to.
+[Thousand Genomes DRAGEN](https://aws.amazon.com/blogs/industries/dragen-reanalysis-of-the-1000-genomes-dataset-now-available-on-the-registry-of-open-data/)
 
-  
+[gnomAD](https://gnomad.broadinstitute.org/downloads)
 
-The `local.datalake.RemoveIamAllowedPrincipals.py` python script will save you the effort of manually revoking those permissions from IAM_ALLOWED_PRINCIPALS. Running the following command will issue the revokes for all IAM_ALLOWED_PRINCIPALS granted permissions.
+[ChEMBL Source Data](https://chembl.gitbook.io/chembl-interface-documentation/downloads)
 
-```
-python ./script/local.datalake.RemoveIamAllowedPrincipals.py
-```
+[Open Targets Source Data](https://www.targetvalidation.org/downloads/data)
 
-DONT RUN THIS COMMAND IF YOU HAVE PEOPLE ALREADY RELYING ON THE AWS GLUE CATALOG (via Athena for example). This will effectively remove their access until you grant them user/role/group specific Lake Formation permissions.
+[Binding DB Source Data](https://www.bindingdb.org/bind/chemsearch/marvin/SDFdownload.jsp?all_download=yes)
+
+[GTEx Source Data](https://gtexportal.org/home/datasets)
+
+[ClinVar](https://www.ncbi.nlm.nih.gov/clinvar/)
+
+### How were these datasets prepared?
+
+Data sets in the AWS RODA HCLS Data Lake were created using the [Data Lake as Code Architecture (DLAC)](https://github.com/aws-samples/data-lake-as-code). The AWS RODA HCLS Data Lake tracks the [RODA branch](https://github.com/aws-samples/data-lake-as-code/tree/roda). The [DLAC mainline](https://github.com/aws-samples/data-lake-as-code/tree/mainline) branch is there to help you create your own data lake with your own private data sets using the DLAC framework.
+
+
