@@ -7,6 +7,8 @@ import { OpenTargetsStack } from "../lib/opentargets-stack";
 import { ChemblStack } from "../lib/chembl-25-stack";
 import { GTExStack } from "../lib/gtex-stack";
 import { BindingDBStack } from "../lib/bindingdb-stack";
+import { ThousandGenomesStack } from "../lib/thousand-genomes-dragen"
+import { GnomadStack } from "../lib/gnomad-stack"
 import { AnalyticsStack } from "../lib/analytics-stack";
 import { ClinvarSummaryVariantStack } from "../lib/clinvar-variant-summary-stack";
 import iam = require("@aws-cdk/aws-iam");
@@ -84,6 +86,17 @@ const clinvarSummaryVariantStack = new ClinvarSummaryVariantStack(
     DataLake: coreDataLake,
   }
 );
+
+const thousandGenomesStack = new ThousandGenomesStack(  app,  "ThousandGenomesStack",  {
+    DataLake: coreDataLake
+  }
+);
+
+const gnomadStack = new GnomadStack(  app,  "GnomadStack",  {
+    DataLake: coreDataLake
+  }
+);
+
 
 const analyticsStack = new AnalyticsStack(app, "AnalyticsStack", {
   targetVpc: baseline.Vpc,
@@ -181,6 +194,35 @@ const ClinvarSummaryVariantTemplate = new DataSetTemplateStack(
     DataSetName: clinvarSummaryVariantStack.Enrollments[0].DataSetName,
   }
 );
+
+
+const ThousandGenomesDragenTemplate = new DataSetTemplateStack(
+  app,
+  "ThousandGenomesDragenTemplate",
+  {
+    description:
+      "AWS Data Lake as Code Registry of Open Data Federated Thousand Genomes DRAGEN Template. (ib-jkv84kv85b)",
+    DatabaseDescriptionPath:
+      "../../RODA_templates/thousand_genomes_dragen_get_database.json",
+    DescribeTablesPath: "../../RODA_templates/thousand_genomes_dragen_get_tables.json",
+    DataSetName: thousandGenomesStack.Enrollments[0].DataSetName,
+  }
+);
+
+
+const GnomadTemplate = new DataSetTemplateStack(
+  app,
+  "GnomadTemplate",
+  {
+    description:
+      "AWS Data Lake as Code Registry of Open Data Federated GNOMAD. (ib-v7rf0a249c)",
+    DatabaseDescriptionPath:
+      "../../RODA_templates/gnomad_get_database.json",
+    DescribeTablesPath: "../../RODA_templates/gnomad_get_tables.json",
+    DataSetName: gnomadStack.Enrollments[0].DataSetName,
+  }
+);
+
 
 // const exampleUser = iam.User.fromUserName(coreDataLake, 'exampleGrantee', 'paul1' );
 
