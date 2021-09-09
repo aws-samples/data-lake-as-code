@@ -4,9 +4,9 @@ The AWS Registry of Open Data (RODA) hosts the following datasets in compressed/
 
 You can also query these datasets 'in place' using services like Athena, Redshift, Quicksight, and EMR to join with your own datasets.
 
-The AWS CloudFormation templates below will create the neccesary AWS Glue database, tables, and schemas in your account's AWS Glue Data Catalog **in seconds**. This allows you to start querying the data with Athena directly out of the public S3 buckets, with zero servers or networking to setup. 
+The AWS CloudFormation templates below will create the neccesary AWS Glue database, tables, and schemas in your account's AWS Glue Data Catalog **in seconds**. With AWS Athena, this allows you to start querying the data with Athena directly out of the public S3 buckets, with zero servers or networking to setup. Other Lake House services like Redshift/EMR/QuickSight all directly integrate with the same AWS Glue Data Catalog meatastore so you can pick the right tool for the job.
 
-![](http://devspacepaul.s3.us-west-2.amazonaws.com/dlac/howitworks.png)
+![](https://github.com/aws-samples/data-lake-as-code/raw/roda/docs/HowLakeHouseReadyDatasetsWork.png)
 
 Once deployed, you can use standard JDBC/ODBC to query these databases with your own notebooks, business inteligence tools, plotting software, HPC enviornment, or even your local development machine. 
 
