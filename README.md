@@ -105,10 +105,13 @@ import { SupplierDataSet } from '../lib/SupplierDataSet-stack'; // Add this!
 ...
 // Leave this alone
 const coreDataLake = new DataLakeStack(app, 'CoreDataLake', {...});
+const exisitingResourceImportStack = new Stack(app, 'resourceImportStack', {
+    description: "Used to import existing resources created outside of this CDK application",
+});
 ...
 // Instantiate Data Set!
 const supplierDataSet= new SupplierDataSet(app, 'SupplierDataSet', {
-     sourceBucket: s3.Bucket.fromBucketName(app, 'SupplierDataSetSourceBucket', '--- YOUR EXISTING BUCKET NAME GOES HERE ---'),
+     sourceBucket: s3.Bucket.fromBucketName(exisitingResourceImportStack, 'SupplierDataSetSourceBucket', '--- YOUR EXISTING BUCKET NAME GOES HERE ---'),
      sourceBucketDataPrefix: '/folder1/SupplierData/',
      DataLake: coreDataLake
  });
