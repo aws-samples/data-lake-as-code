@@ -23,8 +23,7 @@ Click the links below for the data set you are interested in. Then click the "Cr
 
 ## Latest Versions:
 
-### [SEC Financial Statments and Notes](https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png)](https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/quickcreate?templateUrl=https%3A%2F%2Faws-roda-fintech-datalake.s3.amazonaws.com%2FSECFinancialStatementsAndNotes.RodaTemplate.json&stackName=SEC-FinancialStatementsAndNotes-RODA) 
-
+### [SEC Financial Statments and Notes ![](https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png)](https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/quickcreate?templateUrl=https%3A%2F%2Faws-roda-fintech-datalake.s3.amazonaws.com%2FSECFinancialStatementsAndNotes.RodaTemplate.json&stackName=SEC-FinancialStatementsAndNotes-RODA) 
 
 It should take approximately 60 seconds for the stack to finish deploying.
 
