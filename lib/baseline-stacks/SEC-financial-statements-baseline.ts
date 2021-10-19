@@ -42,6 +42,7 @@ export class SECFinancialsBaseline extends Construct {
         
         const loadSecDataAssociation = new ssm.CfnAssociation(this, 'loadSecDataAssociation' + resourceSuffix,{
             name: loadSecDataDoc.ref,
+            scheduleExpression: "cron(01 00 ? * SUN *)",
             targets: [
                 { key: "InstanceIds", values: [instance.instanceId] }
             ]

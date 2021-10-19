@@ -28,6 +28,7 @@ export class SECfinancialStatmentDataSet extends DataSetStack{
             sourceBucketDataPrefixes: [
                 `${props.sourceBucketDataPrefix}SEC/groupedExports/` ,
             ],
+            WorkflowCronScheduleExpression: "cron(01 12 ? * SUN *)",
 	        dataLakeBucket: props.DataLake.DataLakeBucket,
 	        GlueScriptPath: "scripts/glue.s3import.fullcopy.s3.py",
 	        GlueScriptArguments: {
