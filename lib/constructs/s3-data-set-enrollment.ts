@@ -14,6 +14,7 @@ export interface S3dataSetEnrollmentProps extends DataLakeEnrollment.DataLakeEnr
     sourceBucket: s3.IBucket;
     sourceBucketDataPrefixes: string[];
     MaxDPUs: number;
+    ExistingLakeFormationResource?: lakeformation.CfnResource;
 }
 
 
@@ -21,18 +22,27 @@ export interface S3dataSetEnrollmentProps extends DataLakeEnrollment.DataLakeEnr
 export class S3dataSetEnrollment extends DataLakeEnrollment{
     
     private readonly sourceBucket: s3.IBucket;
+    public LakeFormationResource: lakeformation.CfnResource;
 
-    setupGlueRoleLakeFormationPermissions(DataSetGlueRole: iam.Role, DataSetName: string, sourceDataBucket: s3.IBucket) {
+    setupGlueRoleLakeFormationPermissions(DataSetGlueRole: iam.Role, DataSetName: string, sourceDataBucket: s3.IBucket, ExistingLakeFormationResource?: lakeformation.CfnResource ) {
+    
 
-        const sourceLakeFormationLocation = new lakeformation.CfnResource(
-          this,
-          "sourceLakeFormationLocation",
-          {
-            resourceArn: sourceDataBucket.bucketArn,
-            roleArn: this.DataEnrollment.DataSetGlueRole.roleArn,
-            useServiceLinkedRole: true,
-          }
-        );
+    
+        if(ExistingLakeFormationResource == null) {
+            this.LakeFormationResource = new lakeformation.CfnResource(
+              this,
+              "sourceLakeFormationLocation",
+              {
+                resourceArn: sourceDataBucket.bucketArn,
+                roleArn: this.DataEnrollment.DataSetGlueRole.roleArn,
+                useServiceLinkedRole: true,
+              }
+            );
+            
+        } else {
+            this.LakeFormationResource = ExistingLakeFormationResource;
+        }
+        
 
         super.grantGlueRoleLakeFormationPermissions(DataSetGlueRole, DataSetName);
 
@@ -41,7 +51,7 @@ export class S3dataSetEnrollment extends DataLakeEnrollment{
             GrantResourcePrefix: `${DataSetName}SourcelocationGrant`,
             Location: sourceDataBucket.bucketName,
             LocationPrefix: "/"
-        }, sourceLakeFormationLocation);
+        }, this.LakeFormationResource);
 
     }
 
@@ -116,7 +126,7 @@ export class S3dataSetEnrollment extends DataLakeEnrollment{
         this.createCoarseIamPolicy();
         
         
-        this.setupGlueRoleLakeFormationPermissions(this.DataEnrollment.DataSetGlueRole, props.DataSetName, props.sourceBucket); 
+        this.setupGlueRoleLakeFormationPermissions(this.DataEnrollment.DataSetGlueRole, props.DataSetName, props.sourceBucket, props.ExistingLakeFormationResource); 
         
         this.grantCoarseIamRead(this.DataEnrollment.DataSetGlueRole);
         

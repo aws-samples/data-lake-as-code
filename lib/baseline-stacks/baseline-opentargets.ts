@@ -31,11 +31,12 @@ export class OpenTargetsBaseline extends cdk.Construct {
         
         this.createAndApplyImportCommand("scripts/ssmdoc.import.opentargets.1911.json", props.ImportInstance, openTargetsBucket, "1911");
         this.createAndApplyImportCommand("scripts/ssmdoc.import.opentargets.20.06.json", props.ImportInstance, openTargetsBucket, "2006");
+        this.createAndApplyImportCommand("scripts/ssmdoc.import.opentargets.latest.json", props.ImportInstance, openTargetsBucket, "latest", "cron(01 00 ? * SAT *)" );
         
         
     }
     
-    createAndApplyImportCommand(commandDoc: string, instance: ec2.Instance, bucket: s3.Bucket, resourceSuffix: string) {
+    createAndApplyImportCommand(commandDoc: string, instance: ec2.Instance, bucket: s3.Bucket, resourceSuffix: string, cronExpression?: string) {
         
         const loadOpenTargetsDoc = new ssm.CfnDocument(this, 'loadOpenTargetsDoc'+ resourceSuffix, {
             content: JSON.parse(fs.readFileSync(commandDoc, { encoding: 'utf-8' })),
@@ -46,11 +47,13 @@ export class OpenTargetsBaseline extends cdk.Construct {
             name: loadOpenTargetsDoc.ref,
             targets: [
                 { key: "InstanceIds", values: [instance.instanceId] }
-            ]
+            ],
+            ...cronExpression && { scheduleExpression: cronExpression }
         });
 
         loadOpenTargetsAssociation.addPropertyOverride('Parameters',{
-            openTargetsSourceFileTargetBucketLocation: [bucket.bucketName]
+            openTargetsSourceFileTargetBucketLocation: [bucket.bucketName],
+            executionTimeout: ['18000']
         });
 
         

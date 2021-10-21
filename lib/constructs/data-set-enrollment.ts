@@ -13,6 +13,8 @@ export interface FederatedCrawlerTemplateProps extends cdk.StackProps {
 	databaseDescriptionPath: string;
 	crawlerDescriptionPath: string;
 	dataSetName: string;
+	locationFilter?: string[];
+	existingDatabase?: glue.Database;
 }
 
 export class FederatedCrawlerTemplate extends cdk.Construct{
@@ -30,10 +32,16 @@ export class FederatedCrawlerTemplate extends cdk.Construct{
 		// import databaseObj from props.databaseDescriptionPath;
 		// import tablesObj from props.tablesDescriptionPath;
 		
-		this.glueDatabase = new glue.Database(this, 'GlueDatabase', {
+		
+		if(props.existingDatabase == null) {
+			this.glueDatabase = new glue.Database(this, 'GlueDatabase', {
 			locationUri: `${databaseObj['Database']['LocationUri']}`,
-			databaseName: `${databaseObj['Database']['Name']}-awsroda`,
+			databaseName: `${databaseObj['Database']['Name']}_awsroda`,
 		});	 
+		} else{
+			this.glueDatabase = props.existingDatabase;
+		}
+		
 		
 		
 		this.glueRole = new iam.Role(this, `GlueCrawlerRole`, {
@@ -54,10 +62,23 @@ export class FederatedCrawlerTemplate extends cdk.Construct{
 		}));
 		
 		for (let s3Target of crawlerObj['Crawler']['Targets']['S3Targets']) {
-            s3DataLakePaths.push({
-                path: s3Target['Path']
-                //TODO: add exclusions
-            });
+			
+			if(props.locationFilter == null ){
+	            s3DataLakePaths.push({
+	                path: s3Target['Path']
+	                //TODO: add exclusions
+	            });				
+			}else{
+				
+				if(props.locationFilter.indexOf(s3Target['Path']) >= 0){
+					s3DataLakePaths.push({
+		                path: s3Target['Path']
+	                	//TODO: add exclusions
+		            });	
+				}
+				
+			}
+			
 		}
 		
 		this.glueCrawler = new glue.CfnCrawler(this,  `awsroda-crawler`,{
@@ -81,32 +102,89 @@ export class FederatedCrawlerTemplate extends cdk.Construct{
 export interface FederatedDataSetProps extends cdk.StackProps {
 	databaseDescriptionPath: string
 	tablesDescriptionPath: string
+	paritionDescriptionPaths?: string[]
 }
 
 
+	
 export class FederatedDataSetTemplate extends cdk.Construct{
 
 	public readonly glueDatabase: glue.Database;
 	public readonly glueTables: glue.Table;
+
+	public tablesList:{ [id: string] : glue.CfnTable; } = {};
+	
+	public createPartionObjects(partionDescriptionPaths: string[]){
+		for (let partionDescPath of partionDescriptionPaths) {
+			const partionDescObj = require(partionDescPath);
+			
+			for (let partition of partionDescObj['Partitions']) {
+				
+				var columnList = [];
+				
+				for(let column of partition['StorageDescriptor']['Columns']){
+				
+					columnList.push({
+						name: column['Name'],
+						type: column['Type']
+					});
+				}
+			
+			
+				const partitionResource = new glue.CfnPartition(this, `partion${partition['DatabaseName']}${partition['TableName']}${partition['Values'].join()}`,{
+					tableName: partition['TableName']
+					, databaseName: this.glueDatabase.databaseName
+					, catalogId: cdk.Aws.ACCOUNT_ID
+					, partitionInput: {
+						values:	partition['Values']
+						, storageDescriptor: {
+							columns: columnList,
+							numberOfBuckets: -1,
+							compressed: partition['StorageDescriptor']['Compressed'],
+							inputFormat: partition['StorageDescriptor']['InputFormat'],
+							outputFormat: partition['StorageDescriptor']['OutputFormat'],
+							location:  partition['StorageDescriptor']['Location'],
+							parameters: partition['StorageDescriptor']['Parameters'],
+							serdeInfo: {
+								parameters: partition['StorageDescriptor']['SerdeInfo']['Parameters'],
+								serializationLibrary: partition['StorageDescriptor']['SerdeInfo']['SerializationLibrary']
+							}
+						}
+					
+					}
+				});
+				
+				partitionResource.addDependsOn(this.tablesList[partition['TableName']]);
+				
+			}
+			
+			
+			
+		}
+	}
+	
+
 	
 	constructor(scope: cdk.Construct, id: string, props: FederatedDataSetProps) {
 		super(scope, id);
 		
 		const databaseObj = require(props.databaseDescriptionPath);
 		const tablesObj = require(props.tablesDescriptionPath);
+
 		
 		// import databaseObj from props.databaseDescriptionPath;
 		// import tablesObj from props.tablesDescriptionPath;
 		
 		this.glueDatabase = new glue.Database(this, databaseObj['Database']['Name'], {
 			locationUri: `${databaseObj['Database']['LocationUri']}`,
-			databaseName: `${databaseObj['Database']['Name']}-awsroda`,
+			databaseName: `${databaseObj['Database']['Name']}_awsroda`,
 		});	 	
 		
 
 		for (let table of tablesObj['TableList']) {
 			
 			var columnList = [];
+			var partitionList = [];
 			
 			for(let column of table['StorageDescriptor']['Columns']){
 				
@@ -116,14 +194,29 @@ export class FederatedDataSetTemplate extends cdk.Construct{
 				});
 			}
 			
-			new glue.CfnTable(this, table["Name"], {
+			for(let partition of table['PartitionKeys']){
+				
+				partitionList.push({
+					name: partition['Name'],
+					type: partition['Type'],
+					comment: partition['Comment']
+				});
+			}
+			
+			
+			
+			const cfnTable = new glue.CfnTable(this, table["Name"], {
 				catalogId: cdk.Aws.ACCOUNT_ID,
 				databaseName: this.glueDatabase.databaseName,
+				
 				tableInput: {
 					name: table["Name"],
 					parameters: table['Parameters'],
+					partitionKeys: partitionList,
+					tableType: "EXTERNAL",
 					storageDescriptor: {
 						columns: columnList,
+						numberOfBuckets: -1,
 						inputFormat: table['StorageDescriptor']['InputFormat'],
 						outputFormat: table['StorageDescriptor']['OutputFormat'],
 						location:  table['StorageDescriptor']['Location'],
@@ -135,9 +228,14 @@ export class FederatedDataSetTemplate extends cdk.Construct{
 					}
 					
 				}
-			})
+			});
+			this.tablesList[table["Name"]] = cfnTable;
 			
 			
+		}
+		
+		if (props.paritionDescriptionPaths != null) {
+			this.createPartionObjects(props.paritionDescriptionPaths)
 		}
 		
 	}
@@ -438,8 +536,11 @@ export class DataLakeEnrollmentWorkflow extends cdk.Construct {
 	        	properties: {
 	        		triggerId: this.StartTrigger.name
 	        	}
-		    });			
+		    });		
+		    
+		    CronTrigger_triggerActivation.node.addDependency(this.StartTrigger);
 		}
+		
 		
 	    const srcCrawlerCompleteTrigger_triggerActivation = new cfn.CustomResource(this, 'srcCrawlerCompleteTrigger-triggerActivation',  {
         	provider: cfn.CustomResourceProvider.lambda(activateTriggerFunction),
@@ -448,12 +549,15 @@ export class DataLakeEnrollmentWorkflow extends cdk.Construct {
         	}
 	    });
 	    
+	    srcCrawlerCompleteTrigger_triggerActivation.node.addDependency(this.SrcCrawlerCompleteTrigger);
+	    
 	    const etlTrigger_triggerActivation = new cfn.CustomResource(this, 'etlTrigger-triggerActivation',  {
         	provider: cfn.CustomResourceProvider.lambda(activateTriggerFunction),
         	properties: {
         		triggerId: this.ETLCompleteTrigger.name
         	}
 	    });
+	    etlTrigger_triggerActivation.node.addDependency(this.ETLCompleteTrigger);
 	    
 	}
 }

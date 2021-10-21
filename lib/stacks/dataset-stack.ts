@@ -13,20 +13,23 @@ import { DataLakeStack } from './datalake-stack';
 
 
 export interface DataSetTemplateStackProps extends cdk.StackProps {
+	PartionDescriptionPaths?: string[];
 	DatabaseDescriptionPath: string;
 	DescribeTablesPath: string;
 	DataSetName: string;
 }
 
 export class DataSetTemplateStack extends cdk.Stack {
-
+  public Database: glue.Database;
   constructor(scope: cdk.Construct, id: string, props: DataSetTemplateStackProps) {
     super(scope, id, props);
     
-    new FederatedDataSetTemplate(this, props.DataSetName, {
+    const federatedDataSetTemplate = new FederatedDataSetTemplate(this, props.DataSetName, {
       databaseDescriptionPath: props.DatabaseDescriptionPath,
-      tablesDescriptionPath: props.DescribeTablesPath
+      tablesDescriptionPath: props.DescribeTablesPath,
+      paritionDescriptionPaths: props.PartionDescriptionPaths
     });
+    this.Database = federatedDataSetTemplate.glueDatabase;
   }
   
 }

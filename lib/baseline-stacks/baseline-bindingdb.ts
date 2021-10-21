@@ -138,6 +138,7 @@ export class BindingDBBaseline extends cdk.Construct {
         
         const loadBindingDbAssociation = new ssm.CfnAssociation(this, 'loadBindingDbAssociation',{
             name: loadBindingDbDoc.ref,
+            scheduleExpression: "cron(01 00 ? * SUN *)",
             targets: [
                 { key: "InstanceIds", values: [props.ImportInstance.instanceId] }
             ]

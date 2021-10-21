@@ -14,8 +14,9 @@ import { ClinvarSummaryVariantStack } from "../lib/clinvar-variant-summary-stack
 import iam = require("@aws-cdk/aws-iam");
 import s3 = require("@aws-cdk/aws-s3");
 import { DataLakeEnrollment } from "../lib/constructs/data-lake-enrollment";
+import { FederatedCrawlerTemplate } from "../lib/constructs/data-set-enrollment";
 import {
-  DataSetTemplateStack,
+  DataSetTemplateStack,DataSetTemplateStackProps,
   CrawlerTemplateStack,
 } from "../lib/stacks/dataset-stack";
 
@@ -134,6 +135,25 @@ const OpenTargets2006RodaTemplate = new DataSetTemplateStack(
   }
 );
 
+const OpenTargetsLatestRodaTemplate = new DataSetTemplateStack(
+  app,
+  "OpenTargetsLatestRodaTemplate",
+  {
+    description:
+      "AWS Data Lake as Code Registry of Open Data Federated OpenTargets Latest Template. (ib-af4fc1f54d)",
+    DatabaseDescriptionPath:
+      "../../RODA_templates/opentargets_latest_get_database.json",
+    DescribeTablesPath:
+      "../../RODA_templates/opentargets_latest_get_tables.json",
+    DataSetName: openTargetsStack.Enrollments[2].DataSetName,
+    PartionDescriptionPaths: [
+      "../../RODA_templates/opentargets_latest_get_partitions.0.json",
+      "../../RODA_templates/opentargets_latest_get_partitions.1.json",
+      "../../RODA_templates/opentargets_latest_get_partitions.2.json",
+    ],
+  }
+);
+
 const Chembl25RodaTemplate = new DataSetTemplateStack(
   app,
   "Chembl25RodaTemplate",
@@ -196,21 +216,56 @@ const ClinvarSummaryVariantTemplate = new DataSetTemplateStack(
 );
 
 
-const ThousandGenomesDragenTemplate = new DataSetTemplateStack(
-  app,
-  "ThousandGenomesDragenTemplate",
-  {
-    description:
-      "AWS Data Lake as Code Registry of Open Data Federated Thousand Genomes DRAGEN Template. (ib-jkv84kv85b)",
-    DatabaseDescriptionPath:
-      "../../RODA_templates/thousand_genomes_dragen_get_database.json",
-    DescribeTablesPath: "../../RODA_templates/thousand_genomes_dragen_get_tables.json",
-    DataSetName: thousandGenomesStack.Enrollments[0].DataSetName,
+export class ThousandGenomesDragenTemplateStack extends DataSetTemplateStack{
+
+	constructor(scope: cdk.Construct, id: string, props: DataSetTemplateStackProps) {
+	    super(scope, id, props);
+      
+      const crawlerTemplate = new FederatedCrawlerTemplate(this, 'federatedCrawler', {
+      	databaseDescriptionPath:  "../../RODA_templates/thousand_genomes_dragen_get_database.json",
+      	crawlerDescriptionPath: "../../RODA_templates/thousand_genomes_dragen_get_crawler.json",
+      	dataSetName: props.DataSetName,
+      	existingDatabase: this.Database,
+      	locationFilter: ["s3://aws-roda-hcls-datalake/thousandgenomes_dragen/var_partby_samples/"]
+      });
+
   }
-);
+}
+const ThousandGenomesDragenTemplate = new ThousandGenomesDragenTemplateStack(
+        app,
+        "ThousandGenomesDragenTemplate",
+        {
+          description:
+            "AWS Data Lake as Code Registry of Open Data Federated Thousand Genomes DRAGEN Template. (ib-jkv84kv85b)",
+          DatabaseDescriptionPath:
+            "../../RODA_templates/thousand_genomes_dragen_get_database.json",
+          DescribeTablesPath: "../../RODA_templates/thousand_genomes_dragen_get_tables.json",
+          PartionDescriptionPaths: [
+            "../../RODA_templates/thousand_genomes_dragen_get_partitions.0.json",
+            //"../../RODA_templates/thousand_genomes_dragen_get_partitions.1.json",
+            "../../RODA_templates/thousand_genomes_dragen_get_partitions.2.json"
+            ],
+          DataSetName: thousandGenomesStack.Enrollments[0].DataSetName,
+        }
+      ); 
 
 
-const GnomadTemplate = new DataSetTemplateStack(
+export class GnomadTemplateStack extends DataSetTemplateStack{
+
+	constructor(scope: cdk.Construct, id: string, props: DataSetTemplateStackProps) {
+	    super(scope, id, props);
+      
+      const crawlerTemplate = new FederatedCrawlerTemplate(this, 'federatedGnomadCrawler', {
+      	databaseDescriptionPath:  "../../RODA_templates/gnomad_get_database.json",
+      	crawlerDescriptionPath: "../../RODA_templates/gnomad_get_crawler.json",
+      	dataSetName: props.DataSetName,
+      	existingDatabase: this.Database,
+      	locationFilter: ["s3://aws-roda-hcls-datalake/gnomad/sites/"]
+      });
+
+  }
+}
+const GnomadTemplate = new GnomadTemplateStack(
   app,
   "GnomadTemplate",
   {
@@ -220,8 +275,13 @@ const GnomadTemplate = new DataSetTemplateStack(
       "../../RODA_templates/gnomad_get_database.json",
     DescribeTablesPath: "../../RODA_templates/gnomad_get_tables.json",
     DataSetName: gnomadStack.Enrollments[0].DataSetName,
+    PartionDescriptionPaths: [
+      ],
   }
 );
+
+
+
 
 
 // const exampleUser = iam.User.fromUserName(coreDataLake, 'exampleGrantee', 'paul1' );
