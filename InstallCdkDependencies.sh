@@ -1,6 +1,5 @@
-npm install -g aws-cdk
+npm -g install typescript
+npm install -g aws-cdk@next --force
 npm install "@types/node" --save-dev
 npm update
-sudo apt install jq -y
-sudo yum install jq -y
-npm install
+cdk bootstrap

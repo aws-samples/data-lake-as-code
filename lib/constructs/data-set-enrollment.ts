@@ -1,27 +1,33 @@
-import * as cdk from '@aws-cdk/core';
-import s3 = require('@aws-cdk/aws-s3');
-import glue = require('@aws-cdk/aws-glue');
-import lambda = require('@aws-cdk/aws-lambda');
-import iam = require('@aws-cdk/aws-iam');
-import cfn = require("@aws-cdk/aws-cloudformation");
-import fs = require('fs');
-import s3assets = require('@aws-cdk/aws-s3-assets');
+import { Construct,  } from 'constructs';
+import { Aws, App, Stack, Resource, StackProps, CustomResource,  Duration, Fn, Token } from 'aws-cdk-lib';
+
+import * as ec2 from 'aws-cdk-lib/aws-ec2';
+import * as iam from 'aws-cdk-lib/aws-iam';
+import * as glue from 'aws-cdk-lib/aws-glue';
+import * as s3 from 'aws-cdk-lib/aws-s3';
+import * as s3assets from 'aws-cdk-lib/aws-s3-assets';
+import * as lakeformation from 'aws-cdk-lib/aws-lakeformation';
+import * as lambda from 'aws-cdk-lib/aws-lambda';
+import * as cr from 'aws-cdk-lib/custom-resources';
+import * as fs from "fs";
+
+
 import { URL } from "url";
 
 
-export interface FederatedCrawlerTemplateProps extends cdk.StackProps {
+export interface FederatedCrawlerTemplateProps extends StackProps {
 	databaseDescriptionPath: string;
 	crawlerDescriptionPath: string;
 	dataSetName: string;
 }
 
-export class FederatedCrawlerTemplate extends cdk.Construct{
+export class FederatedCrawlerTemplate extends Construct{
 
-	public readonly glueDatabase: glue.Database;
+	public readonly glueDatabase: glue.CfnDatabase;
 	public readonly glueCrawler: glue.CfnCrawler;
 	public readonly glueRole: iam.Role;
 
-	constructor(scope: cdk.Construct, id: string, props: FederatedCrawlerTemplateProps) {
+	constructor(scope: Construct, id: string, props: FederatedCrawlerTemplateProps) {
 		super(scope, id);
 		
 		const databaseObj = require(props.databaseDescriptionPath);
@@ -30,9 +36,15 @@ export class FederatedCrawlerTemplate extends cdk.Construct{
 		// import databaseObj from props.databaseDescriptionPath;
 		// import tablesObj from props.tablesDescriptionPath;
 		
-		this.glueDatabase = new glue.Database(this, 'GlueDatabase', {
-			locationUri: `${databaseObj['Database']['LocationUri']}`,
-			databaseName: `${databaseObj['Database']['Name']}-awsroda`,
+		
+		const databaseName = `${databaseObj['Database']['Name']}`
+		
+		this.glueDatabase = new glue.CfnDatabase(this, 'GlueDatabase', {
+			catalogId: Aws.ACCOUNT_ID,
+			databaseInput: {
+				locationUri: `${databaseObj['Database']['LocationUri']}`,
+				name: databaseName,
+			}
 		});	 
 		
 		
@@ -66,7 +78,7 @@ export class FederatedCrawlerTemplate extends cdk.Construct{
 				s3Targets: s3DataLakePaths	
 			},
 			role: this.glueRole.roleName,
-			databaseName: this.glueDatabase.databaseName, 
+			databaseName: databaseName, 
 			schemaChangePolicy: {
 				deleteBehavior: "DEPRECATE_IN_DATABASE", 
 				updateBehavior: "UPDATE_IN_DATABASE",
@@ -78,18 +90,17 @@ export class FederatedCrawlerTemplate extends cdk.Construct{
 }
 
 
-export interface FederatedDataSetProps extends cdk.StackProps {
+export interface FederatedDataSetProps extends StackProps {
 	databaseDescriptionPath: string
 	tablesDescriptionPath: string
 }
 
 
-export class FederatedDataSetTemplate extends cdk.Construct{
+export class FederatedDataSetTemplate extends Construct{
 
-	public readonly glueDatabase: glue.Database;
-	public readonly glueTables: glue.Table;
+	public readonly glueDatabase: glue.CfnDatabase;
 	
-	constructor(scope: cdk.Construct, id: string, props: FederatedDataSetProps) {
+	constructor(scope: Construct, id: string, props: FederatedDataSetProps) {
 		super(scope, id);
 		
 		const databaseObj = require(props.databaseDescriptionPath);
@@ -98,9 +109,14 @@ export class FederatedDataSetTemplate extends cdk.Construct{
 		// import databaseObj from props.databaseDescriptionPath;
 		// import tablesObj from props.tablesDescriptionPath;
 		
-		this.glueDatabase = new glue.Database(this, databaseObj['Database']['Name'], {
-			locationUri: `${databaseObj['Database']['LocationUri']}`,
-			databaseName: `${databaseObj['Database']['Name']}-awsroda`,
+		const databaseName = `${databaseObj['Database']['Name']}`
+		
+		this.glueDatabase = new glue.CfnDatabase(this, databaseObj['Database']['Name'], {
+			catalogId: Aws.ACCOUNT_ID,
+			databaseInput: {
+				locationUri: `${databaseObj['Database']['LocationUri']}`,
+				name: databaseName,
+			}
 		});	 	
 		
 
@@ -116,9 +132,9 @@ export class FederatedDataSetTemplate extends cdk.Construct{
 				});
 			}
 			
-			new glue.CfnTable(this, table["Name"], {
-				catalogId: cdk.Aws.ACCOUNT_ID,
-				databaseName: this.glueDatabase.databaseName,
+			const freshTable = new glue.CfnTable(this, table["Name"], {
+				catalogId: Aws.ACCOUNT_ID,
+				databaseName: databaseName,
 				tableInput: {
 					name: table["Name"],
 					parameters: table['Parameters'],
@@ -136,6 +152,7 @@ export class FederatedDataSetTemplate extends cdk.Construct{
 					
 				}
 			})
+			freshTable.addDependsOn(this.glueDatabase);
 			
 			
 		}
@@ -144,7 +161,7 @@ export class FederatedDataSetTemplate extends cdk.Construct{
 }
 
 
-export interface DataSetEnrollmentProps extends cdk.StackProps {
+export interface DataSetEnrollmentProps extends StackProps {
 		dataLakeBucket: s3.Bucket;
 		dataSetName: string;
 		SourceConnectionInput?: glue.CfnConnection.ConnectionInputProperty;
@@ -158,7 +175,7 @@ export interface DataSetEnrollmentProps extends cdk.StackProps {
 }
 
 
-export class DataSetEnrollment extends cdk.Construct {
+export class DataSetEnrollment extends Construct {
 		
 	public readonly Workflow: DataLakeEnrollmentWorkflow;
     public readonly SrcCrawlerCompleteTrigger: glue.CfnTrigger;
@@ -167,23 +184,27 @@ export class DataSetEnrollment extends cdk.Construct {
     public readonly DataLakeConnection: glue.CfnConnection;
     public readonly DataSetName: string;
     public readonly DataSetGlueRole: iam.Role;
-    public readonly Dataset_Source: glue.Database;
-    public readonly Dataset_Datalake: glue.Database;
+    public readonly Dataset_Source: glue.CfnDatabase;
+    public readonly Dataset_Datalake: glue.CfnDatabase;
+    
+	public readonly Dataset_SourceDatabaseName: string;
+    public readonly Dataset_DatalakeDatabaseName: string;
     
     public readonly DataLakeBucketName: string;
     public readonly DataLakePrefix: string;
 	public readonly DataLakeTargets: glue.CfnCrawler.TargetsProperty;
 
 
-	private setupCrawler(targetGlueDatabase: glue.Database, targets: glue.CfnCrawler.TargetsProperty, isSourceCrawler: boolean){
+	private setupCrawler(targetGlueDatabase: glue.CfnDatabase, targets: glue.CfnCrawler.TargetsProperty, isSourceCrawler: boolean, databaseName: string){
 		
 		var sourceCrawler = isSourceCrawler ? "src" : "dl";
+		
 		
 		return new glue.CfnCrawler(this,  `${this.DataSetName}-${sourceCrawler}-crawler`,{
 			name: `${this.DataSetName}_${sourceCrawler}_crawler`, 
 			targets: targets, 
 			role: this.DataSetGlueRole.roleName,
-			databaseName: targetGlueDatabase.databaseName, 
+			databaseName: databaseName,
 			schemaChangePolicy: {
 				deleteBehavior: "DEPRECATE_IN_DATABASE", 
 				updateBehavior: "UPDATE_IN_DATABASE",
@@ -194,7 +215,7 @@ export class DataSetEnrollment extends cdk.Construct {
 		
 	}
 
-	constructor(scope: cdk.Construct, id: string, props: DataSetEnrollmentProps) {
+	constructor(scope: Construct, id: string, props: DataSetEnrollmentProps) {
 		super(scope, id);	
 		
 		this.DataLakeTargets = props.DataLakeTargets;
@@ -203,13 +224,22 @@ export class DataSetEnrollment extends cdk.Construct {
 		
 		this.DataSetName = props.dataSetName;
 		
-		this.Dataset_Source = new glue.Database(this, `${props.dataSetName}_src`, {
-			databaseName: `${props.dataSetName}_src`,
-			locationUri: `s3://${props.dataLakeBucket.bucketName}/${props.dataSetName}/`
+		this.Dataset_SourceDatabaseName = `${props.dataSetName}_src`;
+		this.Dataset_DatalakeDatabaseName = `${props.dataSetName}_dl`;
+		
+		this.Dataset_Source = new glue.CfnDatabase(this, `${props.dataSetName}_src`, {
+			catalogId: Aws.ACCOUNT_ID,
+			databaseInput: {
+				name: this.Dataset_SourceDatabaseName,
+				locationUri: `s3://${props.dataLakeBucket.bucketName}/${props.dataSetName}/`
+			}
 		});
-		this.Dataset_Datalake = new glue.Database(this, `${props.dataSetName}_dl`, {
-			databaseName:  `${props.dataSetName}_dl`,
-			locationUri: `s3://${props.dataLakeBucket.bucketName}/${props.dataSetName}/`
+		this.Dataset_Datalake = new glue.CfnDatabase(this, `${props.dataSetName}_dl`, {
+			catalogId: Aws.ACCOUNT_ID,
+			databaseInput: {
+				name:  this.Dataset_DatalakeDatabaseName,
+				locationUri: `s3://${props.dataLakeBucket.bucketName}/${props.dataSetName}/`
+			}
 		});
 		
 
@@ -239,9 +269,8 @@ export class DataSetEnrollment extends cdk.Construct {
 		if(typeof props.SourceAccessPolicy !== 'undefined'){
 			props.SourceAccessPolicy.attachToRole(this.DataSetGlueRole);	
 		}
-		 
-		 
-		const sourceCrawler = this.setupCrawler(this.Dataset_Source, props.SourceTargets, true);
+
+		const sourceCrawler = this.setupCrawler(this.Dataset_Source, props.SourceTargets, true, this.Dataset_SourceDatabaseName);
 		
 		
 		
@@ -278,16 +307,7 @@ export class DataSetEnrollment extends cdk.Construct {
 		const etl_job = new glue.CfnJob(this, `${props.dataSetName}-EtlJob`, jobParams );
 		
 		
-		const datalake_crawler = this.setupCrawler(this.Dataset_Datalake, this.DataLakeTargets, false);
-		
-		// const datalake_crawler = this.setupCrawler(this.Dataset_Datalake, {
-		// 		s3Targets: [
-		// 			{
-		// 				path: `s3://${props.dataLakeBucket.bucketName}/${props.dataSetName}/`
-		// 			}
-		// 		]
-		// }, false);
-
+		const datalake_crawler = this.setupCrawler(this.Dataset_Datalake, this.DataLakeTargets, false, this.Dataset_DatalakeDatabaseName);
 		
 		const datalakeEnrollmentWorkflow = new DataLakeEnrollmentWorkflow(this,`${props.dataSetName}DataLakeWorkflow`,{
 			workfowName: `${props.dataSetName}_DataLakeEnrollmentWorkflow`,
@@ -312,7 +332,7 @@ export interface DataLakeEnrollmentWorkflowProps {
 	WorkflowCronScheduleExpression?: string;
 }
 
-export class DataLakeEnrollmentWorkflow extends cdk.Construct {
+export class DataLakeEnrollmentWorkflow extends Construct {
 
 	public StartTrigger: glue.CfnTrigger;
     public readonly SrcCrawlerCompleteTrigger: glue.CfnTrigger;
@@ -320,7 +340,7 @@ export class DataLakeEnrollmentWorkflow extends cdk.Construct {
     public readonly Workflow: glue.CfnWorkflow; 
     private readonly sourceCrawler: glue.CfnCrawler;
 
-	constructor(scope: cdk.Construct, id: string, props: DataLakeEnrollmentWorkflowProps) {
+	constructor(scope: Construct, id: string, props: DataLakeEnrollmentWorkflowProps) {
 		super(scope, id);
 		
 		this.Workflow = new glue.CfnWorkflow(this, "etlWorkflow", {
@@ -426,29 +446,47 @@ export class DataLakeEnrollmentWorkflow extends cdk.Construct {
 	            uuid: "ActivateGlueTriggerFunction",
 	            code: new lambda.InlineCode(fs.readFileSync('./scripts/lambda.activategluetigger.py', { encoding: 'utf-8' })),
 	            handler: 'index.main',
-	            timeout: cdk.Duration.seconds(300),
+	            timeout: Duration.seconds(300),
 	            runtime: lambda.Runtime.PYTHON_3_7,
 	            memorySize: 1024
         });
+        
+        
+	        
 		 
 		if(props.WorkflowCronScheduleExpression != null){		 
-		    const CronTrigger_triggerActivation = new cfn.CustomResource(this, 'CronTrigger-triggerActivation',  {
-	        	provider: cfn.CustomResourceProvider.lambda(activateTriggerFunction),
+			
+			const CronTrigger_triggerActivationProvider = new cr.Provider(this, 'CronTrigger_triggerActivationProvider', {
+				onEventHandler: activateTriggerFunction,
+		    });
+			
+		    const CronTrigger_triggerActivation = new CustomResource(this, 'CronTrigger-triggerActivation',  {
+				serviceToken: CronTrigger_triggerActivationProvider.serviceToken,
 	        	properties: {
 	        		triggerId: this.StartTrigger.name
 	        	}
 		    });			
 		}
 		
-	    const srcCrawlerCompleteTrigger_triggerActivation = new cfn.CustomResource(this, 'srcCrawlerCompleteTrigger-triggerActivation',  {
-        	provider: cfn.CustomResourceProvider.lambda(activateTriggerFunction),
+		const srcCrawlerCompleteTrigger_triggerActivationProvider = new cr.Provider(this, 'srcCrawlerCompleteTrigger_triggerActivationProvider', {
+			onEventHandler: activateTriggerFunction,
+	    });
+		
+		
+	    const srcCrawlerCompleteTrigger_triggerActivation = new CustomResource(this, 'srcCrawlerCompleteTrigger_triggerActivation',  {
+        	serviceToken: srcCrawlerCompleteTrigger_triggerActivationProvider.serviceToken,
         	properties: {
         		triggerId: this.SrcCrawlerCompleteTrigger.name
         	}
 	    });
 	    
-	    const etlTrigger_triggerActivation = new cfn.CustomResource(this, 'etlTrigger-triggerActivation',  {
-        	provider: cfn.CustomResourceProvider.lambda(activateTriggerFunction),
+	    
+		const etlTrigger_triggerActivationProvider = new cr.Provider(this, 'etlTrigger_triggerActivationProvider', {
+			onEventHandler: activateTriggerFunction,
+	    });
+	    
+	    const etlTrigger_triggerActivation = new CustomResource(this, 'etlTrigger-triggerActivation',  {
+        	serviceToken: etlTrigger_triggerActivationProvider.serviceToken,
         	properties: {
         		triggerId: this.ETLCompleteTrigger.name
         	}

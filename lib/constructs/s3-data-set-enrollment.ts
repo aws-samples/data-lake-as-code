@@ -1,13 +1,14 @@
-import * as cdk from '@aws-cdk/core';
-import ec2 = require('@aws-cdk/aws-ec2');
-import iam = require('@aws-cdk/aws-iam');
-import glue = require('@aws-cdk/aws-glue');
-import s3 = require('@aws-cdk/aws-s3');
-import s3assets = require('@aws-cdk/aws-s3-assets');
+
+import { Construct } from 'constructs';
+import { App, Stack} from 'aws-cdk-lib';
+
+import * as ec2 from 'aws-cdk-lib/aws-ec2';
+import * as iam from 'aws-cdk-lib/aws-iam';
+import * as glue from 'aws-cdk-lib/aws-glue';
+import * as s3 from 'aws-cdk-lib/aws-s3';
+import * as lakeformation from 'aws-cdk-lib/aws-lakeformation';
 import { DataSetEnrollmentProps, DataSetEnrollment } from './data-set-enrollment';
 import { DataLakeEnrollment } from './data-lake-enrollment';
-import lakeformation = require("@aws-cdk/aws-lakeformation");
-
 
 
 export interface S3dataSetEnrollmentProps extends DataLakeEnrollment.DataLakeEnrollmentProps {
@@ -22,11 +23,9 @@ export class S3dataSetEnrollment extends DataLakeEnrollment{
     
     private readonly sourceBucket: s3.IBucket;
 
-    setupGlueRoleLakeFormationPermissions(DataSetGlueRole: iam.Role, DataSetName: string, sourceDataBucket: s3.IBucket) {
+    setupGlueRoleLakeFormationPermissions(DataSetGlueRole: iam.Role, DataSetName: string, sourceDataBucket: s3.IBucket, locationDescription: string) {
 
-        const sourceLakeFormationLocation = new lakeformation.CfnResource(
-          this,
-          "sourceLakeFormationLocation",
+        const sourceLakeFormationLocation = new lakeformation.CfnResource(  this, `sourceLakeFormationLocation-${sourceDataBucket}`,
           {
             resourceArn: sourceDataBucket.bucketArn,
             roleArn: this.DataEnrollment.DataSetGlueRole.roleArn,
@@ -34,18 +33,18 @@ export class S3dataSetEnrollment extends DataLakeEnrollment{
           }
         );
 
-        super.grantGlueRoleLakeFormationPermissions(DataSetGlueRole, DataSetName);
-
         this.grantDataLocationPermissions(this.DataEnrollment.DataSetGlueRole, {
             Grantable: true,
-            GrantResourcePrefix: `${DataSetName}SourcelocationGrant`,
+            GrantResourcePrefix: `${DataSetName}-${locationDescription}-locationGrant`,
             Location: sourceDataBucket.bucketName,
             LocationPrefix: "/"
         }, sourceLakeFormationLocation);
+        
+        return sourceLakeFormationLocation;
 
     }
 
-	constructor(scope: cdk.Construct, id: string, props: S3dataSetEnrollmentProps) {
+	constructor(scope: Construct, id: string, props: S3dataSetEnrollmentProps) {
 		super(scope, id, props);
 	
 		const dataSetName = props.DataSetName;
@@ -115,8 +114,10 @@ export class S3dataSetEnrollment extends DataLakeEnrollment{
        
         this.createCoarseIamPolicy();
         
+        this.SourceCfnResource = this.setupGlueRoleLakeFormationPermissions(this.DataEnrollment.DataSetGlueRole, props.DataSetName, props.sourceBucket, "src"); 
         
-        this.setupGlueRoleLakeFormationPermissions(this.DataEnrollment.DataSetGlueRole, props.DataSetName, props.sourceBucket); 
+        super.grantGlueRoleLakeFormationPermissions(this.DataEnrollment.DataSetGlueRole, props.DataSetName, 'src', this.SourceCfnResource);
+        super.grantGlueRoleLakeFormationPermissions(this.DataEnrollment.DataSetGlueRole, props.DataSetName, 'dl', this.DatalakeCfnResource);
         
         this.grantCoarseIamRead(this.DataEnrollment.DataSetGlueRole);
         

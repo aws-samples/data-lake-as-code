@@ -1,9 +1,10 @@
-import * as cdk from '@aws-cdk/core';
-import ec2 = require('@aws-cdk/aws-ec2');
-import iam = require('@aws-cdk/aws-iam');
-import glue = require('@aws-cdk/aws-glue');
-import s3 = require('@aws-cdk/aws-s3');
-import s3assets = require('@aws-cdk/aws-s3-assets');
+import { Construct } from 'constructs';
+import { Stack } from 'aws-cdk-lib';
+
+import * as ec2 from 'aws-cdk-lib/aws-ec2';
+import * as iam from 'aws-cdk-lib/aws-iam';
+import * as glue from 'aws-cdk-lib/aws-glue';
+import * as s3 from 'aws-cdk-lib/aws-s3';
 import { S3dataSetEnrollmentProps, S3dataSetEnrollment } from './constructs/s3-data-set-enrollment';
 import { DataSetStack, DataSetStackProps} from './stacks/dataset-stack';
 
@@ -16,7 +17,7 @@ export interface ExampleS3DataSetProps extends DataSetStackProps {
 
 export class ExampleS3DataSet extends DataSetStack{
     
-	constructor(scope: cdk.Construct, id: string, props: ExampleS3DataSetProps) {
+	constructor(scope: Construct, id: string, props: ExampleS3DataSetProps) {
 	    super(scope, id, props);
 	    
         const dataSetName = "exampledataset_v1"; // NO CAPS!!!!
@@ -38,7 +39,7 @@ export class ExampleS3DataSet extends DataSetStack{
                 "--job-bookmark-option": "job-bookmark-disable",
                 "--enable-metrics": "",
                 "--DL_BUCKET": props.DataLake.DataLakeBucket.bucketName,
-                "--DL_REGION": cdk.Stack.of(this).region,
+                "--DL_REGION": Stack.of(this).region,
                 "--DL_PREFIX": `/${dataSetName}/`,
                 "--GLUE_SRC_DATABASE": `${dataSetName}_src`
             }

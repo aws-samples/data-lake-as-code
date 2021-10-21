@@ -1,6 +1,8 @@
 {
   "app": "npx ts-node bin/aws.ts",
   "context": {
-    "starterLakeFormationAdmin": "arn:aws:iam::XXXXX:role/Cloud9-Roda-IAM-Role"
+    "@aws-cdk/aws-rds:lowercaseDbIdentifier": false,
+    "@aws-cdk/aws-apigateway:usagePlanKeyOrderInsensitiveId": false,
+    "@aws-cdk/core:stackRelativeExports": false
   }
 }

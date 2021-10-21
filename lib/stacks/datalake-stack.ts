@@ -1,37 +1,37 @@
-import * as cdk from "@aws-cdk/core";
-import ec2 = require("@aws-cdk/aws-ec2");
-import iam = require("@aws-cdk/aws-iam");
-import rds = require("@aws-cdk/aws-rds");
-import glue = require("@aws-cdk/aws-glue");
-import athena = require("@aws-cdk/aws-athena");
-import cfn = require("@aws-cdk/aws-cloudformation");
-import s3 = require("@aws-cdk/aws-s3");
-import s3assets = require("@aws-cdk/aws-s3-assets");
-import lakeformation = require("@aws-cdk/aws-lakeformation");
-import { CustomResource } from "@aws-cdk/core";
-import * as cr from "@aws-cdk/custom-resources";
-import lambda = require("@aws-cdk/aws-lambda");
-import fs = require("fs");
+import { Construct } from 'constructs';
+import { App, Stack, Resource, StackProps, CustomResource,  Duration, DefaultStackSynthesizer, Fn } from 'aws-cdk-lib';
+
+import * as ec2 from 'aws-cdk-lib/aws-ec2';
+import * as iam from 'aws-cdk-lib/aws-iam';
+import * as rds from 'aws-cdk-lib/aws-rds';
+import * as athena from 'aws-cdk-lib/aws-athena';
+import * as s3 from 'aws-cdk-lib/aws-s3';
+import * as s3assets from 'aws-cdk-lib/aws-s3-assets';
+import * as lakeformation from 'aws-cdk-lib/aws-lakeformation';
+import * as lambda from 'aws-cdk-lib/aws-lambda';
+import * as cr from 'aws-cdk-lib/custom-resources';
+
+import * as fs from "fs";
 
 import {
   DataSetEnrollmentProps,
   DataSetEnrollment,
 } from "../constructs/data-set-enrollment";
 
-export interface DataLakeStackProps extends cdk.StackProps {
-  starterLakeFormationAdminPrincipalArn: string;
+export interface DataLakeStackProps extends StackProps {
+
 }
 
-export class DataLakeStack extends cdk.Stack {
+export class DataLakeStack extends Stack {
   public readonly DataLakeBucket: s3.Bucket;
   public readonly AthenaResultsBucket: s3.Bucket;
   public readonly AthenaResultsBucketAccessPolicy: iam.ManagedPolicy;
   public readonly LakeFormationResource: lakeformation.CfnResource;
   public readonly PrimaryAthenaWorkgroup: athena.CfnWorkGroup;
   private readonly bucketRole: iam.Role;
-  private readonly starterAdminArn: string;
 
   public grantAthenaResultsBucketPermission(principal: iam.IPrincipal) {
+    
     if (principal instanceof iam.Role) {
       this.AthenaResultsBucketAccessPolicy.attachToRole(principal);
       return;
@@ -42,36 +42,33 @@ export class DataLakeStack extends cdk.Stack {
       return;
     }
 
-    if (principal instanceof cdk.Resource) {
-      try {
-        const user = principal as iam.User;
-        this.AthenaResultsBucketAccessPolicy.attachToUser(user);
-        return;
-      } catch (exception) {
-        console.log(exception);
+    if (principal instanceof iam.ArnPrincipal) {
+      
+      if(principal.arn.includes(":role/")){
+        this.AthenaResultsBucketAccessPolicy.attachToRole(iam.Role.fromRoleArn(this,'importedRole',principal.arn));
       }
-      try {
-        const role = principal as iam.Role;
-        this.AthenaResultsBucketAccessPolicy.attachToRole(role);
-        return;
-      } catch (exception) {
-        console.log(exception);
+
+      if(principal.arn.includes(":user/")){
+        this.AthenaResultsBucketAccessPolicy.attachToUser(iam.User.fromUserArn(this,'importedUser',principal.arn));
       }
+      
+  
     }
   }
 
-  constructor(scope: cdk.Construct, id: string, props: DataLakeStackProps) {
+  constructor(scope: Construct, id: string, props: DataLakeStackProps) {
     super(scope, id, props);
+
 
     this.DataLakeBucket = new s3.Bucket(this, 'dataLakeBucket',{
     });
     this.AthenaResultsBucket = new s3.Bucket(this, "athenaResultsBucket");
 
-    new lakeformation.CfnDataLakeSettings(this, "starterAdminPermission", {
+
+    new lakeformation.CfnDataLakeSettings(this, "cdkCfnExecRoleAdminPermission", {
       admins: [
         {
-          dataLakePrincipalIdentifier:
-            props.starterLakeFormationAdminPrincipalArn,
+          dataLakePrincipalIdentifier: Fn.sub((this.synthesizer as DefaultStackSynthesizer).cloudFormationExecutionRoleArn)
         },
       ],
     });
@@ -94,9 +91,7 @@ export class DataLakeStack extends cdk.Stack {
       coarseAthenaResultBucketAccess
     );
 
-    this.AthenaResultsBucketAccessPolicy = new iam.ManagedPolicy(
-      this,
-      `athenaResultBucketAccessPolicy`,
+    this.AthenaResultsBucketAccessPolicy = new iam.ManagedPolicy(this, `athenaResultBucketAccessPolicy`,
       {
         document: coarseAthenaResultBucketAccessPolicyDoc,
         description: `AthenaResultBucketAccessPolicy`,
@@ -111,9 +106,7 @@ export class DataLakeStack extends cdk.Stack {
 
     this.DataLakeBucket.grantReadWrite(this.bucketRole);
 
-    this.LakeFormationResource = new lakeformation.CfnResource(
-      this,
-      "dataLakeBucketLakeFormationResource",
+    this.LakeFormationResource = new lakeformation.CfnResource(this,"dataLakeBucketLakeFormationResource",
       {
         resourceArn: this.DataLakeBucket.bucketArn,
         roleArn: this.bucketRole.roleArn,
@@ -121,9 +114,7 @@ export class DataLakeStack extends cdk.Stack {
       }
     );
 
-    const workGroupConfigCustResourceRole = new iam.Role(
-      this,
-      "workGroupConfigCustResourceRole",
+    const workGroupConfigCustResourceRole = new iam.Role(this,"workGroupConfigCustResourceRole",
       {
         assumedBy: new iam.ServicePrincipal("lambda.amazonaws.com"),
       }
@@ -139,7 +130,7 @@ export class DataLakeStack extends cdk.Stack {
       new iam.PolicyStatement({
         resources: [
           this.formatArn({
-            account: cdk.Stack.of(this).account,
+            account: Stack.of(this).account,
             service: "athena",
             sep: "/",
             resource: "workgroup",
@@ -150,30 +141,34 @@ export class DataLakeStack extends cdk.Stack {
         effect: iam.Effect.ALLOW,
       })
     );
-
-    const workGroupConfigCustResource = new cfn.CustomResource(
-      this,
-      "workGroupConfigCustResource",
-      {
-        provider: cfn.CustomResourceProvider.lambda(
-          new lambda.SingletonFunction(this, "Singleton", {
-            role: workGroupConfigCustResourceRole,
-            uuid: "f7d4f730-PPPP-11e8-9c2d-fa7ae01bbebc",
-            code: new lambda.InlineCode(
-              fs.readFileSync("scripts/lambda.updateprimaryworkgroup.py", {
-                encoding: "utf-8",
-              })
-            ),
-            handler: "index.main",
-            timeout: cdk.Duration.seconds(60),
-            runtime: lambda.Runtime.PYTHON_3_7,
+     
+     
+    const updatePrimaryWorkgroup = new lambda.SingletonFunction(this, "Singleton", {
+        role: workGroupConfigCustResourceRole,
+        uuid: "f7d4f730-PPPP-11e8-9c2d-fa7ae01bbebc",
+        code: new lambda.InlineCode(
+          fs.readFileSync("scripts/lambda.updateprimaryworkgroup.py", {
+            encoding: "utf-8",
           })
         ),
+        handler: "index.main",
+        timeout: Duration.seconds(60),
+        runtime: lambda.Runtime.PYTHON_3_7,
+    });
+
+    const primaryWorkingGroupProvider = new cr.Provider(this, 'workgroupEnableProvider', {
+      onEventHandler: updatePrimaryWorkgroup,
+    });
+    
+    const workGroupConfigCustResource = new CustomResource(this, 'WorkgroupEnabledPromise', { 
+        serviceToken: primaryWorkingGroupProvider.serviceToken, 
         properties: {
           WorkGroupName: "primary",
           TargetOutputLocationS3Url: `s3://${this.AthenaResultsBucket.bucketName}/`,
-        },
-      }
-    );
+        }
+    });
+    
+    
   }
 }
+

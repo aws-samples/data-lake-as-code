@@ -1,25 +1,23 @@
 #!/usr/bin/env node
 import 'source-map-support/register';
-import * as cdk from '@aws-cdk/core';
+import * as iam from 'aws-cdk-lib/aws-iam';
+import { Construct } from 'constructs';
+import { App, Stack } from 'aws-cdk-lib';
 import { DataLakeStack } from '../lib/stacks/datalake-stack';
-import iam = require('@aws-cdk/aws-iam');
-import s3 = require('@aws-cdk/aws-s3');
-import ec2 = require('@aws-cdk/aws-ec2');
-import rds = require('@aws-cdk/aws-rds');
 import { DataLakeEnrollment } from '../lib/constructs/data-lake-enrollment';
 import { DataSetTemplateStack, CrawlerTemplateStack } from '../lib/stacks/dataset-stack';
-import { ExampleS3DataSet } from '../lib/ExampleS3DataSet-stack';
 import { ExamplePgRdsDataSet } from '../lib/ExamplePgRdsDataSet-stack';
+import { BaselineStack } from '../lib/Baseline-stack';
+    
 
-const app = new cdk.App();
+const app = new App();
 
 const coreDataLake = new DataLakeStack(app, 'CoreDataLake', {
-    description: "AWS Data Lake as Code core data lake template. (ib-87ce095eDf)",
-    starterLakeFormationAdminPrincipalArn: app.node.tryGetContext("starterLakeFormationAdmin")
+    description: "AWS Data Lake as Code core data lake template. (ib-87ce095eDf)"
 });
 
 
-const exisitingResourceImportStack = new cdk.Stack(app, 'resourceImportStack', {
+const exisitingResourceImportStack = new Stack(app, 'resourceImportStack', {
     description: "Used to import existing resources created outside of this CDK application",
 });
 
@@ -29,7 +27,6 @@ const exisitingResourceImportStack = new cdk.Stack(app, 'resourceImportStack', {
 //     sourceBucketDataPrefix: '/',
 //     DataLake: coreDataLake
 // });
-
 
 // const examplePgRdsDataSet = new ExamplePgRdsDataSet(app, 'ExamplePgRdsDataSet', {
     
@@ -53,8 +50,8 @@ const exisitingResourceImportStack = new cdk.Stack(app, 'resourceImportStack', {
 
 // Grant permissions:
 
-// const exampleExistingIamUser = iam.User.fromUserName(exisitingResourceImportStack, 'exampleUserGrantee', '--- EXISTING IAM USERNAME GOES HERE --' );
-// const exampleExistingIamRole = iam.Role.fromRoleArn(exisitingResourceImportStack, 'exampleRoleGrantee', '--- EXISTING IAM ROLE ARN GOES HERE --' );
+// const exampleExistingIamUser = new iam.ArnPrincipal('arn:aws:iam::XXXXXXXXXX:user/XXXXXX')
+// const exampleExistingIamRole = new iam.ArnPrincipal('arn:aws:iam::XXXXXXXXXX:role/XXXXXXX')
 
 // exampleS3DataSet.grantIamRead(exampleExistingIamUser);
 // exampleS3DataSet.grantIamRead(exampleExistingIamRole);

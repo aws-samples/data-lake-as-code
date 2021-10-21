@@ -1,10 +1,14 @@
-import * as cdk from '@aws-cdk/core';
-import ec2 = require('@aws-cdk/aws-ec2');
-import iam = require('@aws-cdk/aws-iam');
-import rds = require('@aws-cdk/aws-rds');
-import glue = require('@aws-cdk/aws-glue');
-import s3 = require('@aws-cdk/aws-s3');
-import s3assets = require('@aws-cdk/aws-s3-assets');
+import { Construct } from 'constructs';
+import { App, Stack, StackProps, CustomResource } from 'aws-cdk-lib';
+
+import * as ec2 from 'aws-cdk-lib/aws-ec2';
+import * as iam from 'aws-cdk-lib/aws-iam';
+import * as rds from 'aws-cdk-lib/aws-rds';
+import * as glue from 'aws-cdk-lib/aws-glue';
+import * as s3 from 'aws-cdk-lib/aws-s3';
+import * as s3assets from 'aws-cdk-lib/aws-s3-assets';
+
+
 import { DataSetEnrollmentProps, DataSetEnrollment, FederatedDataSetTemplate, FederatedCrawlerTemplate, FederatedCrawlerTemplateProps } from '../constructs/data-set-enrollment';
 import { DataLakeEnrollment } from '../constructs/data-lake-enrollment';
 import { DataLakeStack } from './datalake-stack';
@@ -12,15 +16,15 @@ import { DataLakeStack } from './datalake-stack';
 
 
 
-export interface DataSetTemplateStackProps extends cdk.StackProps {
+export interface DataSetTemplateStackProps extends StackProps {
 	DatabaseDescriptionPath: string;
 	DescribeTablesPath: string;
 	DataSetName: string;
 }
 
-export class DataSetTemplateStack extends cdk.Stack {
+export class DataSetTemplateStack extends Stack {
 
-  constructor(scope: cdk.Construct, id: string, props: DataSetTemplateStackProps) {
+  constructor(scope: Construct, id: string, props: DataSetTemplateStackProps) {
     super(scope, id, props);
     
     new FederatedDataSetTemplate(this, props.DataSetName, {
@@ -31,15 +35,15 @@ export class DataSetTemplateStack extends cdk.Stack {
   
 }
 
-export interface CrawlerTemplateStackProps extends cdk.StackProps {
+export interface CrawlerTemplateStackProps extends StackProps {
 	databaseDescriptionPath: string;
 	crawlerDescriptionPath: string
 	DataSetName: string;
 }
 
-export class CrawlerTemplateStack extends cdk.Stack {
+export class CrawlerTemplateStack extends Stack {
 
-  constructor(scope: cdk.Construct, id: string, props: CrawlerTemplateStackProps) {
+  constructor(scope: Construct, id: string, props: CrawlerTemplateStackProps) {
     super(scope, id, props);
     
     new FederatedCrawlerTemplate(this, props.DataSetName, {
@@ -55,16 +59,16 @@ export class CrawlerTemplateStack extends cdk.Stack {
 
 
 
-export interface DataSetStackProps extends cdk.StackProps {
+export interface DataSetStackProps extends StackProps {
 	DataLake: DataLakeStack;
 }
 
-export class DataSetStack extends cdk.Stack {
+export class DataSetStack extends Stack {
 
   public Enrollments: Array<DataLakeEnrollment> = [];
   public DataLake: DataLakeStack;
 
-  constructor(scope: cdk.Construct, id: string, props: DataSetStackProps) {
+  constructor(scope: Construct, id: string, props: DataSetStackProps) {
     super(scope, id, props);
     this.DataLake = props.DataLake;
   }
