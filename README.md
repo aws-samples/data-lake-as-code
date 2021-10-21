@@ -51,6 +51,10 @@ These datasets were downloaded directly in thier original forms from the followi
 
 [SEC Financial Statments and Notes](https://www.sec.gov/files/aqfsn_1.pdf)
 
+### How often are these datasets refreshed:
+
+Data source locations update at different intervals, but these lakehouse ready datasets check for updates every Sunday.
+
 ### How were these datasets prepared?
 
 Data sets in the AWS RODA Fintech Data Lake were created using the [Data Lake as Code Architecture (DLAC)](https://github.com/aws-samples/data-lake-as-code). The AWS RODA Fintech Data Lake tracks the [RODA Fintech branch](https://github.com/aws-samples/data-lake-as-code/tree/roda-fintech). The [DLAC mainline](https://github.com/aws-samples/data-lake-as-code/tree/mainline) branch is there to help you create your own data lake with your own private data sets using the DLAC framework.
