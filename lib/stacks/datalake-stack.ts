@@ -132,7 +132,7 @@ export class DataLakeStack extends Stack {
           this.formatArn({
             account: Stack.of(this).account,
             service: "athena",
-            sep: "/",
+            //sep: "/",
             resource: "workgroup",
             resourceName: "primary",
           }),

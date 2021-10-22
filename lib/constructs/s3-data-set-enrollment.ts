@@ -15,6 +15,7 @@ export interface S3dataSetEnrollmentProps extends DataLakeEnrollment.DataLakeEnr
     sourceBucket: s3.IBucket;
     sourceBucketDataPrefixes: string[];
     MaxDPUs: number;
+    ExistingLakeFormationResource?: lakeformation.CfnResource;
 }
 
 
@@ -22,25 +23,34 @@ export interface S3dataSetEnrollmentProps extends DataLakeEnrollment.DataLakeEnr
 export class S3dataSetEnrollment extends DataLakeEnrollment{
     
     private readonly sourceBucket: s3.IBucket;
+    public LakeFormationResource: lakeformation.CfnResource;
+    
+    setupGlueRoleLakeFormationPermissions(DataSetGlueRole: iam.Role, DataSetName: string, sourceDataBucket: s3.IBucket, locationDescription: string, ExistingLakeFormationResource?: lakeformation.CfnResource) {
 
-    setupGlueRoleLakeFormationPermissions(DataSetGlueRole: iam.Role, DataSetName: string, sourceDataBucket: s3.IBucket, locationDescription: string) {
+        if(ExistingLakeFormationResource == null) {
+            this.LakeFormationResource = new lakeformation.CfnResource(
+              this,
+              "sourceLakeFormationLocation",
+              {
+                resourceArn: sourceDataBucket.bucketArn,
+                roleArn: this.DataEnrollment.DataSetGlueRole.roleArn,
+                useServiceLinkedRole: true,
+              }
+            );
+            
+        } else {
+            this.LakeFormationResource = ExistingLakeFormationResource;
+        }
+        
 
-        const sourceLakeFormationLocation = new lakeformation.CfnResource(  this, `sourceLakeFormationLocation-${sourceDataBucket}`,
-          {
-            resourceArn: sourceDataBucket.bucketArn,
-            roleArn: this.DataEnrollment.DataSetGlueRole.roleArn,
-            useServiceLinkedRole: true,
-          }
-        );
+        super.grantGlueRoleLakeFormationPermissions(DataSetGlueRole, DataSetName, `${DataSetName}glueRolePermissions`, this.LakeFormationResource );
 
         this.grantDataLocationPermissions(this.DataEnrollment.DataSetGlueRole, {
             Grantable: true,
-            GrantResourcePrefix: `${DataSetName}-${locationDescription}-locationGrant`,
+            GrantResourcePrefix: `${DataSetName}SourcelocationGrant`,
             Location: sourceDataBucket.bucketName,
             LocationPrefix: "/"
-        }, sourceLakeFormationLocation);
-        
-        return sourceLakeFormationLocation;
+        }, this.LakeFormationResource);
 
     }
 
@@ -114,7 +124,7 @@ export class S3dataSetEnrollment extends DataLakeEnrollment{
        
         this.createCoarseIamPolicy();
         
-        this.SourceCfnResource = this.setupGlueRoleLakeFormationPermissions(this.DataEnrollment.DataSetGlueRole, props.DataSetName, props.sourceBucket, "src"); 
+        this.setupGlueRoleLakeFormationPermissions(this.DataEnrollment.DataSetGlueRole, props.DataSetName, props.sourceBucket, "src", props.ExistingLakeFormationResource ); 
         
         super.grantGlueRoleLakeFormationPermissions(this.DataEnrollment.DataSetGlueRole, props.DataSetName, 'src', this.SourceCfnResource);
         super.grantGlueRoleLakeFormationPermissions(this.DataEnrollment.DataSetGlueRole, props.DataSetName, 'dl', this.DatalakeCfnResource);

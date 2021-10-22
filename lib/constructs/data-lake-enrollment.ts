@@ -435,7 +435,9 @@ export class DataLakeEnrollment extends Construct {
 		
 		
 
-        this.createLakeFormationPermission(`${grantIdPrefix}-databaseGrant`,dataLakePrincipal , databaseResourceProperty, permissionGrant.DatabasePermissions, permissionGrant.GrantableDatabasePermissions)
+        const dataLakeGrant = this.createLakeFormationPermission(`${grantIdPrefix}-databaseGrant`,dataLakePrincipal , databaseResourceProperty, permissionGrant.DatabasePermissions, permissionGrant.GrantableDatabasePermissions)
+        
+        dataLakeGrant.addDependsOn(this.DataEnrollment.Dataset_Datalake);
 
         if(includeSourceDb){
 
@@ -444,8 +446,8 @@ export class DataLakeEnrollment extends Construct {
                 databaseResource: {name: databaseName}
             };
 
-            this.createLakeFormationPermission(`${grantIdPrefix}-databaseSrcGrant`,dataLakePrincipal , databaseResourceProperty, permissionGrant.DatabasePermissions, permissionGrant.GrantableDatabasePermissions)
-
+            const sourceGrant = this.createLakeFormationPermission(`${grantIdPrefix}-databaseSrcGrant`,dataLakePrincipal , databaseResourceProperty, permissionGrant.DatabasePermissions, permissionGrant.GrantableDatabasePermissions)
+            sourceGrant.addDependsOn(this.DataEnrollment.Dataset_Source);
         }
 
 
@@ -519,6 +521,7 @@ export class DataLakeEnrollment extends Construct {
             permissions: permissions,
             permissionsWithGrantOption: grantablePremissions
         });
+        
     }
 
 	private setupIamAndLakeFormationDatabasePermissionForPrincipal(principal: iam.IPrincipal, databasePermissions: Array<DataLakeEnrollment.DatabasePermission>, grantableDatabasePermissions: Array<DataLakeEnrollment.DatabasePermission> ){
