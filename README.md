@@ -12,7 +12,7 @@ Data Lake as Code is an extendable AWS CDK application that builds a data lake i
 
 Here is a high-level diagram of what this CDK application creates for you. Check out the ['Data Lake as Code' blog post](https://aws.amazon.com/blogs/startups/a-data-lake-as-code-featuring-chembl-and-opentargets/) if any of these services are unfamiliar or if you want to learn more about the architectural concepts. 
 
-![enter image description here](http://devspacepaul.s3.us-west-2.amazonaws.com/dlac/Untitled5.png)
+![enter image description here](https://raw.githubusercontent.com/aws-samples/data-lake-as-code/mainline/docs/images/Untitled5.png)
 
 
 ## To install this in your own AWS account:
@@ -105,10 +105,13 @@ import { SupplierDataSet } from '../lib/SupplierDataSet-stack'; // Add this!
 ...
 // Leave this alone
 const coreDataLake = new DataLakeStack(app, 'CoreDataLake', {...});
+const exisitingResourceImportStack = new Stack(app, 'resourceImportStack', {
+    description: "Used to import existing resources created outside of this CDK application",
+});
 ...
 // Instantiate Data Set!
 const supplierDataSet= new SupplierDataSet(app, 'SupplierDataSet', {
-     sourceBucket: s3.Bucket.fromBucketName(app, 'SupplierDataSetSourceBucket', '--- YOUR EXISTING BUCKET NAME GOES HERE ---'),
+     sourceBucket: s3.Bucket.fromBucketName(exisitingResourceImportStack, 'SupplierDataSetSourceBucket', '--- YOUR EXISTING BUCKET NAME GOES HERE ---'),
      sourceBucketDataPrefix: '/folder1/SupplierData/',
      DataLake: coreDataLake
  });
@@ -213,7 +216,7 @@ At this point, everything required to enroll your data set has been deployed. To
 
 You can see below the 'crawler-job-crawler' pattern visualized in the Graph. We crawl the source first, then perform the transform via job, then crawl the transformed data to pick up any new schema changes. 
 
-![enter image description here](http://devspacepaul.s3.us-west-2.amazonaws.com/dlac/Untitled.png)
+![enter image description here](https://raw.githubusercontent.com/aws-samples/data-lake-as-code/mainline/docs/images/Untitled.png)
 
 Click the Actions drop down and select "Run". 
 
@@ -221,11 +224,11 @@ You can watch the overall run by visiting the "History" tab. If you want to watc
 
 Here you can see the source crawler has just finished, it ran for a minute and found 3 tables. 
 
-![enter image description here](http://devspacepaul.s3.us-west-2.amazonaws.com/dlac/Untitled1.png)
+![enter image description here](https://raw.githubusercontent.com/aws-samples/data-lake-as-code/mainline/docs/images/Untitled1.png)
 
 Once the source crawler is finished you can see the Job kicking off by visiting the  'Jobs' section in the glue console. Select the ETL job to see its history and real time metrics:
 
-![enter image description here](http://devspacepaul.s3.us-west-2.amazonaws.com/dlac/Untitled2.png)
+![enter image description here](https://raw.githubusercontent.com/aws-samples/data-lake-as-code/mainline/docs/images/Untitled2.png)
 
 
 ## Query an Conquer!
@@ -240,13 +243,13 @@ If you haven't used Athena in your account before, you will need to define a sto
 
 Now, click the ‘Databases’ dropdown. You will see 2 types of databases listed. 
 
-![enter image description here](http://devspacepaul.s3.us-west-2.amazonaws.com/dlac/Untitled3.png)
+![enter image description here](https://raw.githubusercontent.com/aws-samples/data-lake-as-code/mainline/docs/images/Untitled3.png)
 
 Databases that end in **_src** are the 'source' databases as they were first crawled. For the most part, you wont use the src tables. Databases that end in **_dl** are the 'data lake' databases that have been transformed by the Glue job and crawled on completion. You will almost always want to use the **_dl** tables as they have been optimized for performance and cost and have any transformations you have included in the Glue Job.
 
 To start exploring your data, try clicking on one of the horizontal dot buttons next to a table and choose the 'Preview table' option. That will prepopulate `select *` on that table in the query editor and run it. You should see your data now!
 
-![enter image description here](http://devspacepaul.s3.us-west-2.amazonaws.com/dlac/Untitled4.png)
+![enter image description here](https://raw.githubusercontent.com/aws-samples/data-lake-as-code/mainline/docs/images/Untitled4.png)
 
 The Athena SQL editor experience in the AWS console is handy for exploring the data, looking at table schemas, and testing queries. However, if you want to use your on BI tools or notebooks to query the data through Athena you have a few options:
 
