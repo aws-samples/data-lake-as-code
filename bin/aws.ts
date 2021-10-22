@@ -24,11 +24,11 @@ const exisitingResourceImportStack = new Stack(app, 'resourceImportStack', {
 });
 
 
-const exampleS3DataSet = new ExampleS3DataSet(app, 'ExampleS3DataSet', {
-    sourceBucket: s3.Bucket.fromBucketName(exisitingResourceImportStack, 'exampleS3DataSetSourceBucket', 'dlacregression4test'),
-    sourceBucketDataPrefix: 'voc/',
-    DataLake: coreDataLake
-});
+// const exampleS3DataSet = new ExampleS3DataSet(app, 'ExampleS3DataSet', {
+//     sourceBucket: s3.Bucket.fromBucketName(exisitingResourceImportStack, 'exampleS3DataSetSourceBucket', 'XXXExistingBucketNameXXX'),
+//     sourceBucketDataPrefix: 'datasetPrefixThatEndsInAFwdSlash/',
+//     DataLake: coreDataLake
+// });
 
 // const examplePgRdsDataSet = new ExamplePgRdsDataSet(app, 'ExamplePgRdsDataSet', {
     
