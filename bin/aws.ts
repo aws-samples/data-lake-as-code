@@ -9,8 +9,7 @@ import { DataLakeEnrollment } from '../lib/constructs/data-lake-enrollment';
 import { DataSetTemplateStack, CrawlerTemplateStack } from '../lib/stacks/dataset-stack';
 import { ExampleS3DataSet } from '../lib/ExampleS3DataSet-stack';
 import { ExamplePgRdsDataSet } from '../lib/ExamplePgRdsDataSet-stack';
-import { BaselineStack } from '../lib/Baseline-stack';
-    
+
 
 const app = new App();
 
