@@ -4,9 +4,9 @@ The AWS Registry of Open Data (RODA) hosts the following datasets in compressed/
 
 You can also query these datasets 'in place' using services like Athena, Redshift, Quicksight, and EMR to join with your own datasets.
 
-The AWS CloudFormation templates below will create the neccesary AWS Glue database, tables, and schemas in your account's AWS Glue Data Catalog **in seconds**. This allows you to start querying the data with Athena directly out of the public S3 buckets, with zero servers or networking to setup. 
+The AWS CloudFormation templates below will create the neccesary AWS Glue database, tables, and schemas in your account's AWS Glue Data Catalog **in seconds**. With AWS Athena, this allows you to start querying the data with Athena directly out of the public S3 buckets, with zero servers or networking to setup. Other Lake House services like Redshift/EMR/QuickSight all directly integrate with the same AWS Glue Data Catalog meatastore so you can pick the right tool for the job.
 
-![](http://devspacepaul.s3.us-west-2.amazonaws.com/dlac/howitworks.png)
+![](https://github.com/aws-samples/data-lake-as-code/raw/roda/docs/HowLakeHouseReadyDatasetsWork.png)
 
 Once deployed, you can use standard JDBC/ODBC to query these databases with your own notebooks, business inteligence tools, plotting software, HPC enviornment, or even your local development machine. 
 
@@ -29,9 +29,7 @@ Click the links below for the data set you are interested in. Then click the "Cr
 
 ### [Chembl 27 ![](https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png)](https://console.aws.amazon.com/cloudformation/home?#/stacks/quickcreate?templateUrl=https%3A%2F%2Faws-roda-hcls-datalake.s3.amazonaws.com%2FChembl.27.RodaTemplate.json&stackName=Chembl27-RODA) 
 
-### [Chembl 27 ![](https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png)](https://console.aws.amazon.com/cloudformation/home?#/stacks/quickcreate?templateUrl=https%3A%2F%2Faws-roda-hcls-datalake.s3.amazonaws.com%2FChembl.27.RodaTemplate.json&stackName=Chembl27-RODA) 
-
-### [Open Targets 20.06 ![](https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png)](https://console.aws.amazon.com/cloudformation/home?#/stacks/quickcreate?templateUrl=https%3A%2F%2Faws-roda-hcls-datalake.s3.amazonaws.com%2FOpenTargets.20.06.RodaTemplate.json&stackName=OpenTargets-20-06-RODA)
+### [Open Targets Latest ![](https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png)](https://console.aws.amazon.com/cloudformation/home?#/stacks/quickcreate?templateUrl=https%3A%2F%2Faws-roda-hcls-datalake.s3.amazonaws.com%2FOpenTargets.latest.RodaTemplate.json&stackName=OpenTargets-Latest-RODA)
 
 ### [BindingDB ![](https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png)](https://console.aws.amazon.com/cloudformation/home?#/stacks/quickcreate?templateUrl=https%3A%2F%2Faws-roda-hcls-datalake.s3.amazonaws.com%2FBindingDbRodaTemplate.json&stackName=BindingDB-RODA)
 
@@ -41,7 +39,14 @@ Click the links below for the data set you are interested in. Then click the "Cr
 
 It should take approximately 60 seconds for the stack to finish deploying.
 
-The GTEx data set requires one extra step after the deployment. The `exon_reads` table has > 17k columns. Expressing all of those columns in YAML would exceed the CloudFormation max template length! Once the GTEx template deploys, go the [AWS Glue Console](https://us-west-2.console.aws.amazon.com/glue/home?#catalog:tab=crawlers), check the box next to the `gtex_8_awsroda_crawler` and click 'Run crawler'. Once it finishes (1-2 minutes) you can query the GTEx data just like the other datasets. 
+
+---
+**IMPORTANT NOTE!!! Extra Step for GTEx, gnomAD, and 1000 Genomes DRAGEN**
+
+A handful of tables in these datasets either have LOTS of columns or partions. Expressing all of those columns in YAML would exceed the CloudFormation max template length! Once the template deploys, go the [AWS Glue Crawler Console](https://console.aws.amazon.com/glue/home?#catalog:tab=crawlers) check the box next to the `dataset_awsroda_crawler` and click 'Run crawler'. Once it finishes (1-3 minutes) you can query all tables in these datasets. 
+
+
+---
 
 ## Query the data!
 
