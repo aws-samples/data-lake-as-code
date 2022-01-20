@@ -22,7 +22,7 @@ def main(event, context):
         
         if event['RequestType'] == 'Create':
             
-            triggerId = event['ResourceProperties']['TriggerId']
+            triggerId = event['ResourceProperties']['triggerId']
             response = glue.start_trigger(Name=triggerId);
             cfnresponse.send(event, context, cfnresponse.SUCCESS, response, triggerId);
     except Exception as e:
