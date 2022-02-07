@@ -10,9 +10,9 @@ import * as lakeformation from 'aws-cdk-lib/aws-lakeformation';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
 import * as cr from 'aws-cdk-lib/custom-resources';
 import * as fs from "fs";
+import { Asset } from 'aws-cdk-lib/aws-s3-assets';
 
 
-import { URL } from "url";
 
 
 export interface FederatedCrawlerTemplateProps extends StackProps {
@@ -172,6 +172,7 @@ export interface DataSetEnrollmentProps extends StackProps {
 		SourceAccessPolicy?: iam.Policy;
 		MaxDPUs: number;
 		WorkflowCronScheduleExpression?: string;
+		LocalJarsForGlueJob?: string[];
 }
 
 
@@ -253,7 +254,7 @@ export class DataSetEnrollment extends Construct {
 			});
 			if(props.SourceConnectionInput.name){
 				connectionArray.push(props.SourceConnectionInput.name);	
-			}
+		}
 		}
 
 		
@@ -279,9 +280,38 @@ export class DataSetEnrollment extends Construct {
 		});
 		glueScript.grantRead(this.DataSetGlueRole);
 		
+
 		
+	
+		var additonalJars: Array<string> = [];
+		const currentEnrollment = this;
+		if(typeof props.LocalJarsForGlueJob !== "undefined") {
+			
+			props.LocalJarsForGlueJob.forEach(function(localPath: string) {
+				
+				
+				const localName = localPath.replace(/\W/g, '');
+				const jarAsset = new s3assets.Asset(currentEnrollment, `${localName}-GlueScript`, {
+					path: localPath
+				});
+				jarAsset.grantRead(currentEnrollment.DataSetGlueRole);
+				
+				additonalJars.push(jarAsset.s3ObjectUrl);
+			});
+			
+			const additonalJarsParam = additonalJars.join(',');
+		
+			if(typeof props.GlueScriptArguments['--extra-jars'] !== "undefined"){
+				
+				props.GlueScriptArguments['--extra-jars'] = props.GlueScriptArguments['--extra-jars'] + "," + additonalJarsParam
+			}else {
+				props.GlueScriptArguments['--extra-jars'] =  additonalJarsParam
+			}
+		
+		}
 		
 		/// The spread operator below (...) makes the connections property conditional. Its only used for JDBC sources at the moment.
+
 		const jobParams = {
 			executionProperty: {
 				maxConcurrentRuns: 1
@@ -305,7 +335,6 @@ export class DataSetEnrollment extends Construct {
 			})
 		}
 		const etl_job = new glue.CfnJob(this, `${props.dataSetName}-EtlJob`, jobParams );
-		
 		
 		const datalake_crawler = this.setupCrawler(this.Dataset_Datalake, this.DataLakeTargets, false, this.Dataset_DatalakeDatabaseName);
 		

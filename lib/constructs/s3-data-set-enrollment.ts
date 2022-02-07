@@ -16,6 +16,7 @@ export interface S3dataSetEnrollmentProps extends DataLakeEnrollment.DataLakeEnr
     sourceBucketDataPrefixes: string[];
     MaxDPUs: number;
     ExistingLakeFormationResource?: lakeformation.CfnResource;
+    LocalJarsForGlueJob?: string[];
 }
 
 
@@ -118,7 +119,8 @@ export class S3dataSetEnrollment extends DataLakeEnrollment{
 			    s3Targets: s3DataLakePaths
 			},
 			GlueScriptArguments: props.GlueScriptArguments,
-			WorkflowCronScheduleExpression: props.WorkflowCronScheduleExpression
+			WorkflowCronScheduleExpression: props.WorkflowCronScheduleExpression,
+			LocalJarsForGlueJob: props.LocalJarsForGlueJob
 		});
 	
        
