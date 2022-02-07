@@ -1,1800 +1,218 @@
-** Open Targets; version 2020_06 --
-https://www.targetvalidation.org/downloads/data
 
-Apache License
 
-Version 2.0, January 2004
+** YouTube 8M; version Sep 4th, 2019 and Jun 27th, 2019 -- https://research.google.com/youtube8m/index.html
+The dataset is made available by Google LLC. under a Creative Commons
+Attribution 4.0 International (CC BY 4.0) license.
+ 
+Creative Commons Attribution 4.0 International Public License
+By exercising the Licensed Rights (defined below), You accept and agree to be
+bound by the terms and conditions of this Creative Commons Attribution 4.0
+International Public License ("Public License"). To the extent this Public
+License may be interpreted as a contract, You are granted the Licensed Rights in
+consideration of Your acceptance of these terms and conditions, and the Licensor
+grants You such rights in consideration of benefits the Licensor receives from
+making the Licensed Material available under these terms and conditions.
 
-http://www.apache.org/licenses/ TERMS AND CONDITIONS FOR USE, REPRODUCTION, AND
-DISTRIBUTION
+Section 1 – Definitions.
 
-   1. Definitions.
+Adapted Material means material subject to Copyright and Similar Rights that is
+derived from or based upon the Licensed Material and in which the Licensed
+Material is translated, altered, arranged, transformed, or otherwise modified in
+a manner requiring permission under the Copyright and Similar Rights held by the
+Licensor. For purposes of this Public License, where the Licensed Material is a
+musical work, performance, or sound recording, Adapted Material is always
+produced where the Licensed Material is synched in timed relation with a moving
+image.
+Adapter's License means the license You apply to Your Copyright and Similar
+Rights in Your contributions to Adapted Material in accordance with the terms
+and conditions of this Public License.
+Copyright and Similar Rights means copyright and/or similar rights closely
+related to copyright including, without limitation, performance, broadcast,
+sound recording, and Sui Generis Database Rights, without regard to how the
+rights are labeled or categorized. For purposes of this Public License, the
+rights specified in Section 2(b)(1)-(2) are not Copyright and Similar Rights.
+Effective Technological Measures means those measures that, in the absence of
+proper authority, may not be circumvented under laws fulfilling obligations
+under Article 11 of the WIPO Copyright Treaty adopted on December 20, 1996,
+and/or similar international agreements.
+Exceptions and Limitations means fair use, fair dealing, and/or any other
+exception or limitation to Copyright and Similar Rights that applies to Your use
+of the Licensed Material.
+Licensed Material means the artistic or literary work, database, or other
+material to which the Licensor applied this Public License.
+Licensed Rights means the rights granted to You subject to the terms and
+conditions of this Public License, which are limited to all Copyright and
+Similar Rights that apply to Your use of the Licensed Material and that the
+Licensor has authority to license.
+Licensor means the individual(s) or entity(ies) granting rights under this
+Public License.
+Share means to provide material to the public by any means or process that
+requires permission under the Licensed Rights, such as reproduction, public
+display, public performance, distribution, dissemination, communication, or
+importation, and to make material available to the public including in ways that
+members of the public may access the material from a place and at a time
+individually chosen by them.
+Sui Generis Database Rights means rights other than copyright resulting from
+Directive 96/9/EC of the European Parliament and of the Council of 11 March 1996
+on the legal protection of databases, as amended and/or succeeded, as well as
+other essentially equivalent rights anywhere in the world.
+You means the individual or entity exercising the Licensed Rights under this
+Public License. Your has a corresponding meaning.
+Section 2 – Scope.
 
-      "License" shall mean the terms and conditions for use, reproduction, and
-      distribution as defined by Sections 1 through 9 of this document.
+License grant.
+Subject to the terms and conditions of this Public License, the Licensor hereby
+grants You a worldwide, royalty-free, non-sublicensable, non-exclusive,
+irrevocable license to exercise the Licensed Rights in the Licensed Material to:
+reproduce and Share the Licensed Material, in whole or in part; and
+produce, reproduce, and Share Adapted Material.
+Exceptions and Limitations. For the avoidance of doubt, where Exceptions and
+Limitations apply to Your use, this Public License does not apply, and You do
+not need to comply with its terms and conditions.
+Term. The term of this Public License is specified in Section 6(a).
+Media and formats; technical modifications allowed. The Licensor authorizes You
+to exercise the Licensed Rights in all media and formats whether now known or
+hereafter created, and to make technical modifications necessary to do so. The
+Licensor waives and/or agrees not to assert any right or authority to forbid You
+from making technical modifications necessary to exercise the Licensed Rights,
+including technical modifications necessary to circumvent Effective
+Technological Measures. For purposes of this Public License, simply making
+modifications authorized by this Section 2(a)(4) never produces Adapted
+Material.
+Downstream recipients.
+Offer from the Licensor – Licensed Material. Every recipient of the Licensed
+Material automatically receives an offer from the Licensor to exercise the
+Licensed Rights under the terms and conditions of this Public License.
+No downstream restrictions. You may not offer or impose any additional or
+different terms or conditions on, or apply any Effective Technological Measures
+to, the Licensed Material if doing so restricts exercise of the Licensed Rights
+by any recipient of the Licensed Material.
+No endorsement. Nothing in this Public License constitutes or may be construed
+as permission to assert or imply that You are, or that Your use of the Licensed
+Material is, connected with, or sponsored, endorsed, or granted official status
+by, the Licensor or others designated to receive attribution as provided in
+Section 3(a)(1)(A)(i).
+Other rights.
 
-      "Licensor" shall mean the copyright owner or entity authorized by the
-      copyright owner that is granting the License.
+Moral rights, such as the right of integrity, are not licensed under this Public
+License, nor are publicity, privacy, and/or other similar personality rights;
+however, to the extent possible, the Licensor waives and/or agrees not to assert
+any such rights held by the Licensor to the limited extent necessary to allow
+You to exercise the Licensed Rights, but not otherwise.
+Patent and trademark rights are not licensed under this Public License.
+To the extent possible, the Licensor waives any right to collect royalties from
+You for the exercise of the Licensed Rights, whether directly or through a
+collecting society under any voluntary or waivable statutory or compulsory
+licensing scheme. In all other cases the Licensor expressly reserves any right
+to collect such royalties.
+Section 3 – License Conditions.
 
-      "Legal Entity" shall mean the union of the acting entity and all other
-      entities that control, are controlled by, or are under common control
-      with that entity. For the purposes of this definition, "control" means
-      (i) the power, direct or indirect, to cause the direction or management
-      of such entity, whether by contract or otherwise, or (ii) ownership of
-      fifty percent (50%) or more of the outstanding shares, or (iii)
-      beneficial ownership of such entity.
+Your exercise of the Licensed Rights is expressly made subject to the following
+conditions.
 
-      "You" (or "Your") shall mean an individual or Legal Entity exercising
-      permissions granted by this License.
+Attribution.
 
-      "Source" form shall mean the preferred form for making modifications,
-      including but not limited to software source code, documentation source,
-      and configuration files.
+If You Share the Licensed Material (including in modified form), You must:
 
-      "Object" form shall mean any form resulting from mechanical
-      transformation or translation of a Source form, including but not limited
-      to compiled object code, generated documentation, and conversions to
-      other media types.
-
-      "Work" shall mean the work of authorship, whether in Source or Object
-      form, made available under the License, as indicated by a copyright
-      notice that is included in or attached to the work (an example is
-      provided in the Appendix below).
-
-      "Derivative Works" shall mean any work, whether in Source or Object form,
-      that is based on (or derived from) the Work and for which the editorial
-      revisions, annotations, elaborations, or other modifications represent,
-      as a whole, an original work of authorship. For the purposes of this
-      License, Derivative Works shall not include works that remain separable
-      from, or merely link (or bind by name) to the interfaces of, the Work and
-      Derivative Works thereof.
-
-      "Contribution" shall mean any work of authorship, including the original
-      version of the Work and any modifications or additions to that Work or
-      Derivative Works thereof, that is intentionally submitted to Licensor for
-      inclusion in the Work by the copyright owner or by an individual or Legal
-      Entity authorized to submit on behalf of the copyright owner. For the
-      purposes of this definition, "submitted" means any form of electronic,
-      verbal, or written communication sent to the Licensor or its
-      representatives, including but not limited to communication on electronic
-      mailing lists, source code control systems, and issue tracking systems
-      that are managed by, or on behalf of, the Licensor for the purpose of
-      discussing and improving the Work, but excluding communication that is
-      conspicuously marked or otherwise designated in writing by the copyright
-      owner as "Not a Contribution."
-
-      "Contributor" shall mean Licensor and any individual or Legal Entity on
-      behalf of whom a Contribution has been received by Licensor and
-      subsequently incorporated within the Work.
-
-   2. Grant of Copyright License. Subject to the terms and conditions of this
-   License, each Contributor hereby grants to You a perpetual, worldwide,
-   non-exclusive, no-charge, royalty-free, irrevocable copyright license to
-   reproduce, prepare Derivative Works of, publicly display, publicly perform,
-   sublicense, and distribute the Work and such Derivative Works in Source or
-   Object form.
-
-   3. Grant of Patent License. Subject to the terms and conditions of this
-   License, each Contributor hereby grants to You a perpetual, worldwide,
-   non-exclusive, no-charge, royalty-free, irrevocable (except as stated in
-   this section) patent license to make, have made, use, offer to sell, sell,
-   import, and otherwise transfer the Work, where such license applies only to
-   those patent claims licensable by such Contributor that are necessarily
-   infringed by their Contribution(s) alone or by combination of their
-   Contribution(s) with the Work to which such Contribution(s) was submitted.
-   If You institute patent litigation against any entity (including a
-   cross-claim or counterclaim in a lawsuit) alleging that the Work or a
-   Contribution incorporated within the Work constitutes direct or contributory
-   patent infringement, then any patent licenses granted to You under this
-   License for that Work shall terminate as of the date such litigation is
-   filed.
-
-   4. Redistribution. You may reproduce and distribute copies of the Work or
-   Derivative Works thereof in any medium, with or without modifications, and
-   in Source or Object form, provided that You meet the following conditions:
-
-      (a) You must give any other recipients of the Work or Derivative Works a
-      copy of this License; and
-
-      (b) You must cause any modified files to carry prominent notices stating
-      that You changed the files; and
-
-      (c) You must retain, in the Source form of any Derivative Works that You
-      distribute, all copyright, patent, trademark, and attribution notices
-      from the Source form of the Work, excluding those notices that do not
-      pertain to any part of the Derivative Works; and
-
-      (d) If the Work includes a "NOTICE" text file as part of its
-      distribution, then any Derivative Works that You distribute must include
-      a readable copy of the attribution notices contained within such NOTICE
-      file, excluding those notices that do not pertain to any part of the
-      Derivative Works, in at least one of the following places: within a
-      NOTICE text file distributed as part of the Derivative Works; within the
-      Source form or documentation, if provided along with the Derivative
-      Works; or, within a display generated by the Derivative Works, if and
-      wherever such third-party notices normally appear. The contents of the
-      NOTICE file are for informational purposes only and do not modify the
-      License. You may add Your own attribution notices within Derivative Works
-      that You distribute, alongside or as an addendum to the NOTICE text from
-      the Work, provided that such additional attribution notices cannot be
-      construed as modifying the License.
-
-      You may add Your own copyright statement to Your modifications and may
-      provide additional or different license terms and conditions for use,
-      reproduction, or distribution of Your modifications, or for any such
-      Derivative Works as a whole, provided Your use, reproduction, and
-      distribution of the Work otherwise complies with the conditions stated in
-      this License.
-
-   5. Submission of Contributions. Unless You explicitly state otherwise, any
-   Contribution intentionally submitted for inclusion in the Work by You to the
-   Licensor shall be under the terms and conditions of this License, without
-   any additional terms or conditions. Notwithstanding the above, nothing
-   herein shall supersede or modify the terms of any separate license agreement
-   you may have executed with Licensor regarding such Contributions.
-
-   6. Trademarks. This License does not grant permission to use the trade
-   names, trademarks, service marks, or product names of the Licensor, except
-   as required for reasonable and customary use in describing the origin of the
-   Work and reproducing the content of the NOTICE file.
-
-   7. Disclaimer of Warranty. Unless required by applicable law or agreed to in
-   writing, Licensor provides the Work (and each Contributor provides its
-   Contributions) on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-   KIND, either express or implied, including, without limitation, any
-   warranties or conditions of TITLE, NON-INFRINGEMENT, MERCHANTABILITY, or
-   FITNESS FOR A PARTICULAR PURPOSE. You are solely responsible for determining
-   the appropriateness of using or redistributing the Work and assume any risks
-   associated with Your exercise of permissions under this License.
-
-   8. Limitation of Liability. In no event and under no legal theory, whether
-   in tort (including negligence), contract, or otherwise, unless required by
-   applicable law (such as deliberate and grossly negligent acts) or agreed to
-   in writing, shall any Contributor be liable to You for damages, including
-   any direct, indirect, special, incidental, or consequential damages of any
-   character arising as a result of this License or out of the use or inability
-   to use the Work (including but not limited to damages for loss of goodwill,
-   work stoppage, computer failure or malfunction, or any and all other
-   commercial damages or losses), even if such Contributor has been advised of
-   the possibility of such damages.
-
-   9. Accepting Warranty or Additional Liability. While redistributing the Work
-   or Derivative Works thereof, You may choose to offer, and charge a fee for,
-   acceptance of support, warranty, indemnity, or other liability obligations
-   and/or rights consistent with this License. However, in accepting such
-   obligations, You may act only on Your own behalf and on Your sole
-   responsibility, not on behalf of any other Contributor, and only if You
-   agree to indemnify, defend, and hold each Contributor harmless for any
-   liability incurred by, or claims asserted against, such Contributor by
-   reason of your accepting any such warranty or additional liability. END OF
-   TERMS AND CONDITIONS
-
-APPENDIX: How to apply the Apache License to your work.
-
-To apply the Apache License to your work, attach the following boilerplate
-notice, with the fields enclosed by brackets "[]" replaced with your own
-identifying information. (Don't include the brackets!) The text should be
-enclosed in the appropriate comment syntax for the file format. We also
-recommend that a file or class name and description of purpose be included on
-the same "printed page" as the copyright notice for easier identification
-within third-party archives.
-
-Copyright [yyyy] [name of copyright owner]
-
-Licensed under the Apache License, Version 2.0 (the "License");
-
-you may not use this file except in compliance with the License.
-
-You may obtain a copy of the License at
-
-http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-
-distributed under the License is distributed on an "AS IS" BASIS,
-
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-
-See the License for the specific language governing permissions and
-
-limitations under the License.
-
-* For Open Targets see also this required NOTICE:
-    Copyright 2014-2018 Bristol Myers Squibb, EMBL - European Bioinformatics
-    Institute, GlaxoSmithKline, Takeda Pharmaceutical Company, Sanofi S.A., and
-    Wellcome Sanger Institute.
-
-------
-
-** BindingDB; version 2019_11 --
-https://www.bindingdb.org/bind/chemsearch/marvin/SDFdownload.jsp?all_download=yes
-Citation: Michael K. Gilson, Tiqing Liu, Michael Baitaluk, George Nicola, Linda
-Hwang, Jenny Chong, BindingDB in 2015: A public database for medicinal
-chemistry, computational chemistry and systems pharmacology, Nucleic Acids
-Research, Volume 44, Issue D1, 4 January 2016, Pages D1045–D1053,
-https://doi.org/10.1093/nar/gkv1072
-
-License
-THE WORK (AS DEFINED BELOW) IS PROVIDED UNDER THE TERMS OF THIS CREATIVE
-COMMONS PUBLIC LICENSE ("CCPL" OR "LICENSE"). THE WORK IS PROTECTED BY
-COPYRIGHT AND/OR OTHER APPLICABLE LAW. ANY USE OF THE WORK OTHER THAN AS
-AUTHORIZED UNDER THIS LICENSE OR COPYRIGHT LAW IS PROHIBITED.
-
-BY EXERCISING ANY RIGHTS TO THE WORK PROVIDED HERE, YOU ACCEPT AND AGREE TO BE
-BOUND BY THE TERMS OF THIS LICENSE. TO THE EXTENT THIS LICENSE MAY BE
-CONSIDERED TO BE A CONTRACT, THE LICENSOR GRANTS YOU THE RIGHTS CONTAINED HERE
-IN CONSIDERATION OF YOUR ACCEPTANCE OF SUCH TERMS AND CONDITIONS.
-
-1. Definitions
-
-"Collective Work" means a work, such as a periodical issue, anthology or
-encyclopedia, in which the Work in its entirety in unmodified form, along with
-one or more other contributions, constituting separate and independent works in
-themselves, are assembled into a collective whole. A work that constitutes a
-Collective Work will not be considered a Derivative Work (as defined below) for
-the purposes of this License.
-"Derivative Work" means a work based upon the Work or upon the Work and other
-pre-existing works, such as a translation, musical arrangement, dramatization,
-fictionalization, motion picture version, sound recording, art reproduction,
-abridgment, condensation, or any other form in which the Work may be recast,
-transformed, or adapted, except that a work that constitutes a Collective Work
-will not be considered a Derivative Work for the purpose of this License. For
-the avoidance of doubt, where the Work is a musical composition or sound
-recording, the synchronization of the Work in timed-relation with a moving
-image ("synching") will be considered a Derivative Work for the purpose of this
+retain the following if it is supplied by the Licensor with the Licensed
+Material:
+identification of the creator(s) of the Licensed Material and any others
+designated to receive attribution, in any reasonable manner requested by the
+Licensor (including by pseudonym if designated);
+a copyright notice;
+a notice that refers to this Public License;
+a notice that refers to the disclaimer of warranties;
+a URI or hyperlink to the Licensed Material to the extent reasonably
+practicable;
+indicate if You modified the Licensed Material and retain an indication of any
+previous modifications; and
+indicate the Licensed Material is licensed under this Public License, and
+include the text of, or the URI or hyperlink to, this Public License.
+You may satisfy the conditions in Section 3(a)(1) in any reasonable manner based
+on the medium, means, and context in which You Share the Licensed Material. For
+example, it may be reasonable to satisfy the conditions by providing a URI or
+hyperlink to a resource that includes the required information.
+If requested by the Licensor, You must remove any of the information required by
+Section 3(a)(1)(A) to the extent reasonably practicable.
+If You Share Adapted Material You produce, the Adapter's License You apply must
+not prevent recipients of the Adapted Material from complying with this Public
 License.
-"Licensor" means the individual, individuals, entity or entities that offers
-the Work under the terms of this License.
-"Original Author" means the individual, individuals, entity or entities who
-created the Work.
-"Work" means the copyrightable work of authorship offered under the terms of
-this License.
-"You" means an individual or entity exercising rights under this License who
-has not previously violated the terms of this License with respect to the Work,
-or who has received express permission from the Licensor to exercise rights
-under this License despite a previous violation.
-2. Fair Use Rights. Nothing in this license is intended to reduce, limit, or
-restrict any rights arising from fair use, first sale or other limitations on
-the exclusive rights of the copyright owner under copyright law or other
-applicable laws.
-
-3. License Grant. Subject to the terms and conditions of this License, Licensor
-hereby grants You a worldwide, royalty-free, non-exclusive, perpetual (for the
-duration of the applicable copyright) license to exercise the rights in the
-Work as stated below:
-
-to reproduce the Work, to incorporate the Work into one or more Collective
-Works, and to reproduce the Work as incorporated in the Collective Works;
-to create and reproduce Derivative Works provided that any such Derivative
-Work, including any translation in any medium, takes reasonable steps to
-clearly label, demarcate or otherwise identify that changes were made to the
-original Work. For example, a translation could be marked "The original work
-was translated from English to Spanish," or a modification could indicate "The
-original work has been modified.";;
-to distribute copies or phonorecords of, display publicly, perform publicly,
-and perform publicly by means of a digital audio transmission the Work
-including as incorporated in Collective Works;
-to distribute copies or phonorecords of, display publicly, perform publicly,
-and perform publicly by means of a digital audio transmission Derivative Works.
-For the avoidance of doubt, where the Work is a musical composition:
-
-Performance Royalties Under Blanket Licenses. Licensor waives the exclusive
-right to collect, whether individually or, in the event that Licensor is a
-member of a performance rights society (e.g. ASCAP, BMI, SESAC), via that
-society, royalties for the public performance or public digital performance
-(e.g. webcast) of the Work.
-Mechanical Rights and Statutory Royalties. Licensor waives the exclusive right
-to collect, whether individually or via a music rights agency or designated
-agent (e.g. Harry Fox Agency), royalties for any phonorecord You create from
-the Work ("cover version") and distribute, subject to the compulsory license
-created by 17 USC Section 115 of the US Copyright Act (or the equivalent in
-other jurisdictions).
-Webcasting Rights and Statutory Royalties. For the avoidance of doubt, where
-the Work is a sound recording, Licensor waives the exclusive right to collect,
-whether individually or via a performance-rights society (e.g. SoundExchange),
-royalties for the public digital performance (e.g. webcast) of the Work,
-subject to the compulsory license created by 17 USC Section 114 of the US
-Copyright Act (or the equivalent in other jurisdictions).
-The above rights may be exercised in all media and formats whether now known or
-hereafter devised. The above rights include the right to make such
-modifications as are technically necessary to exercise the rights in other
-media and formats. All rights not expressly granted by Licensor are hereby
-reserved.
-
-4. Restrictions. The license granted in Section 3 above is expressly made
-subject to and limited by the following restrictions:
-
-You may distribute, publicly display, publicly perform, or publicly digitally
-perform the Work only under the terms of this License, and You must include a
-copy of, or the Uniform Resource Identifier for, this License with every copy
-or phonorecord of the Work You distribute, publicly display, publicly perform,
-or publicly digitally perform. You may not offer or impose any terms on the
-Work that restrict the terms of this License or the ability of a recipient of
-the Work to exercise the rights granted to that recipient under the terms of
-the License. You may not sublicense the Work. You must keep intact all notices
-that refer to this License and to the disclaimer of warranties. When You
-distribute, publicly display, publicly perform, or publicly digitally perform
-the Work, You may not impose any technological measures on the Work that
-restrict the ability of a recipient of the Work from You to exercise the rights
-granted to that recipient under the terms of the License. This Section 4(a)
-applies to the Work as incorporated in a Collective Work, but this does not
-require the Collective Work apart from the Work itself to be made subject to
-the terms of this License. If You create a Collective Work, upon notice from
-any Licensor You must, to the extent practicable, remove from the Collective
-Work any credit as required by Section 4(b), as requested. If You create a
-Derivative Work, upon notice from any Licensor You must, to the extent
-practicable, remove from the Derivative Work any credit as required by Section
-4(b), as requested.
-If You distribute, publicly display, publicly perform, or publicly digitally
-perform the Work (as defined in Section 1 above) or any Derivative Works (as
-defined in Section 1 above) or Collective Works (as defined in Section 1
-above), You must, unless a request has been made pursuant to Section 4(a), keep
-intact all copyright notices for the Work and provide, reasonable to the medium
-or means You are utilizing: (i) the name of the Original Author (or pseudonym,
-if applicable) if supplied, and/or (ii) if the Original Author and/or Licensor
-designate another party or parties (e.g. a sponsor institute, publishing
-entity, journal) for attribution ("Attribution Parties") in Licensor's
-copyright notice, terms of service or by other reasonable means, the name of
-such party or parties; the title of the Work if supplied; to the extent
-reasonably practicable, the Uniform Resource Identifier, if any, that Licensor
-specifies to be associated with the Work, unless such URI does not refer to the
-copyright notice or licensing information for the Work; and, consistent with
-Section 3(b) in the case of a Derivative Work, a credit identifying the use of
-the Work in the Derivative Work (e.g., "French translation of the Work by
-Original Author," or "Screenplay based on original Work by Original Author").
-The credit required by this Section 4(b) may be implemented in any reasonable
-manner; provided, however, that in the case of a Derivative Work or Collective
-Work, at a minimum such credit will appear, if a credit for all contributing
-authors of the Derivative Work or Collective Work appears, then as part of
-these credits and in a manner at least as prominent as the credits for the
-other contributing authors. For the avoidance of doubt, You may only use the
-credit required by this Section for the purpose of attribution in the manner
-set out above and, by exercising Your rights under this License, You may not
-implicitly or explicitly assert or imply any connection with, sponsorship or
-endorsement by the Original Author, Licensor and/or Attribution Parties, as
-appropriate, of You or Your use of the Work, without the separate, express
-prior written permission of the Original Author, Licensor and/or Attribution
-Parties.
-5. Representations, Warranties and Disclaimer
-
-UNLESS OTHERWISE MUTUALLY AGREED TO BY THE PARTIES IN WRITING, LICENSOR OFFERS
-THE WORK AS-IS AND ONLY TO THE EXTENT OF ANY RIGHTS HELD IN THE LICENSED WORK
-BY THE LICENSOR. THE LICENSOR MAKES NO REPRESENTATIONS OR WARRANTIES OF ANY
-KIND CONCERNING THE WORK, EXPRESS, IMPLIED, STATUTORY OR OTHERWISE, INCLUDING,
-WITHOUT LIMITATION, WARRANTIES OF TITLE, MARKETABILITY, MERCHANTIBILITY,
-FITNESS FOR A PARTICULAR PURPOSE, NONINFRINGEMENT, OR THE ABSENCE OF LATENT OR
-OTHER DEFECTS, ACCURACY, OR THE PRESENCE OF ABSENCE OF ERRORS, WHETHER OR NOT
-DISCOVERABLE. SOME JURISDICTIONS DO NOT ALLOW THE EXCLUSION OF IMPLIED
-WARRANTIES, SO SUCH EXCLUSION MAY NOT APPLY TO YOU.
-
-6. Limitation on Liability. EXCEPT TO THE EXTENT REQUIRED BY APPLICABLE LAW, IN
-NO EVENT WILL LICENSOR BE LIABLE TO YOU ON ANY LEGAL THEORY FOR ANY SPECIAL,
-INCIDENTAL, CONSEQUENTIAL, PUNITIVE OR EXEMPLARY DAMAGES ARISING OUT OF THIS
-LICENSE OR THE USE OF THE WORK, EVEN IF LICENSOR HAS BEEN ADVISED OF THE
-POSSIBILITY OF SUCH DAMAGES.
-
-7. Termination
-
-This License and the rights granted hereunder will terminate automatically upon
-any breach by You of the terms of this License. Individuals or entities who
-have received Derivative Works (as defined in Section 1 above) or Collective
-Works (as defined in Section 1 above) from You under this License, however,
-will not have their licenses terminated provided such individuals or entities
-remain in full compliance with those licenses. Sections 1, 2, 5, 6, 7, and 8
-will survive any termination of this License.
-Subject to the above terms and conditions, the license granted here is
-perpetual (for the duration of the applicable copyright in the Work).
-Notwithstanding the above, Licensor reserves the right to release the Work
-under different license terms or to stop distributing the Work at any time;
-provided, however that any such election will not serve to withdraw this
-License (or any other license that has been, or is required to be, granted
-under the terms of this License), and this License will continue in full force
-and effect unless terminated as stated above.
-8. Miscellaneous
-
-Each time You distribute or publicly digitally perform the Work (as defined in
-Section 1 above) or a Collective Work (as defined in Section 1 above), the
-Licensor offers to the recipient a license to the Work on the same terms and
-conditions as the license granted to You under this License.
-Each time You distribute or publicly digitally perform a Derivative Work,
-Licensor offers to the recipient a license to the original Work on the same
-terms and conditions as the license granted to You under this License.
-If any provision of this License is invalid or unenforceable under applicable
-law, it shall not affect the validity or enforceability of the remainder of the
-terms of this License, and without further action by the parties to this
-agreement, such provision shall be reformed to the minimum extent necessary to
-make such provision valid and enforceable.
-No term or provision of this License shall be deemed waived and no breach
-consented to unless such waiver or consent shall be in writing and signed by
-the party to be charged with such waiver or consent.
-This License constitutes the entire agreement between the parties with respect
-to the Work licensed here. There are no understandings, agreements or
-representations with respect to the Work not specified here. Licensor shall not
-be bound by any additional provisions that may appear in any communication from
-You. This License may not be modified without the mutual written agreement of
-the Licensor and You.
-
-------
-
-** ChEMBL; version 2.7 --
-https://chembl.gitbook.io/chembl-interface-documentation/downloads
-Copyright © EMBL-EBI 2018 | EMBL-EBI is part of the European Molecular Biology
-Laboratory
-
-License
-THE WORK (AS DEFINED BELOW) IS PROVIDED UNDER THE TERMS OF THIS CREATIVE
-COMMONS PUBLIC LICENSE ("CCPL" OR "LICENSE"). THE WORK IS PROTECTED BY
-COPYRIGHT AND/OR OTHER APPLICABLE LAW. ANY USE OF THE WORK OTHER THAN AS
-AUTHORIZED UNDER THIS LICENSE OR COPYRIGHT LAW IS PROHIBITED.
-
-BY EXERCISING ANY RIGHTS TO THE WORK PROVIDED HERE, YOU ACCEPT AND AGREE TO BE
-BOUND BY THE TERMS OF THIS LICENSE. TO THE EXTENT THIS LICENSE MAY BE
-CONSIDERED TO BE A CONTRACT, THE LICENSOR GRANTS YOU THE RIGHTS CONTAINED HERE
-IN CONSIDERATION OF YOUR ACCEPTANCE OF SUCH TERMS AND CONDITIONS.
-
-1. Definitions
-
-"Adaptation" means a work based upon the Work, or upon the Work and other
-pre-existing works, such as a translation, adaptation, derivative work,
-arrangement of music or other alterations of a literary or artistic work, or
-phonogram or performance and includes cinematographic adaptations or any other
-form in which the Work may be recast, transformed, or adapted including in any
-form recognizably derived from the original, except that a work that
-constitutes a Collection will not be considered an Adaptation for the purpose
-of this License. For the avoidance of doubt, where the Work is a musical work,
-performance or phonogram, the synchronization of the Work in timed-relation
-with a moving image ("synching") will be considered an Adaptation for the
-purpose of this License.
-"Collection" means a collection of literary or artistic works, such as
-encyclopedias and anthologies, or performances, phonograms or broadcasts, or
-other works or subject matter other than works listed in Section 1(f) below,
-which, by reason of the selection and arrangement of their contents, constitute
-intellectual creations, in which the Work is included in its entirety in
-unmodified form along with one or more other contributions, each constituting
-separate and independent works in themselves, which together are assembled into
-a collective whole. A work that constitutes a Collection will not be considered
-an Adaptation (as defined below) for the purposes of this License.
-"Creative Commons Compatible License" means a license that is listed at
-https://creativecommons.org/compatiblelicenses that has been approved by
-Creative Commons as being essentially equivalent to this License, including, at
-a minimum, because that license: (i) contains terms that have the same purpose,
-meaning and effect as the License Elements of this License; and, (ii)
-explicitly permits the relicensing of adaptations of works made available under
-that license under this License or a Creative Commons jurisdiction license with
-the same License Elements as this License.
-"Distribute" means to make available to the public the original and copies of
-the Work or Adaptation, as appropriate, through sale or other transfer of
-ownership.
-"License Elements" means the following high-level license attributes as
-selected by Licensor and indicated in the title of this License: Attribution,
-ShareAlike.
-"Licensor" means the individual, individuals, entity or entities that offer(s)
-the Work under the terms of this License.
-"Original Author" means, in the case of a literary or artistic work, the
-individual, individuals, entity or entities who created the Work or if no
-individual or entity can be identified, the publisher; and in addition (i) in
-the case of a performance the actors, singers, musicians, dancers, and other
-persons who act, sing, deliver, declaim, play in, interpret or otherwise
-perform literary or artistic works or expressions of folklore; (ii) in the case
-of a phonogram the producer being the person or legal entity who first fixes
-the sounds of a performance or other sounds; and, (iii) in the case of
-broadcasts, the organization that transmits the broadcast.
-"Work" means the literary and/or artistic work offered under the terms of this
-License including without limitation any production in the literary, scientific
-and artistic domain, whatever may be the mode or form of its expression
-including digital form, such as a book, pamphlet and other writing; a lecture,
-address, sermon or other work of the same nature; a dramatic or
-dramatico-musical work; a choreographic work or entertainment in dumb show; a
-musical composition with or without words; a cinematographic work to which are
-assimilated works expressed by a process analogous to cinematography; a work of
-drawing, painting, architecture, sculpture, engraving or lithography; a
-photographic work to which are assimilated works expressed by a process
-analogous to photography; a work of applied art; an illustration, map, plan,
-sketch or three-dimensional work relative to geography, topography,
-architecture or science; a performance; a broadcast; a phonogram; a compilation
-of data to the extent it is protected as a copyrightable work; or a work
-performed by a variety or circus performer to the extent it is not otherwise
-considered a literary or artistic work.
-"You" means an individual or entity exercising rights under this License who
-has not previously violated the terms of this License with respect to the Work,
-or who has received express permission from the Licensor to exercise rights
-under this License despite a previous violation.
-"Publicly Perform" means to perform public recitations of the Work and to
-communicate to the public those public recitations, by any means or process,
-including by wire or wireless means or public digital performances; to make
-available to the public Works in such a way that members of the public may
-access these Works from a place and at a place individually chosen by them; to
-perform the Work to the public by any means or process and the communication to
-the public of the performances of the Work, including by public digital
-performance; to broadcast and rebroadcast the Work by any means including
-signs, sounds or images.
-"Reproduce" means to make copies of the Work by any means including without
-limitation by sound or visual recordings and the right of fixation and
-reproducing fixations of the Work, including storage of a protected performance
-or phonogram in digital form or other electronic medium.
-2. Fair Dealing Rights. Nothing in this License is intended to reduce, limit,
-or restrict any uses free from copyright or rights arising from limitations or
-exceptions that are provided for in connection with the copyright protection
-under copyright law or other applicable laws.
-
-3. License Grant. Subject to the terms and conditions of this License, Licensor
-hereby grants You a worldwide, royalty-free, non-exclusive, perpetual (for the
-duration of the applicable copyright) license to exercise the rights in the
-Work as stated below:
-
-to Reproduce the Work, to incorporate the Work into one or more Collections,
-and to Reproduce the Work as incorporated in the Collections;
-to create and Reproduce Adaptations provided that any such Adaptation,
-including any translation in any medium, takes reasonable steps to clearly
-label, demarcate or otherwise identify that changes were made to the original
-Work. For example, a translation could be marked "The original work was
-translated from English to Spanish," or a modification could indicate "The
-original work has been modified.";
-to Distribute and Publicly Perform the Work including as incorporated in
-Collections; and,
-to Distribute and Publicly Perform Adaptations.
-For the avoidance of doubt:
-
-Non-waivable Compulsory License Schemes. In those jurisdictions in which the
-right to collect royalties through any statutory or compulsory licensing scheme
-cannot be waived, the Licensor reserves the exclusive right to collect such
-royalties for any exercise by You of the rights granted under this License;
-Waivable Compulsory License Schemes. In those jurisdictions in which the right
-to collect royalties through any statutory or compulsory licensing scheme can
-be waived, the Licensor waives the exclusive right to collect such royalties
-for any exercise by You of the rights granted under this License; and,
-Voluntary License Schemes. The Licensor waives the right to collect royalties,
-whether individually or, in the event that the Licensor is a member of a
-collecting society that administers voluntary licensing schemes, via that
-society, from any exercise by You of the rights granted under this License.
-The above rights may be exercised in all media and formats whether now known or
-hereafter devised. The above rights include the right to make such
-modifications as are technically necessary to exercise the rights in other
-media and formats. Subject to Section 8(f), all rights not expressly granted by
-Licensor are hereby reserved.
-
-4. Restrictions. The license granted in Section 3 above is expressly made
-subject to and limited by the following restrictions:
-
-You may Distribute or Publicly Perform the Work only under the terms of this
-License. You must include a copy of, or the Uniform Resource Identifier (URI)
-for, this License with every copy of the Work You Distribute or Publicly
-Perform. You may not offer or impose any terms on the Work that restrict the
-terms of this License or the ability of the recipient of the Work to exercise
-the rights granted to that recipient under the terms of the License. You may
-not sublicense the Work. You must keep intact all notices that refer to this
-License and to the disclaimer of warranties with every copy of the Work You
-Distribute or Publicly Perform. When You Distribute or Publicly Perform the
-Work, You may not impose any effective technological measures on the Work that
-restrict the ability of a recipient of the Work from You to exercise the rights
-granted to that recipient under the terms of the License. This Section 4(a)
-applies to the Work as incorporated in a Collection, but this does not require
-the Collection apart from the Work itself to be made subject to the terms of
-this License. If You create a Collection, upon notice from any Licensor You
-must, to the extent practicable, remove from the Collection any credit as
-required by Section 4(c), as requested. If You create an Adaptation, upon
-notice from any Licensor You must, to the extent practicable, remove from the
-Adaptation any credit as required by Section 4(c), as requested.
-You may Distribute or Publicly Perform an Adaptation only under the terms of:
-(i) this License; (ii) a later version of this License with the same License
-Elements as this License; (iii) a Creative Commons jurisdiction license (either
-this or a later license version) that contains the same License Elements as
-this License (e.g., Attribution-ShareAlike 3.0 US)); (iv) a Creative Commons
-Compatible License. If you license the Adaptation under one of the licenses
-mentioned in (iv), you must comply with the terms of that license. If you
-license the Adaptation under the terms of any of the licenses mentioned in (i),
-(ii) or (iii) (the "Applicable License"), you must comply with the terms of the
-Applicable License generally and the following provisions: (I) You must include
-a copy of, or the URI for, the Applicable License with every copy of each
-Adaptation You Distribute or Publicly Perform; (II) You may not offer or impose
-any terms on the Adaptation that restrict the terms of the Applicable License
-or the ability of the recipient of the Adaptation to exercise the rights
-granted to that recipient under the terms of the Applicable License; (III) You
-must keep intact all notices that refer to the Applicable License and to the
-disclaimer of warranties with every copy of the Work as included in the
-Adaptation You Distribute or Publicly Perform; (IV) when You Distribute or
-Publicly Perform the Adaptation, You may not impose any effective technological
-measures on the Adaptation that restrict the ability of a recipient of the
-Adaptation from You to exercise the rights granted to that recipient under the
-terms of the Applicable License. This Section 4(b) applies to the Adaptation as
-incorporated in a Collection, but this does not require the Collection apart
-from the Adaptation itself to be made subject to the terms of the Applicable
-License.
-If You Distribute, or Publicly Perform the Work or any Adaptations or
-Collections, You must, unless a request has been made pursuant to Section 4(a),
-keep intact all copyright notices for the Work and provide, reasonable to the
-medium or means You are utilizing: (i) the name of the Original Author (or
-pseudonym, if applicable) if supplied, and/or if the Original Author and/or
-Licensor designate another party or parties (e.g., a sponsor institute,
-publishing entity, journal) for attribution ("Attribution Parties") in
-Licensor's copyright notice, terms of service or by other reasonable means, the
-name of such party or parties; (ii) the title of the Work if supplied; (iii) to
-the extent reasonably practicable, the URI, if any, that Licensor specifies to
-be associated with the Work, unless such URI does not refer to the copyright
-notice or licensing information for the Work; and (iv) , consistent with
-Ssection 3(b), in the case of an Adaptation, a credit identifying the use of
-the Work in the Adaptation (e.g., "French translation of the Work by Original
-Author," or "Screenplay based on original Work by Original Author"). The credit
-required by this Section 4(c) may be implemented in any reasonable manner;
-provided, however, that in the case of a Adaptation or Collection, at a minimum
-such credit will appear, if a credit for all contributing authors of the
-Adaptation or Collection appears, then as part of these credits and in a manner
-at least as prominent as the credits for the other contributing authors. For
-the avoidance of doubt, You may only use the credit required by this Section
-for the purpose of attribution in the manner set out above and, by exercising
-Your rights under this License, You may not implicitly or explicitly assert or
-imply any connection with, sponsorship or endorsement by the Original Author,
-Licensor and/or Attribution Parties, as appropriate, of You or Your use of the
-Work, without the separate, express prior written permission of the Original
-Author, Licensor and/or Attribution Parties.
-Except as otherwise agreed in writing by the Licensor or as may be otherwise
-permitted by applicable law, if You Reproduce, Distribute or Publicly Perform
-the Work either by itself or as part of any Adaptations or Collections, You
-must not distort, mutilate, modify or take other derogatory action in relation
-to the Work which would be prejudicial to the Original Author's honor or
-reputation. Licensor agrees that in those jurisdictions (e.g. Japan), in which
-any exercise of the right granted in Section 3(b) of this License (the right to
-make Adaptations) would be deemed to be a distortion, mutilation, modification
-or other derogatory action prejudicial to the Original Author's honor and
-reputation, the Licensor will waive or not assert, as appropriate, this
-Section, to the fullest extent permitted by the applicable national law, to
-enable You to reasonably exercise Your right under Section 3(b) of this License
-(right to make Adaptations) but not otherwise.
-5. Representations, Warranties and Disclaimer
-
-UNLESS OTHERWISE MUTUALLY AGREED TO BY THE PARTIES IN WRITING, LICENSOR OFFERS
-THE WORK AS-IS AND MAKES NO REPRESENTATIONS OR WARRANTIES OF ANY KIND
-CONCERNING THE WORK, EXPRESS, IMPLIED, STATUTORY OR OTHERWISE, INCLUDING,
-WITHOUT LIMITATION, WARRANTIES OF TITLE, MERCHANTIBILITY, FITNESS FOR A
-PARTICULAR PURPOSE, NONINFRINGEMENT, OR THE ABSENCE OF LATENT OR OTHER DEFECTS,
-ACCURACY, OR THE PRESENCE OF ABSENCE OF ERRORS, WHETHER OR NOT DISCOVERABLE.
-SOME JURISDICTIONS DO NOT ALLOW THE EXCLUSION OF IMPLIED WARRANTIES, SO SUCH
-EXCLUSION MAY NOT APPLY TO YOU.
-
-6. Limitation on Liability. EXCEPT TO THE EXTENT REQUIRED BY APPLICABLE LAW, IN
-NO EVENT WILL LICENSOR BE LIABLE TO YOU ON ANY LEGAL THEORY FOR ANY SPECIAL,
-INCIDENTAL, CONSEQUENTIAL, PUNITIVE OR EXEMPLARY DAMAGES ARISING OUT OF THIS
-LICENSE OR THE USE OF THE WORK, EVEN IF LICENSOR HAS BEEN ADVISED OF THE
-POSSIBILITY OF SUCH DAMAGES.
-
-7. Termination
-
-This License and the rights granted hereunder will terminate automatically upon
-any breach by You of the terms of this License. Individuals or entities who
-have received Adaptations or Collections from You under this License, however,
-will not have their licenses terminated provided such individuals or entities
-remain in full compliance with those licenses. Sections 1, 2, 5, 6, 7, and 8
-will survive any termination of this License.
-Subject to the above terms and conditions, the license granted here is
-perpetual (for the duration of the applicable copyright in the Work).
-Notwithstanding the above, Licensor reserves the right to release the Work
-under different license terms or to stop distributing the Work at any time;
-provided, however that any such election will not serve to withdraw this
-License (or any other license that has been, or is required to be, granted
-under the terms of this License), and this License will continue in full force
-and effect unless terminated as stated above.
-8. Miscellaneous
-
-Each time You Distribute or Publicly Perform the Work or a Collection, the
-Licensor offers to the recipient a license to the Work on the same terms and
-conditions as the license granted to You under this License.
-Each time You Distribute or Publicly Perform an Adaptation, Licensor offers to
-the recipient a license to the original Work on the same terms and conditions
-as the license granted to You under this License.
-If any provision of this License is invalid or unenforceable under applicable
-law, it shall not affect the validity or enforceability of the remainder of the
-terms of this License, and without further action by the parties to this
-agreement, such provision shall be reformed to the minimum extent necessary to
-make such provision valid and enforceable.
-No term or provision of this License shall be deemed waived and no breach
-consented to unless such waiver or consent shall be in writing and signed by
-the party to be charged with such waiver or consent.
-This License constitutes the entire agreement between the parties with respect
-to the Work licensed here. There are no understandings, agreements or
-representations with respect to the Work not specified here. Licensor shall not
-be bound by any additional provisions that may appear in any communication from
-You. This License may not be modified without the mutual written agreement of
-the Licensor and You.
-The rights granted under, and the subject matter referenced, in this License
-were drafted utilizing the terminology of the Berne Convention for the
-Protection of Literary and Artistic Works (as amended on September 28, 1979),
-the Rome Convention of 1961, the WIPO Copyright Treaty of 1996, the WIPO
-Performances and Phonograms Treaty of 1996 and the Universal Copyright
-Convention (as revised on July 24, 1971). These rights and subject matter take
-effect in the relevant jurisdiction in which the License terms are sought to be
-enforced according to the corresponding provisions of the implementation of
-those treaty provisions in the applicable national law. If the standard suite
-of rights granted under applicable copyright law includes additional rights not
-granted under this License, such additional rights are deemed to be included in
-the License; this License is not intended to restrict the license of any rights
-under applicable law.
-
-------
-
-** Genome Tissue Expression Database; version v8 --
-https://www.gtexportal.org/home/datasets
-The Genotype-Tissue Expression (GTEx) Project was supported by the Common Fund
-of the Office of the Director of the National Institutes of Health, and by NCI,
-NHGRI, NHLBI, NIDA, NIMH, and NINDS. The data used for the analyses described
-in this manuscript were obtained from: [insert, where appropriate] the GTEx
-Portal on 08/19/2020.
-
-NIH Genomic Data Sharing Policy
-Notice Number: NOT-OD-14-124
-
-Key Dates
-Release Date:   August 27, 2014
-
-Related Announcements
-NOT-OD-17-110
-NOT-HG-15-038
-NOT-OD-15-086
-NOT-OD-15-083
-NOT-OD-15-027
-NOT-OD-14-111
-NOT-OD-13-119
-NOT-OD-12-136
-NOT-HG-10-006
-NOT-OD-08-013
-NOT-OD-07-088
-NOT-OD-07-088
-NOT-MH-19-033
-NOT-HG-20-011
-Issued by
-National Institutes of Health (NIH)
-
-Purpose
-
-Summary
-The National Institutes of Health (NIH) announces the final Genomic Data
-Sharing (GDS) Policy that promotes sharing, for research purposes, of
-large-scale human and non-human genomic1 data generated from NIH-funded
-research. A summary of public comments on the draft GDS Policy and NIH’s
-responses are also provided.
-
-Introduction
-NIH announces the final Genomic Data Sharing (GDS) Policy, which sets forth
-expectations that ensure the broad and responsible sharing of genomic research
-data. Sharing research data supports the NIH mission and is essential to
-facilitate the translation of research results into knowledge, products, and
-procedures that improve human health. NIH has longstanding policies to make a
-broad range of research data, in addition to genomic data, publicly available
-in a timely manner from the research activities that it funds.2,3,4,5,6
-
-NIH published the Draft NIH Genomic Data Sharing Policy Request for Public
-Comments in the Federal Register on September 20, 2013,7 and the NIH Guide for
-Grants and Contracts on September 27, 2013,8 for a 60-day public comment period
-that ended November 20, 2013. NIH also used websites, listservs, and social
-media to disseminate the request for comments. On November 6, 2013, during the
-comment period, NIH held a public webinar on the draft GDS Policy that was
-attended by nearly 200 people and included a question and answer session.9
-
-NIH received a total of 107 public comments on the draft GDS Policy. Comments
-were submitted by individuals, organizations, and entities affiliated with
-academic institutions, professional and scientific societies, disease and
-patient advocacy groups, research organizations, industry and commercial
-organizations, tribal organizations, state public health agencies, and private
-clinical practices. The public comments have been posted on the NIH GDS
-website.10 Comments were supportive of the principles of sharing data to
-advance research. However, there were a number of questions and concerns, and
-calls for clarification about specific aspects of the draft Policy. A summary
-of comments, organized by corresponding sections of the GDS Policy, is provided
-below.
-
-Scope and Applicability
-Several commenters stated that the draft Policy was unclear with regard to the
-types of research to which the Policy would apply. Some commenters suggested
-that the technology used in a research study (i.e., array-based or
-high-throughput genomic technologies) should not be the focus in determining
-applicability of the Policy. They suggested instead that the information gained
-from the research should determine the applicability of the Policy. Many other
-commenters expressed the concern that the Policy was overly broad and would
-lead to the submission of large quantities of data with low utility for other
-investigators. Several other commenters suggested that the scope of the Policy
-was not broad enough. Additionally, some commenters were uncertain about
-whether the Policy would apply to research funded by multiple sources.
-
-NIH has revised the Scope and Applicability section to help clarify the types
-of research to which the Policy is intended to apply, and the reference to
-specific technologies has been dropped. The list of examples of the types of
-research projects that are within the Policy’s scope, which appeared in
-Appendix A of the draft GDS Policy (now referred to as “Supplemental
-Information to the NIH Genomic Data Sharing Policy”11), has been revised and
-expanded, and examples of research that are not within the scope have been
-added as well. Also, the final GDS Policy now explicitly states that smaller
-studies (e.g., sequencing the genomes of fewer than 100 human research
-participants) are generally not subject to this Policy. Smaller studies,
-however, may be subject to other NIH data sharing policies (e.g., the National
-Institute of Allergy and Infectious Diseases Data Sharing and Release
-Guidelines12) or program requirements. In addition, definitions of key terms
-used in the Policy (e.g., aggregate data) have been included and other terms
-have been clarified.
-
-The statement of scope remains intentionally general enough to accommodate the
-evolving nature of genomic technologies and the broad range of research that
-generates genomic data. It also allows for the possibility that individual NIH
-Institutes or Centers (IC) may choose on a case-by-case basis to apply the
-Policy to projects generating data on a smaller scale depending on the state of
-the science, the needs of the research community, and the programmatic
-priorities of the IC. The Policy applies to research funded in part or in total
-by NIH if NIH funding supports the generation of the genomic data.
-Investigators with questions about whether the Policy applies to their current
-or proposed research should consult the relevant Program Official or Program
-Officer or the IC’s Genomic Program Administrator (GPA). Names and contact
-information for GPAs are available through the NIH GDS website.13
-
-Some commenters expressed concern about the financial burden on investigators
-and institutions of validating and sharing large volumes of genomic data and
-the possibility that resources spent to support data sharing would redirect
-funds away from research. While the resources needed to support data sharing
-are not trivial, NIH maintains that the investments are warranted by the
-significant discoveries made possible through the secondary use of the data. In
-addition, NIH is taking steps to evaluate and monitor the impact of data
-sharing costs on the conduct of research, both programmatically through the Big
-Data to Knowledge Initiative14 and organizationally through the creation of the
-Scientific Data Council, which will advise the agency on issues related to data
-science.15
-
-Data Sharing Plans
-Some commenters pointed out that the Policy was not clear enough about the
-conditions under which NIH would grant an exception to the submission of
-genomic data to NIH. Some also suggested that NIH should allow limited sharing
-of human genomic data when the original consent or national, tribal, or state
-laws do not permit broad sharing.
-
-While NIH encourages investigators to seek consent for broad sharing, and some
-ICs may establish program priorities that expect studies proposed for funding
-to include consent for broad sharing, exceptions may be made. The final Policy
-clarifies that exceptions may be requested in cases where the submission of
-genomic data would not meet the criteria for the Institutional Certification.
-
-Some commenters expressed concern that it would be difficult to estimate the
-resources required to support data sharing plans before a study is completed.
-Others asked for additional guidance on resources that should be requested to
-support the data sharing plan. Several commenters suggested that NIH should
-allow certain elements of the data sharing plan, such as the Institutional
-Certification and associated documentation, to be submitted along with other
-“Just-in-Time” information. For multi-year awards, one commenter suggested that
-the data sharing plans should be periodically reviewed for consistency with
-contemporary ethical standards. Another suggested that data sharing plans
-should be made public.
-
-Under the GDS Policy, investigators are expected to outline in the budget
-section of their funding application the resources they will need to prepare
-the data for submission to appropriate repositories. NIH will provide
-additional guidance on these resources, as necessary. The final Policy
-clarifies that only a basic genomic data sharing plan, in the Resource Sharing
-Plan section of grant applications, needs to be submitted with the funding
-application and that a more detailed plan should be provided prior to award.
-The Institutional Certification also should be provided prior to award, along
-with any other Just-in-Time information. Guidance on genomic data sharing plans
-is available on the NIH GDS website.16 Data sharing plans will undergo periodic
-review through annual progress reports or other appropriate scientific project
-reviews. Further consideration will be given to the suggestion that data
-sharing plans should be made public.
-
-Non-human and Model Organism Genomic Data
-The draft GDS Policy proposed timelines for data submission and data release
-(i.e., when data should be made available for sharing with other
-investigators). For non-human data, the draft Policy proposed that data should
-be submitted and made available for sharing no later than the date of initial
-publication, with the acknowledgement that the submission and release of data
-for certain projects may be expected earlier, mirroring data sharing
-expectations that have been in place under other policies.4 Some commenters
-suggested that the data submission expectations for non-human data were
-unclear. One commenter suggested that NIH should consider a more rapid timeline
-than the date of first publication for releasing model organism data, while
-other comments supported the specified data release timeline. Other commenters
-were concerned that the specified timeline was too short.
-
-The final GDS Policy does not change the timeline for the submission and
-release of non-human and model organism data. The timeline is based on the need
-to promote broad data sharing while also accommodating the investigators
-generating the data, who often must make a significant effort to prepare the
-data for sharing. The Policy points out that an NIH IC may choose to shorten
-the timeline for data submission and release for certain projects and expects
-investigators to work with NIH Program or Project Officials for specific
-guidance on the timelines and milestones for their projects.
-
-There was broad support for the Policy’s flexibility of allowing non-human and
-model organism data to be deposited in any widely used data repository. One
-commenter requested that a link or reference to non-NIH-designated repositories
-be included in the Policy. Further information about NIH-designated
-repositories, including examples of such repositories, is available on the GDS
-website,17 and additional information about non-NIH-designated data
-repositories will be incorporated in outreach and training materials for NIH
-staff and investigators and made available on the GDS website. NIH has
-clarified the final Policy to state that data types that were previously
-submitted to widely used repositories (e.g., gene expression data to the Gene
-Expression Omnibus or Array Express) should continue as before, while data
-types not previously submitted may go to these or other widely used
-repositories as agreed to by the funding IC.
-
-Human Genomic Data
-The Supplemental Information to the NIH GDS Policy10 establishes timelines for
-the submission and subsequent release of data for access by secondary
-investigators based on the level of processing that the data have undergone. A
-number of commenters expressed concern about these timelines, suggesting that
-they were too short and could limit an investigator’s ability to perform
-adequate quality control and publish results within the provided timeline. Many
-commenters proposed that the timeline for data release be extended to 12 or 18
-months or be the date of publication, whichever comes first. Others were
-concerned that the timelines were too long and that they should reflect the
-longstanding principle of rapid data release as articulated in the Bermuda and
-Ft. Lauderdale agreements.5 Some commenters were concerned that the elimination
-of the embargo period, (i.e., the period between when a study is released for
-secondary research and when the submitting investigator first publishes on the
-findings of the study) would adversely affect the goal of rapid data release.
-One commenter was concerned that data would be released before investigators
-could discuss consequential findings with participants.
-
-NIH has modified the Supplemental Information to clarify that the 6-month
-deferral for the release of Level 2 and Level 3 human genomic data does not
-start until the data have been cleaned and submission to NIH has been
-initiated, which is typically about three months after the data have been
-generated. Because there will be significant variation in research projects
-generating Level 2 and Level 3 human genomic data, the timeline for submission
-is project-specific and will be determined in each case by the funding NIH IC
-through consultation with the investigator, and the Supplemental Information
-has been clarified accordingly. Under the GWAS Policy,6 a publication embargo
-period was used as a way of making data more rapidly available. In exchange for
-immediate data access, secondary users were not permitted to publish or present
-research findings until 12 months after the data were released. NIH did not
-adopt this approach for the GDS Policy because in practice, the publication
-embargo dates were difficult for secondary users to track, especially for
-datasets that had multiple embargo periods for certain types of data, raising
-the risk of unintentional embargo violations. Regarding the concern that human
-genomic data will be made available before investigators can notify
-participants of consequential findings, such data would be considered Level 4
-data and would not be expected to be released before publication, which NIH
-believes will provide sufficient time to discuss consequential findings with
-participants.
-
-Many commenters called for the Policy to include technical data standards for
-the submission of human genomic data, such as platform information, controlled
-vocabulary, normalization algorithms, data quality standards, and metadata
-standards. NIH agrees with the importance of developing and using standards for
-genomic data and is aware that there are numerous initiatives underway to
-develop and promote such standards.18 NIH has revised the Supplemental
-Information by adding a section on resources for data standards. It provides
-references to instructions for data submission to specific NIH-designated data
-repositories, which include data standards. Additional resources for data
-standards will be incorporated in the Supplemental Information as they are
-developed and become appropriate for broad use.
-
-Several commenters asked for a definition of an NIH-designated data repository
-and for guidance on determining which non-NIH repositories are acceptable as
-well as examples of such repositories. Commenters also expressed interest in
-additional details regarding the use of Trusted Partners, which are third-party
-partnerships established through a contract mechanism, to provide
-infrastructure needs for data storage and/or tools that are useful for genomic
-data analyses. A definition of an NIH-designated repository is now included in
-the final Policy. Additionally, further information about non-NIH-designated
-repositories that accept human genomic data will be made available on the GDS
-website and incorporated in outreach and training materials for NIH staff and
-NIH-funded investigators. Additional information about Trusted Partners,
-including the standards required for trusted partnerships, is also available on
-the NIH GDS website.16
-
-Regarding informed consent, the GDS Policy expects investigators generating
-genomic data to seek consent from participants for future research uses and the
-broadest possible sharing. A number of commenters were concerned that
-participants would not agree to consent for broad sharing and that enrollment
-in research studies may decline, potentially biasing studies if certain
-populations were less likely to consent to broad use of their data. Some
-commenters also raised a concern about the competitiveness of an application
-that proposed to obtain consent for more limited sharing of data. Several
-commenters suggested that NIH permit alternative forms of informed consent
-other than broad consent, such as dynamic consent or tiered consent.
-
-NIH recognizes that consent for future research uses and broad sharing may not
-be appropriate or obtainable in all circumstances. ICs may continue to accept
-data from studies with consents that stipulate limitations on future uses and
-sharing, and NIH will maintain the data access system that enables more limited
-sharing and secondary use. With regard to the competitiveness of grant
-applications that do not propose to utilize consent for broad sharing, this
-Policy does not propose that applications be assessed on this point during the
-merit review, but investigators are nonetheless expected to seek consent for
-broad sharing to the greatest extent possible. The breadth of the sharing
-permitted by the consent may be taken into consideration during program
-priority review by the ICs. Regarding the alternative forms of consent, the
-Policy does not prohibit the use of dynamic or tiered consents. It promotes the
-use of consent for broad sharing to enable the greatest potential public
-benefit. However, NIH recognizes that changing technology may enable more
-dynamic consent processes that improve tracking and oversight and more closely
-reflect participant preferences. NIH will continue to monitor developments in
-this area.
-
-Several commenters were unsure whether the GDS Policy would apply to research
-in clinical settings or research involving data from deceased individuals.
-Research that falls within the scope of the GDS Policy will be subject to the
-Policy, regardless of whether it occurs in a clinical setting or involves data
-generated from deceased individuals.
-
-Several commenters also expressed concern that the Policy is unclear about the
-ability of groups, in addition to participants, to opt-out or withdraw informed
-consent for research and whether the ability to withdraw could be transferred
-or inherited. The Policy states that investigators and institutions may request
-that NIH withdraw data in the event that individual participants or groups
-withdraw consent for secondary research, although some data that have been
-distributed for research cannot be retrieved. Institutions submitting the data
-should determine whether data should be withdrawn from NIH repositories and
-notify NIH accordingly.
-
-Many commenters urged NIH to develop standard text or templates for informed
-consent documents so that investigators would be assured that their consent
-material would be consistent with the Policy’s expectations for informed
-consent and data sharing. One of these commenters noted the challenge of
-conveying the necessary information (e.g., broad future research uses) without
-adding to the complexity of consent forms. Developing educational materials or
-tools to guide the process for obtaining informed consent was also suggested.
-Other commenters expressed concern about the burden of rewriting and
-harmonizing existing informed consent documents. NIH appreciates the suggestion
-to develop template consent documents and plans to provide guidance to assist
-investigators and institutions in developing informed consent documents.
-
-Many comments questioned the proposal to require explicit consent for research
-that is not considered humans subjects research under 45 CFR Part 46 (e.g.,
-research that involves de-identified specimens or cell lines). There were also
-several comments about the draft GDS Policy proposal to grandfather data from
-de-identified clinical specimens and cell lines collected or generated before
-the effective date of the GDS Policy. The reason the Policy expects consent for
-research for the use of data generated from de-identified clinical specimens
-and cell lines created after the effective date of the Policy is because the
-evolution of genomic technology and analytical methods raises the risk of
-re-identification.19 Moreover, requiring that consent be obtained is respectful
-of research participants, and it is increasingly clear that participants expect
-to be asked for their permission to use and share their de-identified specimens
-for research.20,21,22 The Policy does not require consent to be obtained for
-research with data generated from de-identified clinical specimens and cell
-lines that were created or collected before the effective date of the Policy
-because of the practical and ethical limitations in recontacting participants
-to obtain new consent for existing collections and the fact that such data may
-have already been widely used in research.
-
-The draft GDS Policy included an exception for “compelling scientific reasons”
-to allow the research use of data from de-identified, clinical specimens or
-cell lines collected or created after the effective date of the Policy and for
-which research consent was not obtained. Commenters did not object to the need
-for such an exception, but they asked for clarification on what constitutes a
-“compelling scientific reason,” and the process through which investigators’
-justifications would be determined to be appropriate.
-
-The funding IC will determine whether the investigators’ justifications for the
-use of clinical specimens or cell lines for which no consent for research was
-obtained are acceptable, as provided in their funding application and
-Institutional Certification. Further guidance on what constitutes compelling
-scientific reasons will be made available on the GDS website and will likely
-evolve over time as NIH ICs, the NIH GDS governance system, and program and
-project staff acquire greater experience with requests for research with such
-specimens.
-
-For clinical specimens and cell lines lacking consent for research and
-collected before the effective date of the Policy, several commenters were
-concerned that the Policy was unclear about whether data from such specimens
-can be deposited in NIH repositories. This provision of the Policy is intended
-to allow the research use of genomic data derived from de-identified clinical
-specimens or cell lines collected or created after the Policy’s effective date
-in exceptional situations where the proposed research has the potential to
-advance scientific or medical knowledge significantly and could not be
-conducted with consented specimens or cell lines. The draft GDS Policy stated
-that NIH will accept data from clinical specimens and cell lines lacking
-consent for research use that were collected before the effective date of the
-Policy, and this remains unchanged in the final Policy.
-
-A concern shared by several commenters was that the risks posed to the privacy
-of individuals with rare diseases, populations with higher risk of
-re-identification by the broad sharing of data, or populations at risk of
-greater potential harm from re-identification were not adequately addressed.
-Several commenters were particularly concerned that no additional protections
-were specified for these populations, and a subset suggested that research
-subject to the GDS Policy that involves these populations should be entirely
-exempt from the Policy’s expectations for data sharing.
-
-Currently, NIH requests Institutional Review Boards (IRBs) to consider ethical
-concerns related to groups or populations when determining whether a study’s
-consent documents are consistent with NIH policy.23 In addition, NIH has
-clarified in the final GDS Policy that exceptions may be requested for the
-submission and subsequent sharing of data if the criteria in the Institutional
-Certification cannot be met (e.g., an IRB or equivalent body cannot assure that
-submission of data and subsequent sharing for research purposes are consistent
-with the informed consent of study participants). If a submitting institution
-determines that the criteria can be met but has additional concerns related to
-the sharing of the data, the institution can indicate additional stipulations
-for the use of the data through the data use limitations submitted with the
-study.
-
-Several commenters suggested that return of medically actionable incidental
-findings should be included in the consent or that re-identification of
-participants should be allowed in order to return such incidental results. NIH
-recognizes that, as in any research study, harms may result if individual
-research findings that have not been clinically validated are returned to
-subjects or are used prematurely for clinical decision-making. The return of
-individual findings from studies using data obtained from NIH-designated
-repositories is expected to be rare, because investigators will not be able to
-return individual research results directly to a participant as neither they
-nor the repository will have access to the identities of participants.
-Submitting institutions and their IRBs may wish to establish policies for
-determining when it is appropriate to return individual findings from research
-studies. Further guidance on the return of results is available from the
-Presidential Commission for the Study of Bioethical Issues’ report, “Anticipate
-and Communicate: Ethical Management of Incidental and Secondary Findings in the
-Clinical, Research, and Direct-to-Consumer Contexts.”24
-
-Several commenters were concerned that the draft GDS Policy was unclear about
-which standard should be used to ensure the de-identification of data. Another
-issue raised by a number of comments related to identifiability of genomic
-data. Several commenters were concerned that de-identified genotype data could
-be re-identified, even if these data are de-identified according to Health
-Insurance Portability and Accountability Act (HIPAA) and the Common Rule.
-Others asserted that genomic data could not be fully de-identified. A number of
-commenters suggested that the GDS Policy should explicitly state that risks
-exist for participant privacy despite the de-identification of genomic data and
-should require informed consent documents to include such a statement. Others
-suggested that the Policy should state that genomic information cannot be
-de-identified. Commenters suggested that the risks of re-identification were
-not adequately addressed in the draft Policy.
-
-The final GDS Policy has been clarified to state that for the purpose of the
-Policy, data should be de-identified to meet the definition for de-identified
-data in the HHS Regulations for Protection of Human Subjects25 and be stripped
-of the 18 identifiers listed in the HIPAA Privacy Rule.26 NIH agrees that the
-risks of re-identification should be conveyed to prospective subjects in the
-consent process. This is one of the reasons why NIH expects explicit consent
-after the effective date of the Policy for broad sharing and for data that will
-be submitted to unrestricted-access data repositories (i.e., openly accessible
-data repositories, previously referred to as “open access”). NIH will provide
-further guidance on informing participants about the risks of re-identification
-through revisions to guidance documents such as the NIH Points to Consider for
-IRBs and Institutions in their Review of Data Submission Plans for
-Institutional Certifications Under NIH’s Policy for Sharing of Data Obtained in
-NIH Supported or Conducted Genome-Wide Association Studies.24
-
-Several commenters were particularly concerned about the cost and burden of
-obtaining informed consent for the research use of data generated from clinical
-specimens and cell lines collected or created after the effective date of the
-GDS Policy. NIH recognizes that these consent expectations for data from
-de-identified clinical specimens collected after the effective date will
-require additional resources. Given growing concerns about re-identification,
-it is no longer ethically tenable simply to de-identify clinical specimens or
-derived cell lines to generate data for research use without an individual’s
-consent. In addition, NIH anticipates that obtaining consent for broad future
-research uses will facilitate access to greater volumes of data and ultimately
-will reduce the costs and burdens associated with sharing research data.
-
-Some commenters expressed concern that the draft Policy’s standards for consent
-are more restrictive than other rules governing human subjects protections
-including the Common Rule27 and revisions proposed to the Common Rule in a 2011
-Advance Notice of Proposed Rule Making (ANPRM).28 Some commenters sought
-greater clarification regarding regulatory differences or the regulatory basis
-for the draft Policy’s protections.
-
-NIH has the authority to establish additional policies with expectations that
-are not required by laws or regulations but advance the agency’s mission to
-enhance health, lengthen life, and reduce illness and disability. The GDS
-Policy builds on the GWAS Policy, which established additional expectations
-that were not required by the Common Rule for obtaining consent for, handling,
-sharing, and using human genotype and phenotype data in NIH-funded research.
-NIH expects that in addition to adhering to the GDS Policy, investigators and
-institutions will also comply with the Common Rule and any other applicable
-federal regulations or laws. In response to the concern that the draft Policy
-is inconsistent with the ANPRM for revisions to the Common Rule, NIH will
-evaluate any inconsistencies between the GDS Policy and the Common Rule when
-the Common Rule revisions are final.
-
-Responsibilities of Investigators Accessing and Using Genomic Data
-Commenters asserted that the draft GDS Policy did not do enough to protect
-against the misuse of the data by investigators accessing the data. They
-suggested that the Policy state that responsibilities outlined in the Policy
-for data users should be “required” rather than “expected” and should state
-that there will be penalties for noncompliance with the Policy and rigorous
-sanctions for the intentional misuse of data. There was also a comment
-proposing that a submitting institution should be able to review and comment on
-all data access requests (DARs) to NIH before NIH completes its internal review
-process and proposed that NIH notify submitting institutions and research
-participants of any policy violations reported by users of genomic data.
-
-NIH Data Access Committees (DACs) review DARs on behalf of submitting
-institutions by using the data use limitations provided by the institutions to
-determine whether the DAR is consistent with the limitations to ensure that
-participants’ wishes are respected. As part of its ongoing oversight process,
-NIH reviews notifications of data mismanagement or misuse, such as errors in
-the assignment of data use limitations during data submission, investigators
-sharing controlled-access data with unapproved investigators, and investigators
-using the data for research that was not described in their research use
-statement. To date, violations have been discovered before the completion of
-the research, and no participants have been harmed. When NIH becomes aware of
-any problems, the relevant institution and investigators are notified, and NIH
-takes appropriate steps to address the violation and prevent it from recurring.
-To ensure that the penalties for the misuse of data are clear for all data
-submitters, users, and research participants, the GDS Policy has been revised
-to clarify that secondary users in violation of the Policy or the Data Use
-Certification may face enforcement actions. In addition, a measure to protect
-the confidentiality of de-identified data obtained through controlled access
-has been added by encouraging approved users to consider requesting a
-Certificate of Confidentiality.
-
-Several comments were submitted by representatives or members of tribal
-organizations about data access. Tribal groups expressed concerns about the
-ability of DACs to represent tribal preferences in the review of requests for
-tribal data. They also proposed new provisions for the protection of
-participant data, for example, including de-identification of tribal membership
-in participant de-identification and revision of the Genomic Data User Code of
-Conduct to reference protocols for accessing, sharing, and using tribal data,
-such as de-identification of participants’ tribal affiliation.
-The final Policy has been modified to reference explicitly that tribal law, in
-addition to other factors such as limitations in the original informed consents
-or concerns about harms to individuals or groups, should be considered in
-assessing the secondary use of some genomic data.
-
-Some commenters proposed changes to controlled access for human genomic data.
-Some commenters thought controlled access unnecessarily limited research, and
-many provided a range of suggestions on how to improve the process of accessing
-the data, such as: allowing unrestricted access to de-identified data;
-developing standard data use limitations for controlled-access data;
-streamlining and increasing transparency of data access procedures and
-processing time; and modifying the database of genotypes and phenotypes (dbGaP)
-to facilitate peer-review and collaboration.
-
-The final GDS Policy permits unrestricted access to de-identified data, but
-only if participants have explicitly consented to sharing their data through
-unrestricted-access mechanisms. Standard data use limitations have been
-developed by NIH and are available through the GDS website.29 With regard to
-improving transparency on data access procedures, NIH plans to make statistics
-on access publicly available on the GDS website,30 including the average
-processing time for NIH to review data access requests. From its inception,
-dbGaP has solicited feedback from users and worked to improve data submission
-and access procedures, for example, the creation of a study compilation that
-allows investigators to submit a single request for access to all
-controlled-access aggregate and individual-level genomic data available for
-general research use.31,32 NIH will continue to seek user feedback and track
-the performance of the dbGaP system.
-
-Several comments expressed concern that the GDS Policy will increase
-administrative burden for NIH DACs, potentially resulting in longer timeframes
-to obtain data maintained under controlled access. NIH is aware of the burden
-that may be imposed on DACs by additional data access requests and will
-continue to monitor this possibility and, as needed, develop methods to
-decrease DAC burden and improve performance for investigators, institutions,
-and NIH ICs.
-
-Intellectual Property
-The GDS Policy expects that basic sequence and certain related data made
-available through NIH-designated data repositories and all conclusions derived
-from them will be freely available. It discourages patenting of “upstream”
-discoveries, which are considered pre-competitive, while it encourages the
-patenting of “downstream” applications appropriate for intellectual property.
-Of the several comments received on intellectual property, many supported the
-draft Policy’s provisions. However, a few commenters opposed patenting in
-general, and one suggested that the Policy should explicitly prohibit rather
-than discourage the use of patents for inventions that result from research
-undertaken with data from NIH-designated repositories.
-
-As noted above, NIH encourages the appropriate patenting of “downstream”
-applications. NIH will continue to encourage the broadest possible use of
-products, technologies, and information resulting from NIH funding or developed
-using data obtained from NIH data repositories to the extent permitted by
-applicable NIH policies, federal regulations and laws, while encouraging the
-patenting of technology suitable for private investment that addresses public
-needs. As is well known, the Supreme Court decision in Association for
-Molecular Pathology et al. v. Myriad Genetics, Inc. et al. prohibits the
-patenting of naturally occurring DNA sequences.33 Consistent with this
-decision, the NIH expects that patents directed to naturally occurring
-sequences will not be filed.
-
-Conclusion
-NIH appreciates the time and effort taken by commenters to respond to the
-Request for Comments. The responses were helpful in revising the draft GDS
-Policy and enhanced the understanding of additional guidance materials that may
-be necessary.
-
-Final NIH Genomic Data Sharing Policy
-I. Purpose
-The National Institutes of Health (NIH) Genomic Data Sharing (GDS) Policy sets
-forth expectations that ensure the broad and responsible sharing of genomic
-research data. Sharing research data supports the NIH mission and is essential
-to facilitate the translation of research results into knowledge, products, and
-procedures that improve human health. NIH has longstanding policies to make
-data publicly available in a timely manner from the research activities that it
-funds.2,3,4,5,6
-
-II. Scope and Applicability
-The GDS Policy applies to all NIH-funded research that generates large-scale
-human or non-human genomic data as well as the use of these data for subsequent
-research. Large-scale data include genome-wide association studies (GWAS),34
-single nucleotide polymorphisms (SNP) arrays, and genome sequence1,
-transcriptomic, metagenomic, epigenomic, and gene expression data, irrespective
-of funding level and funding mechanism (e.g., grant, contract, cooperative
-agreement, or intramural support). The Supplemental Information to the NIH
-Genomic Data Sharing Policy (Supplemental Information)10 provides examples of
-research projects involving large-scale genomic data that are subject to the
-Policy. NIH Institute or Centers (IC) may expect submission of data from
-smaller scale research projects based on the state of the science, the
-programmatic priorities of the IC funding the research, and the utility of the
-data for the research community.
-
-At appropriate intervals, NIH will review the types of research to which this
-Policy may be applicable, and any changes to examples of research that are
-within the Policy’s scope will be provided in the Supplemental Information. NIH
-will notify investigators and institutions of any changes through standard NIH
-communication channels (e.g., NIH Guide for Grants and Contracts).
-
-NIH expects all funded investigators to adhere to the GDS Policy, and
-compliance with this Policy will become a special term and condition in the
-Notice of Award or the Contract Award. Failure to comply with the terms and
-conditions of the funding agreement could lead to enforcement actions,
-including the withholding of funding, consistent with 45 CFR 74.6235 and/or
-other authorities, as appropriate.
-
-III. Effective Date
-This Policy applies to:
-
-Competing grant applications36 that are submitted to NIH for the January 25,
-2015, due date or subsequent due dates;
-Proposals for contracts that are submitted to NIH on or after January 25, 2015;
-and
-NIH intramural research projects generating genomic data on or after January
-25, 2015.
-IV. Responsibilities of Investigators Submitting Genomic Data
-A. Genomic Data Sharing Plans
-Investigators seeking NIH funding should contact appropriate IC Program
-Official or Project Officer37 as early as possible to discuss data sharing
-expectations and timelines that would apply to their proposed studies. NIH
-expects investigators and their institutions to provide basic plans for
-following this Policy in the “Genomic Data Sharing Plan” located in the
-Resource Sharing Plan section of funding applications and proposals. Any
-resources that may be needed to support a proposed genomic data sharing plan
-(e.g., preparation of data for submission) should be included in the project's
-budget. A more detailed genomic data sharing plan should be provided to the
-funding IC prior to award. The Institutional Certification (for sharing human
-data), should also be provided to the funding IC prior to award, along with any
-other Just-in-Time information. NIH expects intramural investigators to address
-compliance with genomic data sharing plans with their IC scientific leadership
-prior to initiating applicable research and are encouraged to contact their IC
-leadership or the Office of Intramural Research for guidance. The funding NIH
-IC will typically review compliance with genomic data sharing plans at the time
-of annual progress reports or other appropriate scientific project reviews, or
-at other times, depending on the reporting requirements specified by the IC for
-specific programs or projects.
-
-B. Non-human Genomic Data Sharing Plans
-1. Data Submission Expectations and Timeline
-Large-scale non-human genomic data, including data from microbes, microbiomes,
-and model organisms, as well as relevant associated data (e.g., phenotype and
-exposure data), are to be shared in a timely manner. Genomic data undergo
-different levels of data processing, which provides the basis for NIH’s
-expectations for data submission. These expectations are provided in the
-Supplemental Information. In general, investigators should make non-human
-genomic data publicly available no later than the date of initial publication.
-However, earlier availability (i.e., before publication) may be expected for
-certain data or IC-funded projects (e.g., data from projects with broad utility
-as a resource for the scientific community such as microbial population-based
-genomic studies).
-
-2. Data Repositories
-Non-human data may be made available through any widely used data repository,
-whether NIH-funded or not, such as the Gene Expression Omnibus (GEO),38
-Sequence Read Archive (SRA),39 Trace Archive,40 Array Express,41 Mouse Genome
-Informatics (MGI),42 WormBase,43 the Zebrafish Model Organism Database
-(ZFIN),44 GenBank,45 European Nucleotide Archive (ENA),46 or DNA Data Bank of
-Japan (DDBJ).47 NIH expects investigators to continue submitting data types to
-the same repositories that they submitted the data to before the effective date
-of the GDS Policy (e.g., DNA sequence data to GenBank/ENA/DDBJ, expression data
-to GEO or Array Express). Data types not previously submitted to any
-repositories may be submitted to these or other widely used repositories as
-agreed to by the funding IC.
-
-C. Human Genomic Data Sharing Plans
-1. Data Submission Expectations and Timeline
-Investigators should submit large-scale human genomic data as well as relevant
-associated data (e.g., phenotype and exposure data) to an NIH-designated data
-repository48 in a timely manner. Investigators should also submit any
-information necessary to interpret the submitted genomic data, such as study
-protocols, data instruments, and survey tools.
-
-Genomic data undergo different levels of data processing, which provides the
-basis for NIH’s expectations for data submission and timelines for the release
-of the data for access by investigators. These expectations and timelines are
-provided in the Supplemental Information. In general, NIH will release data
-submitted to NIH-designated data repositories no later than six months after
-the initial data submission begins, or at the time of acceptance of the first
-publication, whichever occurs first, without restrictions on publication or
-other dissemination.49
-
-Investigators should de-identify50 human genomic data that they submit to
-NIH-designated data repositories according to the standards set forth in the
-HHS Regulations for the Protection of Human Subjects26 to ensure that the
-identities of research subjects cannot be readily ascertained with the data.
-Investigators should also strip the data of identifiers according to the Health
-Insurance Portability and Accountability Act (HIPAA) Privacy Rule.27 The
-de-identified data should be assigned random, unique codes by the investigator,
-and the key to other study identifiers held by the submitting institution.
-
-Although the data in the NIH database of Genotypes and Phenotypes (dbGaP) are
-de-identified by both the HHS Regulations for Protection of Human Subjects and
-HIPAA Privacy Rule standards, NIH has obtained a Certificate of Confidentiality
-for dbGaP as an additional precaution because genomic data can be
-re-identified.51 NIH encourages investigators and institutions submitting
-large-scale human genomic datasets to NIH-designated data repositories to seek
-a Certificate of Confidentiality as an additional safeguard to prevent
-compelled disclosure of any personally identifiable information they may
-hold.52
-
-2. Data Repositories
-Investigators should register all studies with human genomic data that fall
-within the scope of the GDS Policy in dbGaP53 by the time that data cleaning
-and quality control measures begin, regardless of which NIH-designated data
-repository will receive the data. After registration in dbGaP, investigators
-should submit the data to the relevant NIH-designated data repository (e.g.,
-dbGaP, GEO, SRA, the Cancer Genomics Hub54). NIH-designated data repositories
-need not be the exclusive source for facilitating the sharing of genomic data,
-that is, investigators may also elect to submit data to a non-NIH-designated
-data repository in addition to an NIH-designated data repository. However,
-investigators should ensure that appropriate data security measures are in
-place,55 and that confidentiality, privacy, and data use measures are
-consistent with the GDS Policy.
-
-3. Tiered System for the Distribution of Human Data
-Respect for, and protection of the interests of, research participants are
-fundamental to NIH’s stewardship of human genomic data. The informed consent
-under which the data or samples were collected is the basis for the submitting
-institution to determine the appropriateness of data submission to
-NIH-designated data repositories and whether the data should be available
-through unrestricted or controlled access. Controlled-access data in
-NIH-designated data repositories are made available for secondary research only
-after investigators have obtained approval from NIH to use the requested data
-for a particular project. Data in unrestricted-access repositories are publicly
-available to anyone (e.g., The 1000 Genomes Project56).
-
-4. Informed Consent
-For research that falls within the scope of the GDS Policy, submitting
-institutions, through their Institutional Review Boards26 (IRBs), privacy
-boards,57 or equivalent bodies,58 are to review the informed consent materials
-to determine whether it is appropriate for data to be shared for secondary
-research use. Specific considerations may vary with the type of study and
-whether the data are obtained through prospective or retrospective data
-collections. NIH provides additional information on issues related to the
-respect for research participant interests in its Points to Consider for IRBs
-and Institutions in their Review of Data Submission Plans for Institutional
-Certifications.24
-
-For studies initiated after the effective date of the GDS Policy, NIH expects
-investigators to obtain participants’ consent for their genomic and phenotypic
-data to be used for future research purposes and to be shared broadly. The
-consent should include an explanation about whether participants’
-individual-level data will be shared through unrestricted- or controlled-access
-repositories.
-
-For studies proposing to use genomic data from cell lines or clinical
-specimens59 that were created or collected after the effective date of the
-Policy, NIH expects that informed consent for future research use and broad
-data sharing will have been obtained even if the cell lines or clinical
-specimens are de-identified. If there are compelling scientific reasons that
-necessitate the use of genomic data from cell lines or clinical specimens that
-were created or collected after the effective date of this Policy and that lack
-consent for research use and data sharing, investigators should provide a
-justification in the funding request for their use. The funding IC will review
-the justification and decide whether to make an exception to the consent
-expectation.
-
-For studies using data from specimens collected before the effective date of
-the GDS Policy, there may be considerable variation in the extent to which
-future genomic research and broad sharing were addressed in the informed
-consent materials for the primary research. In these cases, an assessment by an
-IRB, privacy board, or equivalent body is needed to ensure that data submission
-is not inconsistent with the informed consent provided by the research
-participant. NIH will accept data derived from de-identified cell lines or
-clinical specimens lacking consent for research use that were created or
-collected before the effective date of this Policy.
-
-NIH recognizes that in some circumstances broad sharing may not be consistent
-with the informed consent of the research participants whose data are included
-in the dataset. In such circumstances, institutions planning to submit
-aggregate-60 or individual-level data to NIH for controlled access should note
-any data use limitations in the data sharing plan submitted as part of the
-funding request. These data use limitations should be specified in the
-Institutional Certification submitted to NIH prior to award.
-
-5. Institutional Certification
-The responsible Institutional Signing Official61 of the submitting institution
-should provide an Institutional Certification to the funding IC prior to award
-consistent with the genomic data sharing plan submitted with the request for
-funding. The Institutional Certification should state whether the data will be
-submitted to an unrestricted- or controlled-access database. For submissions to
-controlled access and, as appropriate for unrestricted access, the
-Institutional Certification should assure that:
-
-The data submission is consistent, as appropriate, with applicable national,
-tribal, and state laws and regulations as well as relevant institutional
-policies;62
-Any limitations on the research use of the data, as expressed in the informed
-consent documents, are delineated;63
-The identities of research participants will not be disclosed to NIH-designated
-data repositories; and
-An IRB, privacy board, and/or equivalent body, as applicable, has reviewed the
-investigator’s proposal for data submission and assures that:
-The protocol for the collection of genomic and phenotypic data is consistent
-with 45 CFR Part 46;28
-Data submission and subsequent data sharing for research purposes are
-consistent with the informed consent of study participants from whom the data
-were obtained;64
-Consideration was given to risks to individual participants and their families
-associated with data submitted to NIH-designated data repositories and
-subsequent sharing;
-To the extent relevant and possible, consideration was given to risks to groups
-or populations associated with submitting data to NIH-designated data
-repositories and subsequent sharing; and
-The investigator’s plan for de-identifying datasets is consistent with the
-standards outlined in this Policy (see section IV.C.1.).
-6. Exceptions to Data Submission Expectations
-In cases where data submission to an NIH-designated data repository is not
-appropriate, that is, the Institutional Certification criteria cannot be met,
-investigators should provide a justification for any data submission exceptions
-requested in the funding application or proposal. The funding IC may grant an
-exception to submitting relevant data to NIH, and the investigator would be
-expected to develop an alternate plan to share data through other mechanisms.
-For transparency purposes, when exceptions are granted, studies will still be
-registered in dbGaP, the reason for the exception will be included in the
-registration record, and a reference will be provided to an alternative
-data-sharing plan or resource, if available. More information about requesting
-exceptions is available on the GDS website.15
-
-7. Data Withdrawal
-Submitting investigators and their institutions may request removal of data on
-individual participants from NIH-designated data repositories, in the event
-that a research participant withdraws or changes his or her consent. However,
-some data that have been distributed for approved research use cannot be
-retrieved.
-
-V. Responsibilities for Investigators Accessing and Using Genomic Data
-A. Requests for Controlled-Access Data
-Access to human data is through a tiered model involving unrestricted- and
-controlled-data access mechanisms. Requests for controlled-access data65 are
-reviewed by NIH Data Access Committees (DACs).66 DAC decisions are based
-primarily upon conformance of the proposed research as described in the access
-request to the data use limitations established by the submitting institution
-through the Institutional Certification. NIH DACs will accept requests for
-proposed research uses beginning one month prior to the anticipated data
-release date. The access period for all controlled-access data is one year; at
-the end of each approved period, data users can request an additional year of
-access or close out the project. Although data are de-identified, approved
-users of controlled-access data are encouraged to consider whether a
-Certificate of Confidentiality could serve as an additional safeguard to
-prevent compelled disclosure of any genomic data they may hold.55
-
-B. Terms and Conditions for Research Use of Controlled-Access Data
-Investigators approved to download controlled-access data from NIH-designated
-data repositories and their institutions are expected to abide by the NIH
-Genomic Data User Code of Conduct67 through their agreement to the Data Use
-Certification.68 The Data Use Certification, co-signed by the investigators
-requesting the data and their Institutional Signing Official, specifies the
-conditions for the secondary research use of controlled-access data, including:
-
-Using the data only for the approved research;
-Protecting data confidentiality;
-Following, as appropriate, all applicable national, tribal, and state laws and
-regulations, as well as relevant institutional policies and procedures for
-handling genomic data;
-Not attempting to identify individual participants from whom the data were
-obtained;
-Not selling any of the data obtained from NIH-designated data repositories;
-Not sharing any of the data obtained from controlled-access NIH-designated data
-repositories with individuals other than those listed in the data access
-request;
-Agreeing to the listing of a summary of approved research uses in dbGaP along
-with the investigator’s name and organizational affiliation;
-Agreeing to report any violation of the GDS Policy to the appropriate DAC(s) as
-soon as it is discovered;
-Reporting research progress using controlled-access datasets through annual
-access renewal requests or project close-out reports;
-Acknowledging in all oral or written presentations, disclosures, or
-publications the contributing investigator(s) who conducted the original study,
-the funding organization(s) that supported the work, the specific dataset(s)
-and applicable accession number(s), and the NIH-designated data repositories
-through which the investigator accessed any data.
-NIH expects that investigators who are approved to use controlled-access data
-will follow guidance on security best practices58 that outlines expected data
-security protections (e.g., physical security measures and user training) to
-ensure that the data are kept secure and not released to any person not
-permitted to access the data.
-
-If investigators violate the terms and conditions for secondary research use,
-NIH will take appropriate action. Further information is available in the Data
-Use Certification.
-
-C. Conditions for Use of Unrestricted-Access Data
-Investigators who download unrestricted-access data from NIH-designated data
-repositories should:
-
-Not attempt to identify individual human research participants from whom the
-data were obtained;69
-Acknowledge in all oral or written presentations, disclosures, or publications
-the specific dataset(s) or applicable accession number(s) and the
-NIH-designated data repositories through which the investigator accessed any
-data.
-VI. Intellectual Property
-NIH encourages patenting of technology suitable for subsequent private
-investment that may lead to the development of products that address public
-needs without impeding research. However, it is important to note that
-naturally occurring DNA sequences are not patentable in the United States.34
-Therefore, basic sequence data and certain related information (e.g.,
-genotypes, haplotypes, p-values, allele frequencies) are pre-competitive. Such
-data made available through NIH-designated data repositories, and all
-conclusions derived directly from them, should remain freely available, without
-any licensing requirements.
-
-NIH encourages broad use of NIH-funded genomic data that is consistent with a
-responsible approach to management of intellectual property derived from
-downstream discoveries, as outlined in the NIH Best Practices for the Licensing
-of Genomic Inventions70 and Section 8.2.3, Sharing Research Resources, of the
-NIH Grants Policy Statement.71 NIH discourages the use of patents to prevent
-the use of or to block access to genomic or genotype-phenotype data developed
-with NIH support.
-
-References
-1. The genome is the entire set of genetic instructions found in a cell. See
-http://ghr.nlm.nih.gov/glossary=genome.
-2. Final NIH Statement on Sharing Research Data. February 26, 2003. See
-https://grants.nih.gov/grants/guide/notice-files/NOT-OD-03-032.html.
-3. NIH Intramural Policy on Large Database Sharing. April 5, 2002. See
-http://sourcebook.od.nih.gov/ethic-conduct/large-db-sharing.htm.
-4. NIH Policy on Sharing of Model Organisms for Biomedical Research. May 7,
-2004. See https://grants.nih.gov/grants/guide/notice-files/NOT-OD-04-042.html.
-5. Reaffirmation and Extension of NHGRI Rapid Data Release Policies:
-Large-scale Sequencing and Other Community Resource Projects. February 2003.
-See https://www.genome.gov/10506537.
-6. NIH Policy for Sharing of Data Obtained in NIH Supported or Conducted
-Genome-Wide Association Studies (GWAS). See
-https://grants.nih.gov/grants/guide/notice-files/NOT-OD-07-088.html.
-7. Federal Register Notice. Draft NIH Genomic Data Sharing Policy Request for
-Public Comments. See http://www.federalregister.gov/a/2013-22941.
-8. The NIH Guide for Grants and Contracts. Request for Information: Input on
-the Draft NIH Genomic Data Sharing Policy. September 27, 2013. See
-https://grants.nih.gov/grants/guide/notice-files/NOT-OD-13-119.html.
-9. Public Consultation Webinar. Draft NIH Genomic Data Sharing Policy. November
-6, 2013. See https://webmeeting.nih.gov/p7sqo6avp6j/.
-10. Compiled Public Comments on the Draft Genomic Data Sharing Policy. See
-http://gds.nih.gov/pdf/GDS_Policy_Public_Comments.PDF.
-11. Supplemental Information to the NIH Genomic Data Sharing Policy. See
-http://gds.nih.gov/pdf/supplemental_info_GDS_Policy.pdf.
-12. National Institute of Allergy and Infectious Diseases. Data Sharing and
-Release Plans. See
-http://www.niaid.nih.gov/labsandresources/resources/dmid/pages/data.aspx.
-13. Roster of NIH Genomic Program Administrators. See
-http://gds.nih.gov/04po2_2GPA.html.
-14. NIH Big Data to Knowledge.  See http://bd2k.nih.gov.
-15. NIH Big Data to Knowledge. Scientific Data Council. See
-http://bd2k.nih.gov/about_bd2k.html#sdcmembership.
-16. Genomic Data Sharing Website. Resources for Investigators Submitting Data
-to dbGaP. See http://gds.nih.gov/06researchers1.html.
-17. Genomic Data Sharing Website. Data Repositories. See
-http://gds.nih.gov/02dr2.html.
-18. See for example the Genomic Standards Consortium, http://gensc.org/; the
-Global Alliance, http://www.broadinstitute.org/news/globalalliance; and the NIH
-Big Data to Knowledge focus on community-based data and metadata standards,
-http://bd2k.nih.gov/about_bd2k.html#areas.
-19. Gymrek et al. Identifying Personal Genomes by Surname Inference. Science.
-339(6117): 321-324. (2013).
-20. Kaufman et al. Public Opinion about the Importance of Privacy in Biobank
-Research. American Journal of Human Genetics. 85(5): 643-654. (2009).
-21. Vermeulen et al. A Trial of Consent Procedures for Future Research with
-Clinically Derived Biological Samples. British Journal of Cancer. 101(9):
-1505-1512. (2009).
-22. Trinidad et al. Research Practice and Participant Preferences: the Growing
-Gulf. Science. 331(6015): 287-288. (2011).
-23. NIH Points to Consider for IRBs and Institutions in their Review of Data
-Submission Plans for Institutional Certifications Under NIH’s Policy for
-Sharing of Data Obtained in NIH Supported or Conducted Genome-Wide Association
-Studies (GWAS). See
-http://gds.nih.gov/pdf/PTC_for_IRBs_and_Institutions_revised5-31-11.pdf.
-24. Presidential Commission for the Study of Bioethical Issues. Anticipate and
-Communicate: Ethical Management of Incidental and Secondary Findings in the
-Clinical, Research, and Direct-to-Consumer Contexts. December 2013. See
-http://bioethics.gov/node/3183.
-25. Code of Federal Regulations. Protection of Human Subjects. Definitions. See
-45 CFR 46.102(f) at
-http://www.hhs.gov/ohrp/humansubjects/guidance/45cfr46.html#46.102.
-26. The list of HIPAA identifiers that must be removed is available at 45 CFR
-164.514(b)(2). See:
-http://www.gpo.gov/fdsys/pkg/CFR-2002-title45-vol1/pdf/CFR-2002-title45-vol1-sec164-514.pdf.
-27. Federal Policy for the Protection of Human Subjects (Common Rule). 45 CFR
-Part 46. See http://www.hhs.gov/ohrp/humansubjects/commonrule/.
-28. ANPRM for Revision to Common Rule. See
-http://www.hhs.gov/ohrp/humansubjects/anprm2011page.html.
-29. Genomic Data Sharing Website. Standard Data Use Limitations. See
-http://gds.nih.gov/pdf/standard_data_use_limitations.pdf.
-30. Genomic Data Sharing Website.  See http://gds.nih.gov/.
-31. dbGaP Compilation of Aggregate Genomic Data for General Research Use. See
-http://www.ncbi.nlm.nih.gov/projects/gap/cgi-bin/study.cgi?study_id=phs000501.v1.p1.
-32. dbGaP Collection: Compilation of Individual-Level Genomic Data for General
-Research Use. See
-http://www.ncbi.nlm.nih.gov/projects/gap/cgi-bin/collection.cgi?study_id=phs000688.v1.p1.
-33. Association for Molecular Pathology v. Myriad Genetics, Inc., 569 U.S. ___
-(2013) (slip opinion 12-398). See
-http://www.supremecourt.gov/opinions/12pdf/12-398_1b7d.pdf.
-34. GWAS has the same definition in this policy as in the 2007 GWAS Policy: a
-study in which the density of genetic markers and the extent of linkage
-disequilibrium should be sufficient to capture (by the r2 parameter) a large
-proportion of the common variation in the genome of the population under study,
-and the number of samples (in a case-control or trio design) should provide
-sufficient power to detect variants of modest effect.
-35. 45 CFR 74.62. Uniform Administrative Requirements for Awards and Subawards
-to Institutions of Higher Education, Hospitals, Other Nonprofit Organizations,
-and Commercial Organizations; Enforcement. See
-http://www.gpo.gov/fdsys/pkg/CFR-2011-title45-vol1/xml/CFR-2011-title45-vol1-part74.xml#seqnum74.62.
-36. Competing grant applications encompass all activities with a research
-component, including but not limited to the following: Research Grants (Rs),
-Program Projects (Ps), Cooperative Research Mechanisms (Us), Career Development
-Awards (Ks), and SCORs and other S grants with a research component.
-37. Investigators should refer to funding announcements or IC websites for
-contact information.
-38. Gene Expression Omnibus at http://www.ncbi.nlm.nih.gov/geo/.
-39. Sequence Read Archive at http://www.ncbi.nlm.nih.gov/Traces/sra/sra.cgi.
-40. Trace Archive at http://www.ncbi.nlm.nih.gov/Traces/trace.cgi.
-41. Array Express at http://www.ebi.ac.uk/arrayexpress/.
-42. Mouse Genome Informatics at http://www.informatics.jax.org/.
-43. WormBase at http://www.wormbase.org.
-44. The Zebrafish Model Organism Database at http://zfin.org/.
-45. GenBank at http://www.ncbi.nlm.nih.gov/genbank/.
-46. European Nucleotide Archive at http://www.ebi.ac.uk/ena/.
-47. DNA Data Bank of Japan at http://www.ddbj.nig.ac.jp/.
-48. An NIH-designated data repository is any data repository maintained or
-supported by NIH either directly or through collaboration.
-49. A period for data preparation is anticipated prior to data submission to
-NIH, and the appropriate time intervals for that data preparation (or data
-cleaning) will be subject to the particular data type and project plans (see
-Supplemental Information). Investigators should work with NIH Program or
-Project Officials for specific guidance.
-50. De-identified refers to removing information that could be used to
-associate a dataset or record with a human individual.
-51. Confidentiality Certificate. HG-2009-01. Issued to the National Center for
-Biotechnology Information, National Library of Medicine, NIH. See
-http://www.ncbi.nlm.nih.gov/projects/gap/cgi-bin/GetPdf.cgi?document_name=ConfidentialityCertificate.pdf.
-52. For additional information about Certificates of Confidentiality, see
-https://grants.nih.gov/grants/policy/coc/.
-53. Database of Genotypes and Phenotypes at http://www.ncbi.nlm.nih.gov/gap.
-54. Cancer Genomics Hub at https://cghub.ucsc.edu/.
-55. dbGaP Security Best Practices. See
-http://www.ncbi.nlm.nih.gov/projects/gap/cgi-bin/GetPdf.cgi?document_name=dbgap_2b_security_procedures.pdf.
-56. The 1000 Genomes Project at http://www.1000genomes.org/.
-57. See the roles of Privacy Boards as elaborated in 45 CFR 164 at
-http://www.gpo.gov/fdsys/pkg/CFR-2011-title45-vol1/pdf/CFR-2011-title45-vol1-part164.pdf.
-58. Equivalent body is used here to acknowledge that some primary studies may
-be conducted abroad and in such cases the expectation is that an analogous
-review committee to an IRB or privacy board (e.g., Research Ethics Committees)
-may be asked to participate in the presubmission review of proposed genomic
-projects.
-59. Clinical specimens are specimens that have been obtained through clinical
-practice.
-60. Aggregate data are summary statistics compiled from multiple sources of
-individual-level data.
-61. An Institutional Signing Official is generally a senior official at an
-institution who is credentialed through NIH eRA Commons system and is
-authorized to enter the institution into a legally binding contract and sign on
-behalf of an investigator who has submitted data or a data access request to
-NIH.
-62. For the submission of data derived from cell lines or clinical specimens
-lacking research consent that were created or collected before the effective
-date of this Policy, the Institutional Certification needs to address only this
-item.
-63. For guidance on clearly communicating inappropriate data uses, see NIH
-Points to Consider in Drafting Effective Data Use Limitation Statements,
-http://gwas.nih.gov/pdf/NIH_PTC_in_Drafting_DUL_Statements.pdf.
-64. As noted earlier, for studies using data or specimens collected before the
-effective date of this Policy, the IRB, privacy board, or equivalent body
-should review informed consent materials to ensure that data submission is not
-inconsistent with the informed consent provided by the research participants.
-65. dbGaP Authorized Access. See
-https://dbgap.ncbi.nlm.nih.gov/aa/wga.cgi?page=login.
-66. For a list of NIH Data Access Committees, see
-http://gwas.nih.gov/04po2_1DAC.html.
-67. Genomic Data User Code of Conduct. See
-http://gds.nih.gov/pdf/Genomic_Data_User_Code_of_Conduct.pdf.
-68. Model Data Use Certification Agreement. See
-http://gwas.nih.gov/pdf/Model_DUC_7-26-13.pdf.
-69. In certain cases, NIH may consider approving research intended to enhance
-genomic data privacy protection procedures.
-70. NIH Best Practices for the Licensing of Genomic Inventions. See
-http://www.ott.nih.gov/sites/default/files/documents/pdfs/70fr18413.pdf.
-71. NIH Grants Policy Statement. 8.2.3, Sharing Research Resources. See
-https://grants.nih.gov/grants/policy/nihgps_2012/nihgps_ch8.htm#_Toc271264950.
+Section 4 – Sui Generis Database Rights.
+
+Where the Licensed Rights include Sui Generis Database Rights that apply to Your
+use of the Licensed Material:
+
+for the avoidance of doubt, Section 2(a)(1) grants You the right to extract,
+reuse, reproduce, and Share all or a substantial portion of the contents of the
+database;
+if You include all or a substantial portion of the database contents in a
+database in which You have Sui Generis Database Rights, then the database in
+which You have Sui Generis Database Rights (but not its individual contents) is
+Adapted Material; and
+You must comply with the conditions in Section 3(a) if You Share all or a
+substantial portion of the contents of the database.
+For the avoidance of doubt, this Section 4 supplements and does not replace Your
+obligations under this Public License where the Licensed Rights include other
+Copyright and Similar Rights.
+Section 5 – Disclaimer of Warranties and Limitation of Liability.
+
+Unless otherwise separately undertaken by the Licensor, to the extent possible,
+the Licensor offers the Licensed Material as-is and as-available, and makes no
+representations or warranties of any kind concerning the Licensed Material,
+whether express, implied, statutory, or other. This includes, without
+limitation, warranties of title, merchantability, fitness for a particular
+purpose, non-infringement, absence of latent or other defects, accuracy, or the
+presence or absence of errors, whether or not known or discoverable. Where
+disclaimers of warranties are not allowed in full or in part, this disclaimer
+may not apply to You.
+To the extent possible, in no event will the Licensor be liable to You on any
+legal theory (including, without limitation, negligence) or otherwise for any
+direct, special, indirect, incidental, consequential, punitive, exemplary, or
+other losses, costs, expenses, or damages arising out of this Public License or
+use of the Licensed Material, even if the Licensor has been advised of the
+possibility of such losses, costs, expenses, or damages. Where a limitation of
+liability is not allowed in full or in part, this limitation may not apply to
+You.
+The disclaimer of warranties and limitation of liability provided above shall be
+interpreted in a manner that, to the extent possible, most closely approximates
+an absolute disclaimer and waiver of all liability.
+Section 6 – Term and Termination.
+
+This Public License applies for the term of the Copyright and Similar Rights
+licensed here. However, if You fail to comply with this Public License, then
+Your rights under this Public License terminate automatically.
+Where Your right to use the Licensed Material has terminated under Section 6(a),
+it reinstates:
+
+automatically as of the date the violation is cured, provided it is cured within
+30 days of Your discovery of the violation; or
+upon express reinstatement by the Licensor.
+For the avoidance of doubt, this Section 6(b) does not affect any right the
+Licensor may have to seek remedies for Your violations of this Public License.
+For the avoidance of doubt, the Licensor may also offer the Licensed Material
+under separate terms or conditions or stop distributing the Licensed Material at
+any time; however, doing so will not terminate this Public License.
+Sections 1, 5, 6, 7, and 8 survive termination of this Public License.
+Section 7 – Other Terms and Conditions.
+
+The Licensor shall not be bound by any additional or different terms or
+conditions communicated by You unless expressly agreed.
+Any arrangements, understandings, or agreements regarding the Licensed Material
+not stated herein are separate from and independent of the terms and conditions
+of this Public License.
+Section 8 – Interpretation.
+
+For the avoidance of doubt, this Public License does not, and shall not be
+interpreted to, reduce, limit, restrict, or impose conditions on any use of the
+Licensed Material that could lawfully be made without permission under this
+Public License.
+To the extent possible, if any provision of this Public License is deemed
+unenforceable, it shall be automatically reformed to the minimum extent
+necessary to make it enforceable. If the provision cannot be reformed, it shall
+be severed from this Public License without affecting the enforceability of the
+remaining terms and conditions.
+No term or condition of this Public License will be waived and no failure to
+comply consented to unless expressly agreed to by the Licensor.
+Nothing in this Public License constitutes or may be interpreted as a limitation
+upon, or waiver of, any privileges and immunities that apply to the Licensor or
+You, including from the legal processes of any jurisdiction or authority.

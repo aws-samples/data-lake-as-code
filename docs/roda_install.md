@@ -1,90 +1,78 @@
-# Installing Athena-ready Chemical and Genomics Databases from the  Registry of Open Data on AWS
+# Installing Lakehouse Ready Datasets from the  Registry of Open Data on AWS
 
-The AWS Registry of Open Data (RODA) hosts the following datasets in a parquet format in a public S3 bucket which you are free to copy. 
+The AWS Registry of Open Data (RODA) hosts the following ML datasets in their original forms along with compressed/parquet/orc formats in a public S3 bucket which you are free to copy into your own bucket.
 
-However, in an effort to make these datasets more consumable, the CloudFormation templates below will create the corresponding AWS Glue database, tables, and schemas in your account's AWS Glue Data Catalog. 
+You can also query these datasets 'in place' right out of the public bucket using services like Athena, Redshift, Quicksight, and EMR to join with your own datasets by deploying the accompanying CloudFormation template to create the Glue Data Catalog entries for you.
+ 
+## YouTube 8 Million
 
-This allows you to start querying the data with Athena directly out of the public S3 buckets, **in seconds**, with zero servers or networking to setup. 
+It's best to read up on the dataset itself on the [YT8M website](https://research.google.com/youtube8m/index.html). 
 
-![](http://devspacepaul.s3.us-west-2.amazonaws.com/dlac/howitworks.png)
+We provide the data in two forms. 
 
-Going further, you can use standard JDBC/ODBC to query these databases with your own notebooks, business inteligence tools, plotting software, Redshift or EMR clusters, or even your local development machine. 
+- **Option 1)** The original .tfrecord format provided by Google Research.
+- **Option 2)** Parquet conversions of those tfrecords into a format that lets you query the data in place directy out of the S3 bucket.
 
+### Option 1)
 
-## One time prerequisite 
+Your typical `s3 sync` or `s3 cp` commands will download the files for you. The folder structure is identical to how the data is distributed by Google Research.
 
-If you have never used Amazon Athena in your account before, you need to [setup a default query location](https://docs.aws.amazon.com/athena/latest/ug/querying.html#query-results-specify-location-console). This should only take 2-3 minutes to do.
+```
+s3://aws-roda-ml-datalake/yt8m/
+    └───2/
+        └───frame/
+            └───test/*.tfrecord
+            └───train/*.tfrecord
+            └───validate/*.tfrecord
+            
+        └───video/
+            └───test/*.tfrecord
+            └───train/*.tfrecord
+            └───validate/*.tfrecord
+    └───3/ 
+        └───frame/
+            └───test/*.tfrecord
+            └───validate/*.tfrecord
+    └───vocabulary.csv
 
-You only need to do this once. 
+```
 
-## Deploy this into my account
+### Option 2)
 
-Click the links below for the data set you are interested in. Then click the "Create stack". Make sure you are in your preferred region. 
+Deploy the YT8M CloudFormation Template by clicking "Launch stack" below. Only takes about 60 seconds.
 
+[![](https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png)](https://us-west-2.console.aws.amazon.com/cloudformation/home?region=us-west-2#/stacks/quickcreate?templateUrl=https://aws-roda-ml-datalake.s3.us-west-2.amazonaws.com/YT8MRodaTemplate.RodaTemplate.json&stackName=YT8M-RODA) 
 
-## Latest Versions:
-
-
-
-### [Chembl 27 ![](https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png)](https://console.aws.amazon.com/cloudformation/home?#/stacks/quickcreate?templateUrl=https%3A%2F%2Faws-roda-hcls-datalake.s3.amazonaws.com%2FChembl.27.RodaTemplate.json&stackName=Chembl27-RODA) 
-
-### [Open Targets 20.06 ![](https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png)](https://console.aws.amazon.com/cloudformation/home?#/stacks/quickcreate?templateUrl=https%3A%2F%2Faws-roda-hcls-datalake.s3.amazonaws.com%2FOpenTargets.20.06.RodaTemplate.json&stackName=OpenTargets-20-06-RODA)
-
-### [BindingDB ![](https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png)](https://console.aws.amazon.com/cloudformation/home?#/stacks/quickcreate?templateUrl=https%3A%2F%2Faws-roda-hcls-datalake.s3.amazonaws.com%2FBindingDbRodaTemplate.json&stackName=BindingDB-RODA)
-
-### [Genome Tissue Expresssion Database ![](https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png)](https://console.aws.amazon.com/cloudformation/home?#/stacks/quickcreate?templateUrl=https%3A%2F%2Faws-roda-hcls-datalake.s3.amazonaws.com%2FGTEx.8.RodaTemplate.json&stackName=GTEx-8-RODA)
-
-It should take approximately 60 seconds for the stack to finish deploying.
-
-The GTEx data set requires one extra step after the deployment. The `exon_reads` table has > 17k columns. Expressing all of those columns in YAML would exceed the CloudFormation max template length! Once the GTEx template deploys, go the [AWS Glue Console](https://us-west-2.console.aws.amazon.com/glue/home?#catalog:tab=crawlers), check the box next to the `gtex_8_awsroda_crawler` and click 'Run crawler'. Once it finishes (1-2 minutes) you can query the GTEx data just like the other datasets. 
-
-## Query the data!
+If you have never used Amazon Athena in your account before, you need to [setup a default query location](https://docs.aws.amazon.com/athena/latest/ug/querying.html#query-results-specify-location-console). This should only take 2-3 minutes to do. You only need to do this once. 
 
 Go to the [Amazon Athena](https://console.aws.amazon.com/athena/home?force#query) console.
 
-Select the database you just deployed in the "Database" drop down.
+Select the YT8M you just deployed in the "Database" drop down.
 
 You should see the tables listed below. Expand the table to see the columns/schema for each table. You can also click on the vertical dots next to a table name and select 'Preview table' to get a quick feel for whats inside.
 
-![](http://devspacepaul.s3.us-west-2.amazonaws.com/dlac/runquery.png)
+Now that your Glue tables have been created, you use SageMaker, Redshift, Quicksight, etc to begin training or joining with your own data. 
 
 
-## Want to know more?
+## How this works
 
-### How this works
+
+Data sets in the AWS RODA ML Data Lake were created using the [Data Lake as Code Architecture (DLAC)](https://github.com/aws-samples/data-lake-as-code). The AWS RODA ML Data Lake tracks the [RODA-ML branch](https://github.com/aws-samples/data-lake-as-code/tree/roda-ml). The [DLAC mainline](https://github.com/aws-samples/data-lake-as-code/tree/mainline) branch is there to help you create your own data lake with your own private data sets using the DLAC framework.
+
+The AWS CloudFormation templates create the necessary AWS Glue database, tables, and schemas in your account's AWS Glue Data Catalog in seconds. With AWS Athena, this allows you to start querying the data with Athena directly out of the public S3 buckets, with zero servers or networking to setup. AWS Machine Learning services like SageMaker and and Lake House services like Redshift/EMR/QuickSight all directly integrate with the same AWS Glue Data Catalog meatastore so you can pick the right tool for the job.
+
+![](https://raw.githubusercontent.com/aws-samples/data-lake-as-code/roda/docs/HowLakeHouseReadyDatasetsWork.png)
+
+You can also use standard JDBC/ODBC to query these databases with your own notebooks, R studio environments, business intelligence tools, plotting software, Redshift or EMR clusters, or even your local development machine. 
+
+
+
 Take the time to visit the AWS Glue console. There, you will see the databases, tables, table definitions, etc. You will notice the locations for the tables are s3://aws-roda-hcls-datalake/database/etc. 
 
-### More about the datasets:
+## More about the datasets:
 
-These datasets were downloaded directly in thier original forms from the following locations. You should refer to the source documentation for the datasets below for more information about the data itself. We have not modified any datasets beyond converting them from thier orignal database dumps/json/csv/etc formats into a parquet representation for performance and cost efficency. 
+These datasets were downloaded directly in their original forms from the following locations. You should refer to the source documentation for the datasets below for more information about the data itself. We have not modified any datasets beyond converting them from their original database dumps/json/csv/etc formats into a parquet representation for performance and cost efficiency. 
 
-[ChEMBL Source Data](https://chembl.gitbook.io/chembl-interface-documentation/downloads)
-
-[Open Targets Source Data](https://www.targetvalidation.org/downloads/data)
-
-[Binding DB Source Data](https://www.bindingdb.org/bind/chemsearch/marvin/SDFdownload.jsp?all_download=yes)
-
-[GTEx Source Data](https://gtexportal.org/home/datasets)
-
-### How were these datasets prepared?
-
-Data sets in the AWS RODA HCLS Data Lake were created using the [Data Lake as Code Architecture (DLAC)](https://github.com/aws-samples/data-lake-as-code). The AWS RODA HCLS Data Lake tracks the [RODA branch](https://github.com/aws-samples/data-lake-as-code/tree/roda). The [DLAC mainline](https://github.com/aws-samples/data-lake-as-code/tree/mainline) branch is there to help you create your own data lake with your own private data sets using the DLAC framework.
-
-### Older Versions:
-
-[Deploy Open Targets 20.06](https://console.aws.amazon.com/cloudformation/home?#/stacks/quickcreate?templateUrl=https%3A%2F%2Faws-roda-hcls-datalake.s3.amazonaws.com%2FOpenTargets.19.11.RodaTemplate.json&stackName=OpenTargets-19-11-RODA)
-
-[Deploy Chembl 25](https://console.aws.amazon.com/cloudformation/home?#/stacks/quickcreate?templateUrl=https%3A%2F%2Faws-roda-hcls-datalake.s3.amazonaws.com%2FChembl.25.RodaTemplate.json&stackName=Chembl25-RODA)
-
-## Troubleshooting
-
-**Your query has the following error(s):**
-```
-HIVE_CURSOR_ERROR: Can not read value at 9 in block 0 in file s3://aws-roda-hcls-datalake/...snappy.parquet
-```
-
-There is a bug in how Athena's Presto engine handles Hive's decimal type. This is fixed in an upcoming release. In the event you see this error, create a new workgroup in Athena called exactly `AmazonAthenaPreviewFunctionality` and then use that workgroup for your queries. Athena will use the the next generation Presto version and you shouldnt see this error again. 
-
-
+[YT8M from Google Research](https://research.google.com/youtube8m/index.html)
 
 

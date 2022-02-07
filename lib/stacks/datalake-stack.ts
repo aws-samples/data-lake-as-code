@@ -61,6 +61,7 @@ export class DataLakeStack extends Stack {
 
 
     this.DataLakeBucket = new s3.Bucket(this, 'dataLakeBucket',{
+      bucketName: "aws-roda-ml-datalake"
     });
     this.AthenaResultsBucket = new s3.Bucket(this, "athenaResultsBucket");
 

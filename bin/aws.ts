@@ -7,8 +7,7 @@ import * as s3 from 'aws-cdk-lib/aws-s3';
 import { DataLakeStack } from '../lib/stacks/datalake-stack';
 import { DataLakeEnrollment } from '../lib/constructs/data-lake-enrollment';
 import { DataSetTemplateStack, CrawlerTemplateStack } from '../lib/stacks/dataset-stack';
-import { ExampleS3DataSet } from '../lib/ExampleS3DataSet-stack';
-import { ExamplePgRdsDataSet } from '../lib/ExamplePgRdsDataSet-stack';
+import { YT8MDataSetStack } from '../lib/YT8M-ODS';
 
 
 const app = new App();
@@ -23,11 +22,27 @@ const exisitingResourceImportStack = new Stack(app, 'resourceImportStack', {
 });
 
 
-// const exampleS3DataSet = new ExampleS3DataSet(app, 'ExampleS3DataSet', {
-//     sourceBucket: s3.Bucket.fromBucketName(exisitingResourceImportStack, 'exampleS3DataSetSourceBucket', 'XXXExistingBucketNameXXX'),
-//     sourceBucketDataPrefix: 'datasetPrefixThatEndsInAFwdSlash/',
-//     DataLake: coreDataLake
-// });
+const yt8m = new YT8MDataSetStack(app, 'yt8mDataSet', {
+    sourceBucket: s3.Bucket.fromBucketName(exisitingResourceImportStack, 'aws-roda-ml-datalake', 'aws-roda-ml-datalake'),
+    sourceBucketDataPrefix: 'yt8m/',
+    DataLake: coreDataLake
+});
+
+const YT8MRodaTemplate = new DataSetTemplateStack(
+  app,
+  "YT8MRodaTemplate",
+  {
+    description:
+      "Lake House Ready YouTube 8 Million Dataset in the AWS Registry of Open Data. (ib-mv94mx8812e)",
+    DatabaseDescriptionPath:
+      "../../RODA_templates/yt8m_ods_get_database.json",
+    DescribeTablesPath:
+      "../../RODA_templates/yt8m_ods_get_tables.json",
+    DataSetName: yt8m.Enrollments[0].DataSetName,
+  }
+);
+
+
 
 // const examplePgRdsDataSet = new ExamplePgRdsDataSet(app, 'ExamplePgRdsDataSet', {
     

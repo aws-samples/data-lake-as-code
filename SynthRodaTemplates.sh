@@ -1,5 +1,5 @@
-aws glue get-tables --database-name sec_financial_statements_dl > RODA_templates/sec_financial_statements_get_tables.json
-aws glue get-database --name sec_financial_statements_dl > RODA_templates/sec_financial_statements_get_database.json
+aws glue get-tables --database-name yt8m_ods_dl > RODA_templates/yt8m_ods_get_tables.json
+aws glue get-database --name yt8m_ods_dl > RODA_templates/yt8m_ods_get_database.json
 
 npm run build
 
