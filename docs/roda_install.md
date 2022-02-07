@@ -39,7 +39,7 @@ s3://aws-roda-ml-datalake/yt8m/
 
 ### Option 2)
 
-This is the ['Modern Data Architecture'](https://aws.amazon.com/big-data/datalakes-and-analytics/modern-data-architecture/) approach does not require you to copy data into your own bucket. You can query the data in-place right out of the public bucket.
+This is the ['Modern Data Architecture'](https://aws.amazon.com/big-data/datalakes-and-analytics/modern-data-architecture/) approach does not require you to copy data into your own bucket. You can query the data in-place right out of the public bucket with native AWS services.
 
 Deploy the YT8M CloudFormation Template by clicking "Launch stack" below. Only takes about 60 seconds.
 
