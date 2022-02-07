@@ -3,11 +3,11 @@ aws glue get-database --name yt8m_ods_dl > RODA_templates/yt8m_ods_get_database.
 
 npm run build
 
-cdk synth SECFinancialStatementsAndNotesTemplate
+cdk synth YT8MRodaTemplate
 
-jq 'del(.Parameters, .Rules)' cdk.out/SECFinancialStatementsAndNotesTemplate.template.json > tmp.$$.json && mv tmp.$$.json cdk.out/SECFinancialStatementsAndNotesTemplate.template.json
+jq 'del(.Parameters, .Rules)' cdk.out/YT8MRodaTemplate.template.json > tmp.$$.json && mv tmp.$$.json cdk.out/YT8MRodaTemplate.template.json
 
-aws s3 cp cdk.out/SECFinancialStatementsAndNotesTemplate.template.json s3://aws-roda-fintech-datalake/SECFinancialStatementsAndNotes.RodaTemplate.json
+aws s3 cp cdk.out/YT8MRodaTemplate.template.json s3://aws-roda-fintech-datalake/YT8MRodaTemplate.RodaTemplate.json
 
 
 
