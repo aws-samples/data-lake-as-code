@@ -10,7 +10,7 @@ It's best to read up on the dataset itself on the [YT8M website](https://researc
 
 We provide the data in two forms. 
 
-- **Option 1)** The original .tfrecord format provided by Google Research.
+- **Option 1 )** The original .tfrecord format provided by Google Research.
 - **Option 2)** Parquet conversions of those .tfrecords into a format that lets you query the data in place directy out of the S3 bucket.
 
 ### Option 1)
@@ -38,6 +38,8 @@ s3://aws-roda-ml-datalake/yt8m/
 ```
 
 ### Option 2)
+
+This is the ['Modern Data Architecture'](https://aws.amazon.com/big-data/datalakes-and-analytics/modern-data-architecture/) approach does not require you to copy data into your own bucket. You can query the data in-place right out of the public bucket.
 
 Deploy the YT8M CloudFormation Template by clicking "Launch stack" below. Only takes about 60 seconds.
 
