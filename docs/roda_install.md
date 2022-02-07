@@ -11,11 +11,11 @@ It's best to read up on the dataset itself on the [YT8M website](https://researc
 We provide the data in two forms. 
 
 - **Option 1)** The original .tfrecord format provided by Google Research.
-- **Option 2)** Parquet conversions of those tfrecords into a format that lets you query the data in place directy out of the S3 bucket.
+- **Option 2)** Parquet conversions of those .tfrecords into a format that lets you query the data in place directy out of the S3 bucket.
 
 ### Option 1)
 
-Your typical `s3 sync` or `s3 cp` commands will download the files for you. The folder structure is identical to how the data is distributed by Google Research.
+Your typical `s3 sync` or `s3 cp` commands will download the files for you. For example, `aws s3 sync s3://aws-roda-ml-datalake/yt8m/ .` will copy the whole 1.6TB down onto your local machine. Or `aws s3 sync s3://aws-roda-ml-datalake/yt8m/ s3://yourbucket/yourfolder/` will copy it out of the public bucket and into your own bucket. The folder structure is identical to how the data is distributed by Google Research.
 
 ```
 s3://aws-roda-ml-datalake/yt8m/
