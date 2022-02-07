@@ -4,7 +4,9 @@
 There are three primary branches for this repo. 
 
 - **[mainline](https://github.com/aws-samples/data-lake-as-code/tree/mainline)** - You are here. Allows you to use the Data Lake as Code architecture and constructs in your own enviornment. It excludes the RODA data sets and 'baseline' stack documented in the blog.
-- **[roda](https://github.com/aws-samples/data-lake-as-code/tree/roda)** - This branch tracks new AWS Registry of Open Data (RODA) data sets enrolled by the Data Lake as Code architecture. More on this coming soon...
+- **[roda](https://github.com/aws-samples/data-lake-as-code/tree/roda)** - This branch tracks new Heathcare or Life Sciences AWS Registry of Open Data (RODA) data sets enrolled by the Data Lake as Code architecture. 
+- **[roda-fintech](https://github.com/aws-samples/data-lake-as-code/tree/roda-fintech)** - This branch tracks new Fintech-centric AWS Registry of Open Data (RODA) data sets enrolled by the Data Lake as Code architecture. 
+- **[roda-ml](https://github.com/aws-samples/data-lake-as-code/tree/roda-ml)** - This branch tracks new ML-centric AWS Registry of Open Data (RODA) data sets enrolled by the Data Lake as Code architecture. 
 - **[blog](https://github.com/aws-samples/data-lake-as-code/tree/roda)** - This branch tracks the ['Data Lake as Code' blog post](https://aws.amazon.com/blogs/startups/a-data-lake-as-code-featuring-chembl-and-opentargets/)
 
 ## What is this?
