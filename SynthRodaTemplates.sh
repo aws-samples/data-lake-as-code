@@ -16,6 +16,9 @@ aws glue get-database --name chembl_25_dl > RODA_templates/chembl_25_get_databas
 aws glue get-tables --database-name chembl_27_dl > RODA_templates/chembl_27_get_tables.json
 aws glue get-database --name chembl_27_dl > RODA_templates/chembl_27_get_database.json
 
+aws glue get-tables --database-name chembl_29_dl > RODA_templates/chembl_29_get_tables.json
+aws glue get-database --name chembl_29_dl > RODA_templates/chembl_29_get_database.json
+
 aws glue get-tables --database-name binding_db_dl > RODA_templates/binding_db_get_tables.json
 aws glue get-database --name binding_db_dl > RODA_templates/binding_db_get_database.json
 
@@ -49,6 +52,9 @@ cdk synth OpenTargets2006RodaTemplate
 cdk synth OpenTargetsLatestRodaTemplate
 cdk synth Chembl25RodaTemplate
 cdk synth Chembl27RodaTemplate
+
+cdk synth Chembl29RodaTemplate
+
 cdk synth BindingDbRodaTemplate
 cdk synth GTExRodaTemplate8
 cdk synth ClinvarSummaryVariantTemplate
@@ -60,6 +66,9 @@ aws s3 cp cdk.out/OpenTargets2006RodaTemplate.template.json s3://aws-roda-hcls-d
 aws s3 cp cdk.out/OpenTargetsLatestRodaTemplate.template.json s3://aws-roda-hcls-datalake/OpenTargets.latest.RodaTemplate.json
 aws s3 cp cdk.out/Chembl25RodaTemplate.template.json s3://aws-roda-hcls-datalake/Chembl.25.RodaTemplate.json
 aws s3 cp cdk.out/Chembl27RodaTemplate.template.json s3://aws-roda-hcls-datalake/Chembl.27.RodaTemplate.json
+
+aws s3 cp cdk.out/Chembl29RodaTemplate.template.json s3://aws-roda-hcls-datalake/Chembl.29.RodaTemplate.json
+
 aws s3 cp cdk.out/BindingDbRodaTemplate.template.json s3://aws-roda-hcls-datalake/BindingDbRodaTemplate.json
 aws s3 cp cdk.out/GTExRodaTemplate8.template.json s3://aws-roda-hcls-datalake/GTEx.8.RodaTemplate.json
 aws s3 cp cdk.out/ClinvarSummaryVariantTemplate.template.json s3://aws-roda-hcls-datalake/ClinvarSummaryVariantTemplate.template.json
@@ -72,6 +81,7 @@ aws s3 cp cdk.out/GnomadTemplate.template.json s3://aws-roda-hcls-datalake/gnomA
 
 #https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/quickcreate?templateUrl=https%3A%2F%2Faws-roda-hcls-datalake.s3.amazonaws.com%2FChembl.27.RodaTemplate.json&stackName=Chembl27-RODA
 #https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/quickcreate?templateUrl=https%3A%2F%2Faws-roda-hcls-datalake.s3.amazonaws.com%2FChembl.25.RodaTemplate.json&stackName=Chembl25-RODA
+#https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/quickcreate?templateUrl=https%3A%2F%2Faws-roda-hcls-datalake.s3.amazonaws.com%2FChembl.29.RodaTemplate.json&stackName=Chembl29-RODA
 
 #https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/quickcreate?templateUrl=https%3A%2F%2Faws-roda-hcls-datalake.s3.amazonaws.com%2FBindingDbRodaTemplate.json&stackName=BindingDB-RODA
 

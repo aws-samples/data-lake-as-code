@@ -22,6 +22,7 @@ export class ChemblBaseline extends cdk.Construct {
     public readonly DbSecret: rds.DatabaseSecret;
     public readonly Chembl25DatabaseInstance: rds.DatabaseInstance;
     public readonly Chembl27DatabaseInstance: rds.DatabaseInstance;
+    public readonly Chembl29DatabaseInstance: rds.DatabaseInstance;
     	
 	constructor(scope: cdk.Construct, id: string, props: ChemblBaselineProps) {
 		super(scope, id);
@@ -87,9 +88,21 @@ export class ChemblBaseline extends cdk.Construct {
             deletionProtection: false
         });
         
+        this.Chembl29DatabaseInstance = new rds.DatabaseInstance(this, 'chembl29', {
+            engine: rds.DatabaseInstanceEngine.POSTGRES,
+            masterUsername: 'master',
+            vpc: props.TargetVPC,
+            vpcPlacement: appSubnetSelection, 
+            instanceType: ec2.InstanceType.of(ec2.InstanceClass.BURSTABLE3, ec2.InstanceSize.SMALL),
+            instanceIdentifier: 'chembl-29',
+            masterUserPassword: chemblDBSecret.secretValueFromJson('password'),
+            securityGroups: [chemblDbSG],
+            deletionProtection: false
+        });
         
         this.createAndApplyImportCommand("scripts/ssmdoc.importchembl25.json",props.ImportInstance, this.Chembl25DatabaseInstance, this.DbSecret, "25");
         this.createAndApplyImportCommand("scripts/ssmdoc.importchembl27.json",props.ImportInstance, this.Chembl27DatabaseInstance, this.DbSecret, "27");
+        this.createAndApplyImportCommand("scripts/ssmdoc.importchembl29.json",props.ImportInstance, this.Chembl29DatabaseInstance, this.DbSecret, "29");
         
         
     }

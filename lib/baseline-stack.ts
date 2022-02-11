@@ -22,6 +22,7 @@ interface coreDataLakeProps extends cdk.StackProps {
 export class BaselineStack extends cdk.Stack {
   public readonly ChemblDb25: rds.DatabaseInstance;
   public readonly ChemblDb27: rds.DatabaseInstance;
+  public readonly ChemblDb29: rds.DatabaseInstance;
   public readonly ChemblDBChemblDbAccessSg: ec2.SecurityGroup;
   public readonly ChemblDBSecret: rds.DatabaseSecret;
   public readonly OpenTargetsSourceBucket: s3.Bucket;
@@ -136,6 +137,7 @@ export class BaselineStack extends cdk.Stack {
 
     this.ChemblDb25 = chemblBaseline.Chembl25DatabaseInstance;
     this.ChemblDb27 = chemblBaseline.Chembl27DatabaseInstance;
+    this.ChemblDb29 = chemblBaseline.Chembl29DatabaseInstance;
     this.ChemblDBSecret = chemblBaseline.DbSecret;
     this.ChemblDBChemblDbAccessSg = chemblBaseline.DbAccessSg;
 

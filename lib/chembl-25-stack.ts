@@ -15,6 +15,7 @@ export interface ChemblStackEnrollmentProps extends DataSetStackProps {
 	databaseSecret: rds.DatabaseSecret;
 	ChemblDb25: rds.DatabaseInstance;
 	ChemblDb27: rds.DatabaseInstance;
+	ChemblDb29: rds.DatabaseInstance;
 	accessSecurityGroup: ec2.SecurityGroup;
 }
 
@@ -72,6 +73,30 @@ export class ChemblStack extends DataSetStack{
 			}	    	
 		}));
 		
+		
+		const dataSetNameChembl29 = "chembl_29";
+		
+		this.Enrollments.push(new RDSPostgresDataSetEnrollment(this, 'chembl-29-enrollment', {
+	    	databaseSecret: props.databaseSecret,
+	    	database: props.ChemblDb29,
+	    	MaxDPUs: 5.0,
+	    	databaseSidOrServiceName: "chembl_29",
+	    	accessSecurityGroup: props.accessSecurityGroup,
+	    	dataLakeBucket: props.DataLake.DataLakeBucket,
+	    	AccessSubnet: props.ChemblDb29.vpc.privateSubnets[0] as ec2.Subnet,
+	    	DataSetName: dataSetNameChembl29,
+	    	JdbcTargetIncludePaths: ["chembl_29/%"],
+	    	GlueScriptPath: "scripts/glue.s3importchembl25.py",
+			GlueScriptArguments: {
+				"--job-language": "python", 
+				"--job-bookmark-option": "job-bookmark-enable",
+				"--enable-metrics": "",
+				"--DL_BUCKET": props.DataLake.DataLakeBucket.bucketName,
+				"--DL_PREFIX": "/"+dataSetNameChembl29+"/",
+				"--DL_REGION": cdk.Stack.of(this).region,
+				"--GLUE_SRC_DATABASE": "chembl_29_src"
+			}	    	
+		}));
 	}
 }
 

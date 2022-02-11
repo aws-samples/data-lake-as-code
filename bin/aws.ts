@@ -44,6 +44,7 @@ const baseline = new BaselineStack(app, "BaselineStack", {
 const chemblStack = new ChemblStack(app, "ChemblStack", {
   ChemblDb25: baseline.ChemblDb25,
   ChemblDb27: baseline.ChemblDb27,
+  ChemblDb29: baseline.ChemblDb29,
   accessSecurityGroup: baseline.ChemblDBChemblDbAccessSg,
   databaseSecret: baseline.ChemblDBSecret,
   DataLake: coreDataLake,
@@ -175,6 +176,18 @@ const Chembl27RodaTemplate = new DataSetTemplateStack(
     DatabaseDescriptionPath: "../../RODA_templates/chembl_27_get_database.json",
     DescribeTablesPath: "../../RODA_templates/chembl_27_get_tables.json",
     DataSetName: chemblStack.Enrollments[1].DataSetName,
+  }
+);
+
+const Chembl29RodaTemplate = new DataSetTemplateStack(
+  app,
+  "Chembl29RodaTemplate",
+  {
+    description:
+      "AWS Data Lake as Code Registry of Open Data Federated Chembl 29 Template. (ib-bc6f662f64)",
+    DatabaseDescriptionPath: "../../RODA_templates/chembl_29_get_database.json",
+    DescribeTablesPath: "../../RODA_templates/chembl_29_get_tables.json",
+    DataSetName: chemblStack.Enrollments[2].DataSetName,
   }
 );
 
