@@ -27,7 +27,7 @@
               "echo 'Starting OpenTargets download...' >> /home/ssm-user/progressLogOpenTargetsLatest",
               "wget -r -nH --cut-dirs=5 -nc ftp://ftp.ebi.ac.uk//pub/databases/opentargets/platform/latest/output/etl/parquet/ -P opentargets/sourceExports/open-targets-data-releases/ >> /home/ssm-user/progressLogOpenTargetsLatest 2>/home/ssm-user/progressLogOpenTargetsLatest",
               "find opentargets/sourceExports/open-targets-data-releases/latest/ -type f -name '_SUCCESS' -delete",
-              "aws s3 sync opentargets/sourceExports/open-targets-data-releases/latest/ s3://{{openTargetsSourceFileTargetBucketLocation}}/opentargets/sourceExports/latest/"
+              "aws s3 sync opentargets/sourceExports/open-targets-data-releases/latest/ s3://{{openTargetsSourceFileTargetBucketLocation}}/opentargets/sourceExports/latest/ --delete"
             ]
          }
       }
