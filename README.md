@@ -42,7 +42,7 @@ It should take approximately 60 seconds for the stack to finish deploying.
 
 
 ---
-**IMPORTANT NOTE!!! Extra Step for GTEx, gnomAD, and 1000 Genomes DRAGEN**
+**IMPORTANT NOTE!!! Extra Step for GTEx, and 1000 Genomes DRAGEN**
 
 A handful of tables in these datasets either have LOTS of columns or partions. Expressing all of those columns in YAML would exceed the CloudFormation max template length! Once the template deploys, go the [AWS Glue Crawler Console](https://console.aws.amazon.com/glue/home?#catalog:tab=crawlers) check the box next to the `dataset_awsroda_crawler` and click 'Run crawler'. Once it finishes (1-3 minutes) you can query all tables in these datasets. 
 
