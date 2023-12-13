@@ -121,7 +121,7 @@ export class DataLakeEnrollment extends Construct {
     	const coarseLakeFormationPolicy = iam.PolicyStatement.fromJson(lakeFormationPolicy);
 
     	const policyParams = {
-    	  policyName: `${this.DataSetName}-coarseIamDataLakeAccessPolicy`,
+    	  managedPolicyName: `${this.DataSetName}-coarseIamDataLakeAccessPolicy`,
     	  statements: [
     	      s3PolicyStatement,
     	      gluePolicyStatement, 
